@@ -31,6 +31,15 @@ export const createDatos = async (req, res) => {
     }
 }
 
+export const updateDatos = async (req, res) => {
+    try {
+        const updateDatos = await Datos.findByIdAndUpdate(req.body._id, req.body, {new: true})
+        res.send(updateDatos)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
+
 export const getDatos = async (req, res) => {
     try {
         const datos = await Datos.find()
