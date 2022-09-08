@@ -14,7 +14,8 @@ export const createMensaje = async (req, res) => {
                 public_id: result.public_id
             }
         }
-        const nuevoMensaje = new Contacto({nombre, email, telefono, metodoRespuesta, mensaje, imagen})
+        const fecha = new Date()
+        const nuevoMensaje = new Contacto({nombre, email, telefono, metodoRespuesta, mensaje, imagen, fecha})
         await nuevoMensaje.save()
         return res.json(nuevoMensaje)
     } catch (error) {

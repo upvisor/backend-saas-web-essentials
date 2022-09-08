@@ -3,7 +3,8 @@ import Finalizar from '../models/Finalizar.js'
 export const createFinalizar = async (req, res) => {
     try {
         const carrito = req.body
-        const nuevoFinalizar = new Finalizar({carrito})
+        const fecha = new Date()
+        const nuevoFinalizar = new Finalizar({carrito, fecha})
         await nuevoFinalizar.save()
         return res.json(nuevoFinalizar)
     } catch (error) {

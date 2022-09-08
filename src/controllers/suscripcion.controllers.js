@@ -3,7 +3,8 @@ import Suscripcion from '../models/Suscripcion.js'
 export const createSuscripcion = async (req, res) => {
     try {
         const {email} = req.body
-        const nuevaSuscripcion = new Suscripcion({email})
+        const fecha = new Date()
+        const nuevaSuscripcion = new Suscripcion({email, fecha})
         await nuevaSuscripcion.save()
         return res.json(nuevaSuscripcion)
     } catch (error) {

@@ -3,7 +3,8 @@ import Visualizacion from '../models/Visualizacion.js'
 export const createVisualizacion = async (req, res) => {
     try {
         const {producto, precio} = req.body
-        const nuevaVisualizacion = new Visualizacion({producto, precio})
+        const fecha = new Date()
+        const nuevaVisualizacion = new Visualizacion({producto, precio, fecha})
         await nuevaVisualizacion.save()
         return res.json(nuevaVisualizacion)
     } catch (error) {

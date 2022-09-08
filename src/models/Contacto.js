@@ -28,6 +28,10 @@ const ContactoSchema = new mongoose.Schema({
     imagen: {
         url: String,
         public_id: String
+    },
+    fecha: {
+        type: Date,
+        required: true
     }
 })
 

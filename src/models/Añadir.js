@@ -3,15 +3,19 @@ import mongoose from 'mongoose'
 const AñadirSchema = mongoose.Schema({
     cantidadProductos: {
         type: Number,
-        require: true
+        required: true
     },
     nombre: {
         type: String,
-        require: true
+        required: true
     },
     precio: {
         type: Number,
-        require: true
+        required: true
+    },
+    fecha: {
+        type: Date,
+        required: true
     }
 })
 

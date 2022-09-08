@@ -3,7 +3,11 @@ import mongoose from 'mongoose'
 const FinalizarSchema = mongoose.Schema({
     carrito: {
         type: Array,
-        require: true
+        required: true
+    },
+    fecha: {
+        type: Date,
+        required: true
     }
 })
 

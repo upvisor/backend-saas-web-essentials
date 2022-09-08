@@ -3,17 +3,17 @@ import mongoose from 'mongoose'
 const CompraSchema = mongoose.Schema({
     email: {
         type: String,
-        require: true,
+        required: true,
         trim: true
     },
     region: {
         type: String,
-        require: true,
+        required: true,
         trim: true
     },
     ciudad: {
         type: String,
-        require: true,
+        required: true,
         trim: true
     },
     nombre: {
@@ -23,12 +23,12 @@ const CompraSchema = mongoose.Schema({
     },
     apellido: {
         type: String,
-        require: true,
+        required: true,
         trim: true
     },
     direccion: {
         type: String,
-        require: true,
+        required: true,
         trim: true
     },
     departamento: {
@@ -37,25 +37,25 @@ const CompraSchema = mongoose.Schema({
     },
     telefono: {
         type: Number,
-        require: true,
+        required: true,
         trim: true
     },
     carrito: {
         type: Array,
-        require: true
+        required: true
     },
     envio: {
         type: Number,
-        require: true,
+        required: true,
         trim: true,
     },
     estado: {
         type: String,
-        require: true,
+        required: true,
     },
     fecha: {
         type: Date,
-        require: true
+        required: true
     }
 })
 

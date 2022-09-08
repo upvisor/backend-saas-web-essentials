@@ -8,6 +8,10 @@ const VisualizacionSchema = mongoose.Schema({
     precio: {
         type: Number,
         required: true
+    },
+    fecha: {
+        type: Date,
+        required: true
     }
 })
 
