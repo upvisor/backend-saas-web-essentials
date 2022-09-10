@@ -14,8 +14,8 @@ export const createVisualizacion = async (req, res) => {
 
 export const getVisualizacion = async (req, res) => {
     try {
-        const Visualizaciones = await Visualizacion.find()
-        res.send(Visualizaciones)
+        const visualizaciones = await Visualizacion.find()
+        res.send(visualizaciones)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }

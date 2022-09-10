@@ -13,6 +13,7 @@ import finalizarRoutes from './routes/finalizar.routes.js'
 import pagosRoutes from './routes/pagos.routes.js'
 import suscripcionesRoutes from './routes/suscripcion.routes.js'
 import visualizacionesRoutes from './routes/visualizacion.routes.js'
+import usuarioRoutes from './routes/usuario.routes.js'
 
 connectDB()
 
@@ -37,6 +38,7 @@ app.use(finalizarRoutes)
 app.use(pagosRoutes)
 app.use(suscripcionesRoutes)
 app.use(visualizacionesRoutes)
+app.use(usuarioRoutes)
 
 app.listen(process.env.PORT || 3000)
 console.log('Server on port', process.env.PORT || 3000)
