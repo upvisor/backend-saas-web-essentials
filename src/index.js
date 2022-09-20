@@ -14,6 +14,7 @@ import pagosRoutes from './routes/pagos.routes.js'
 import suscripcionesRoutes from './routes/suscripcion.routes.js'
 import visualizacionesRoutes from './routes/visualizacion.routes.js'
 import usuarioRoutes from './routes/usuario.routes.js'
+import cuponesRoutes from './routes/cupones.routes.js'
 
 connectDB()
 
@@ -39,6 +40,7 @@ app.use(pagosRoutes)
 app.use(suscripcionesRoutes)
 app.use(visualizacionesRoutes)
 app.use(usuarioRoutes)
+app.use(cuponesRoutes)
 
 app.listen(process.env.PORT || 3000)
 console.log('Server on port', process.env.PORT || 3000)

@@ -40,6 +40,10 @@ const CompraSchema = mongoose.Schema({
         required: true,
         trim: true
     },
+    cupon: {
+        type: String,
+        trim: true
+    },
     carrito: {
         type: Array,
         required: true
