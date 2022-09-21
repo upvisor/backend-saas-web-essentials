@@ -57,6 +57,10 @@ const CompraSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    pago: {
+        type: String,
+        required: true
+    },
     fecha: {
         type: Date,
         required: true
