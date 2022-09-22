@@ -3,7 +3,8 @@ import Compra from '../models/Compra.js'
 export const createCompra = async (req, res) => {
     try {
         const {email, region, ciudad, nombre, apellido, direccion, departamento, telefono, cupon, carrito, envio, estado, pago, fecha} = req.body
-        const nuevaCompra = new Compra({email, region, ciudad, nombre, apellido, direccion, departamento, telefono, cupon, carrito, envio, estado, pago, fecha})
+        const cuponUpper = cupon.toUpperCase()
+        const nuevaCompra = new Compra({email, region, ciudad, nombre, apellido, direccion, departamento, telefono, cupon: cuponUpper, carrito, envio, estado, pago, fecha})
         await nuevaCompra.save()
         return res.json(nuevaCompra)
     } catch (error) {
