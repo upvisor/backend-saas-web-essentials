@@ -1,8 +1,10 @@
 import {Router} from 'express'
-import {createIngreso} from '../controllers/ingresosControllers.js'
+import {createIngreso ,getIngresos} from '../controllers/ingresosControllers.js'
 
 const router = Router()
 
 router.post('/ingresos', createIngreso)
+
+router.get('/ingresos', getIngresos)
 
 export default router
