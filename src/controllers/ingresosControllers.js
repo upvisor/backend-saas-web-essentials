@@ -7,6 +7,7 @@ export const createIngreso = async (req, res) => {
         const producto = productos[0]
         const excedente = recibido - envio - precio
         const peticion = await axios.get('https://server-blaspod-production.up.railway.app/importaciones')
+        const peticion2 = await axios.get('https://server-blaspod-production.up.railway.app/productos')
         let precioProductos = 0
         if (peticion.data.length !== 0) {
             peticion.data.map(items => {
@@ -14,6 +15,14 @@ export const createIngreso = async (req, res) => {
                     productos.map(product => {
                         if (item.nombre === product) {
                             precioProductos = Math.round(precioProductos + Number(item.precioImportacion) / Number(item.cantidad))
+                        } else if (peticion2.data.length !== 0) {
+                            peticion2.data.map(e => {
+                                if (product === e.nombre) {
+                                    if (e.categorias === item.nombre) {
+                                        precioProductos = Math.round(precioProductos + Number(item.precioImportacion) / Number(item.cantidad))
+                                    }
+                                }
+                            })
                         }
                     })
                 })
