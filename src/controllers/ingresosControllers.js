@@ -36,3 +36,12 @@ export const createIngreso = async (req, res) => {
         return res.status(500).json({message: error.message})
     }
 }
+
+export const getIngresos = async (req, res) => {
+    try {
+        const ingresos = await Ingreso.find()
+        res.send(ingresos)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
