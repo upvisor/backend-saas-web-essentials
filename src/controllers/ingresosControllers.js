@@ -18,7 +18,7 @@ export const createIngreso = async (req, res) => {
                         } else if (peticion2.data.length !== 0) {
                             peticion2.data.map(e => {
                                 if (product === e.nombre) {
-                                    if (e.categorias === item.nombre) {
+                                    if (e.categorias === item.nombre.toLowerCase()) {
                                         precioProductos = Math.round(precioProductos + Number(item.precioImportacion) / Number(item.cantidad))
                                     }
                                 }
