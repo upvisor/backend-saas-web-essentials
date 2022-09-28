@@ -6,3 +6,5 @@ const router = Router()
 router.post('/flujo-de-caja', createFlujo)
 
 router.get('/flujo-de-caja', getFlujo)
+
+export default router
