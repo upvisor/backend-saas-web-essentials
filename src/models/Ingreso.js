@@ -32,6 +32,10 @@ const IngresoSchema = mongoose.Schema({
     ganancia: {
         type: Number,
         default: 0
+    },
+    estado: {
+        type: String,
+        required: true
     }
 })
 

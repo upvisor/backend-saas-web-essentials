@@ -3,7 +3,7 @@ import axios from 'axios'
 
 export const createIngreso = async (req, res) => {
     try {
-        const {fecha, productos, recibido, envio, precio} = req.body
+        const {fecha, productos, recibido, envio, precio, estado} = req.body
         const producto = productos[0]
         const excedente = recibido - envio - precio
         const peticion = await axios.get('https://server-blaspod-production.up.railway.app/importaciones')
@@ -29,7 +29,7 @@ export const createIngreso = async (req, res) => {
             })
         }
         const ganancia = precio - precioProductos
-        const nuevoIngreso = new Ingreso({fecha, productos: producto, recibido, envio, precio, capital: precioProductos, excedente: excedente, ganancia})
+        const nuevoIngreso = new Ingreso({fecha, productos: producto, recibido, envio, precio, estado, capital: precioProductos, excedente: excedente, ganancia})
         await nuevoIngreso.save()
         return res.json(nuevoIngreso)
     } catch (error) {
