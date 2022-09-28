@@ -24,3 +24,12 @@ export const createFlujo = async (req, res) => {
         return res.status(500).json({message: error.message})
     }
 }
+
+export const getFlujo = async (req, res) => {
+    try {
+        const Flujos = await FlujoCaja.find()
+        res.json(Flujos)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
