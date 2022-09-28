@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import {createFlujo, getFlujo} from '../controllers/flujoCaja.controllers,js'
+import {createFlujo, getFlujo} from '../controllers/flujoCaja.controllers.js'
 
 const router = Router()
 
