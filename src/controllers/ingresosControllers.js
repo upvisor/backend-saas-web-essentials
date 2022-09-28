@@ -30,7 +30,9 @@ export const createIngreso = async (req, res) => {
         }
         const ganancia = precio - precioProductos
         const nuevoIngreso = new Ingreso({fecha, productos: producto, recibido, envio, precio, estado, capital: precioProductos, excedente: excedente, ganancia})
-        await nuevoIngreso.save()
+        if (estado === 'Pagado') {
+            await nuevoIngreso.save()
+        }
         return res.json(nuevoIngreso)
     } catch (error) {
         return res.status(500).json({message: error.message})
