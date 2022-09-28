@@ -28,7 +28,7 @@ export const createFlujo = async (req, res) => {
 export const getFlujo = async (req, res) => {
     try {
         const Flujos = await FlujoCaja.find()
-        res.json(Flujos)
+        res.send(Flujos)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
