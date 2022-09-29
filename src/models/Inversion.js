@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const InversionSchema = mongoose.Schema({
-    montoInicial: {
+    inversion: {
         type: Number,
         required: true,
         trim: true
