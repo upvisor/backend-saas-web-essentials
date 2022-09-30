@@ -12,19 +12,33 @@ export const createIngreso = async (req, res) => {
         if (peticion.data.length !== 0) {
             peticion.data.map(items => {
                 items.importacion.map(item => {
-                    productos.map(product => {
-                        if (item.nombre === product) {
+                    if (productos.length >= 2) {
+                        productos.map(product => {
+                            if (item.nombre === product) {
+                                precioProductos = Math.round(precioProductos + Number(item.precioImportacion) / Number(item.cantidad))
+                            } else if (peticion2.data.length !== 0) {
+                                peticion2.data.map(e => {
+                                    if (product === e.nombre) {
+                                        if (e.categorias === item.nombre.toLowerCase()) {
+                                            precioProductos = Math.round(precioProductos + (Number(item.precioImportacion) + Number(item.precioAduanas)) / Number(item.cantidad))
+                                        }
+                                    }
+                                })
+                            }
+                        })
+                    } else {
+                        if (item.nombre === productos) {
                             precioProductos = Math.round(precioProductos + Number(item.precioImportacion) / Number(item.cantidad))
                         } else if (peticion2.data.length !== 0) {
                             peticion2.data.map(e => {
-                                if (product === e.nombre) {
+                                if (productos === e.nombre) {
                                     if (e.categorias === item.nombre.toLowerCase()) {
                                         precioProductos = Math.round(precioProductos + (Number(item.precioImportacion) + Number(item.precioAduanas)) / Number(item.cantidad))
                                     }
                                 }
                             })
                         }
-                    })
+                    }
                 })
             })
         }
