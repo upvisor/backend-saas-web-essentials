@@ -52,7 +52,7 @@ const productoSchema = new mongoose.Schema({
         public_id: String
     },
     calificaciones: {
-        type: Object
+        type: Array
     }
 })
 
