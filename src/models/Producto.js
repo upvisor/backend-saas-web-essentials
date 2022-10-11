@@ -50,6 +50,9 @@ const productoSchema = new mongoose.Schema({
     imagen: {
         url: String,
         public_id: String
+    },
+    calificaciones: {
+        type: Object
     }
 })
 
