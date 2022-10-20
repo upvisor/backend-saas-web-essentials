@@ -20,10 +20,20 @@ import ingresosRoutes from './routes/ingresos.routes.js'
 import importacionesRoutes from './routes/importaciones.routes.js'
 import flujoCajaRoutes from './routes/flujoCaja.routes.js'
 import inversionRoutes from './routes/inversion.routes.js'
+import conversacionRoutes from './routes/conversaciones.routes.js'
+import mensajesRoutes from './routes/mensajes.routes.js'
+import {Server as SocketServer} from 'socket.io'
+import http from 'http'
 
 connectDB()
 
 const app = express()
+const server = http.createServer(app)
+const io = new SocketServer(server, {
+    cors: {
+        origin: '*'
+    }
+})
 
 app.use(cors())
 app.use(express.json())
@@ -51,6 +61,14 @@ app.use(ingresosRoutes)
 app.use(importacionesRoutes)
 app.use(flujoCajaRoutes)
 app.use(inversionRoutes)
+app.use(conversacionRoutes)
+app.use(mensajesRoutes)
 
-app.listen(process.env.PORT || 3000)
+io.on('connection', (socket) => {
+    socket.on('message', (message) => {
+        socket.broadcast.emit('message', message)
+    })
+})
+
+server.listen(process.env.PORT || 3000)
 console.log('Server on port', process.env.PORT || 3000)
