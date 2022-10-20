@@ -14,7 +14,7 @@ export const createMensaje = async (req, res) => {
 export const getMensajes = async (req, res) => {
     try {
         const mensajes = await Mensajes.find({
-            conversationId: req.params.conversationId
+            conversacionId: req.params.conversacionId
         })
         return res.json(mensajes)
     } catch (error) {
