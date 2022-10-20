@@ -5,6 +5,6 @@ const router = Router()
 
 router.post('/mensaje', createMensaje)
 
-router.get('/mensaje/:conversationId', getMensajes)
+router.get('/mensaje/:conversacionId', getMensajes)
 
 export default router
