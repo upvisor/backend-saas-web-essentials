@@ -65,8 +65,8 @@ app.use(conversacionRoutes)
 app.use(mensajesRoutes)
 
 io.on('connection', (socket) => {
-    socket.on('message', (message) => {
-        socket.broadcast.emit('message', message)
+    socket.on('message', () => {
+        socket.broadcast.emit('message')
     })
 })
 
