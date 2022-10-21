@@ -81,6 +81,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('mensaje', data => {
+        console.log(data)
         io.to(data.destinatario).emit('mensaje', data)
     })
 
