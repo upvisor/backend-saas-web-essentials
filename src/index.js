@@ -64,9 +64,29 @@ app.use(inversionRoutes)
 app.use(conversacionRoutes)
 app.use(mensajesRoutes)
 
+let users = []
+
+const agregarUsuario = (userId, socketId) => {
+    !users.some(user => user.userId === userId) && users.push({userId, socketId})
+}
+
+const removerUsuario = (socketId) => {
+    users = users.filter(user => user.socketId !== socketId)
+}
+
 io.on('connection', (socket) => {
-    socket.on('message', () => {
-        socket.broadcast.emit('message')
+    socket.on('nuevoUsuario', senderId => {
+        agregarUsuario(senderId, socket.id)
+        io.emit('getUsuarios', users)
+    })
+
+    socket.on('mensaje', data => {
+        io.to(data.destinatario).emit('mensaje', data)
+    })
+
+    socket.on('disconnect', () => {
+        removerUsuario(socket.id)
+        io.emit('getUsuarios', users)
     })
 })
 
