@@ -74,19 +74,33 @@ const removerUsuario = (socketId) => {
     users = users.filter(user => user.socketId !== socketId)
 }
 
+const getUsuarios = (userId) => {
+    return users.find(user => user.socketId === userId)
+}
+
 io.on('connection', (socket) => {
     socket.on('nuevoUsuario', senderId => {
+        console.log(senderId)
+        console.log(socket.id)
         agregarUsuario(senderId, socket.id)
+        console.log(users)
         io.emit('getUsuarios', users)
     })
 
-    socket.on('mensaje', data => {
-        console.log(data)
-        io.to(data.destinatario).emit('mensaje', data)
+    socket.on('enviarMensaje', ({userId, receiverId, text}) => {
+        console.log({userId, receiverId, text})
+        console.log(socket.id)
+        const user = getUsuarios(receiverId)
+        console.log(user.socketId)
+        io.to(user.socketId).emit('getMensaje', {
+            userId,
+            text
+        })
     })
 
     socket.on('disconnect', () => {
         removerUsuario(socket.id)
+        console.log(users)
         io.emit('getUsuarios', users)
     })
 })
