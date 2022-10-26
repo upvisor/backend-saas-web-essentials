@@ -80,27 +80,21 @@ const getUsuarios = (userId) => {
 
 io.on('connection', (socket) => {
     socket.on('nuevoUsuario', senderId => {
-        console.log(senderId)
-        console.log(socket.id)
         agregarUsuario(senderId, socket.id)
-        console.log(users)
         io.emit('getUsuarios', users)
     })
 
-    socket.on('enviarMensaje', ({userId, receiverId, text}) => {
-        console.log({userId, receiverId, text})
-        console.log(socket.id)
+    socket.on('enviarMensaje', ({userId, receiverId, text, conversacionId}) => {
         const user = getUsuarios(receiverId)
-        console.log(user.socketId)
         io.to(user.socketId).emit('getMensaje', {
             userId,
-            text
+            text,
+            conversacionId
         })
     })
 
     socket.on('disconnect', () => {
         removerUsuario(socket.id)
-        console.log(users)
         io.emit('getUsuarios', users)
     })
 })
