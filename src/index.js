@@ -22,6 +22,7 @@ import flujoCajaRoutes from './routes/flujoCaja.routes.js'
 import inversionRoutes from './routes/inversion.routes.js'
 import conversacionRoutes from './routes/conversaciones.routes.js'
 import mensajesRoutes from './routes/mensajes.routes.js'
+import estadisticasRoutes from './routes/estadisticas.routes.js'
 import {Server as SocketServer} from 'socket.io'
 import http from 'http'
 
@@ -63,6 +64,7 @@ app.use(flujoCajaRoutes)
 app.use(inversionRoutes)
 app.use(conversacionRoutes)
 app.use(mensajesRoutes)
+app.use(estadisticasRoutes)
 
 let users = []
 
