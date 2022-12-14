@@ -3,7 +3,6 @@ const { Options, IntegrationApiKeys, Environment, IntegrationCommerceCodes, Webp
 
 export const createOrder = async (req, res) => {
     const {buy_order, session_id, amount, return_url} = req.body
-    console.log(buy_order, session_id)
     const tx = new WebpayPlus.Transaction(new Options(IntegrationCommerceCodes.WEBPAY_PLUS, IntegrationApiKeys.WEBPAY, Environment.Integration))
     const response = await tx.create(buy_order, session_id, amount, return_url)
     res.send(response)
