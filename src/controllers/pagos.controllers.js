@@ -2,8 +2,7 @@ import pkg from 'transbank-sdk'
 const { Options, IntegrationApiKeys, Environment, IntegrationCommerceCodes, WebpayPlus } = pkg
 
 export const createOrder = async (req, res) => {
-    const {buy_order, session_id, amount, return_url} = req.body
-    const tx = new WebpayPlus.Transaction(new Options(IntegrationCommerceCodes.WEBPAY_PLUS, IntegrationApiKeys.WEBPAY, Environment.Integration))
+    const tx = new WebpayPlus.Transaction(new Options(process.env.TRANSBANK_APIKEYS && process.env.TRANSBANK_COMMERCODE ? process.env.TRANSBANK_COMMERCODE : IntegrationCommerceCodes.WEBPAY_PLUS, process.env.TRANSBANK_APIKEYS && process.env.TRANSBANK_COMMERCODE ? process.env.TRANSBANK_APIKEYS : IntegrationApiKeys.WEBPAY, process.env.TRANSBANK_APIKEYS && process.env.TRANSBANK_COMMERCODE ? Environment.Production : Environment.Integration))
     const response = await tx.create(buy_order, session_id, amount, return_url)
     res.send(response)
 }
