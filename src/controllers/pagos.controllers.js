@@ -19,7 +19,7 @@ export const commit = asyncHandler(async function (req, res) {
     const commitResponse = await (new WebpayPlus.Transaction()).commit(token)
     res.send(commitResponse)
   } catch (error) {
-    return res.status(500).json({message: error.message})
+    return res.status(204).json({message: 'Pago no realizado'})
   }
 })
 
