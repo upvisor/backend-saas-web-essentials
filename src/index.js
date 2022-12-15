@@ -10,7 +10,6 @@ import comprasRoutes from './routes/compras.routes.js'
 import contactoRoutes from './routes/contacto.routes.js'
 import datosRoutes from './routes/datos.routes.js'
 import finalizarRoutes from './routes/finalizar.routes.js'
-import pagosRoutes from './routes/pagos.routes.js'
 import suscripcionesRoutes from './routes/suscripcion.routes.js'
 import visualizacionesRoutes from './routes/visualizacion.routes.js'
 import usuarioRoutes from './routes/usuario.routes.js'
@@ -23,6 +22,7 @@ import inversionRoutes from './routes/inversion.routes.js'
 import conversacionRoutes from './routes/conversaciones.routes.js'
 import mensajesRoutes from './routes/mensajes.routes.js'
 import estadisticasRoutes from './routes/estadisticas.routes.js'
+import webplayPlusRouter from './routes/pagos.routes.js'
 import {Server as SocketServer} from 'socket.io'
 import http from 'http'
 
@@ -52,7 +52,6 @@ app.use(comprasRoutes)
 app.use(contactoRoutes)
 app.use(datosRoutes)
 app.use(finalizarRoutes)
-app.use(pagosRoutes)
 app.use(suscripcionesRoutes)
 app.use(visualizacionesRoutes)
 app.use(usuarioRoutes)
@@ -65,6 +64,7 @@ app.use(inversionRoutes)
 app.use(conversacionRoutes)
 app.use(mensajesRoutes)
 app.use(estadisticasRoutes)
+app.use(webplayPlusRouter)
 
 let users = []
 
