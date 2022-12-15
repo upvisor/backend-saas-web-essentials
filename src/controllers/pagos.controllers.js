@@ -14,9 +14,13 @@ export const create = asyncHandler(async function (req, res) {
 })
 
 export const commit = asyncHandler(async function (req, res) {
-  let { token } = req.body
-  const commitResponse = await (new WebpayPlus.Transaction()).commit(token)
-  res.send(commitResponse)
+  try {
+    let { token } = req.body
+    const commitResponse = await (new WebpayPlus.Transaction()).commit(token)
+    res.send(commitResponse)
+  } catch (error) {
+    return res.status(500).json({message: error.message})
+  }
 })
 
 export const status = asyncHandler(async function (req, res) {
