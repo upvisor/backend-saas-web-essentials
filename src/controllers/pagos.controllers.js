@@ -20,7 +20,7 @@ export const commit = asyncHandler(async function (req, res) {
 })
 
 export const status = asyncHandler(async function (req, res) {
-  let token = req.body.token
+  let { token } = req.body
   const statusResponse = await (new WebpayPlus.Transaction()).status(token)
   let viewData = {
     token,
