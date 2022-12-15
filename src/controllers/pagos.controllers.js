@@ -1,6 +1,6 @@
-import pkg, { Environment, Options } from 'transbank-sdk'
+import pkg from 'transbank-sdk'
 import {asyncHandler} from '../utils/async_handler.js'
-const { WebpayPlus } = pkg
+const { WebpayPlus, Environment, Options } = pkg
 
 export const create = asyncHandler(async function (req, res) {
   const { buyOrder, sessionId, amount, returnUrl } = req.body
