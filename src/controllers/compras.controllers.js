@@ -20,3 +20,22 @@ export const getCompras = async (req, res) => {
         return res.status(500).json({message: error.message})
     }
 }
+
+export const getCompra = async (req, res) => {
+    try {
+        const compra = await Compra.findById(req.params.id)
+        if (!compra) return res.sendStatus(404)
+        res.json(compra)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
+
+export const updateCompra = async (req, res) => {
+    try {
+        const updateCompra = await Compra.findByIdAndUpdate(req.params.id, req.body, {new: true})
+        return res.send(updateCompra)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
