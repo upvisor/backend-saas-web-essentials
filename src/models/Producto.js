@@ -11,7 +11,7 @@ const productoSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    precioRebajado: {
+    precioAnterior: {
         type: Number,
         trim: true
     },

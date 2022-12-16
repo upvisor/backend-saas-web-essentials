@@ -13,7 +13,7 @@ export const getProductos = async (req, res) => {
 
 export const createProducto = async (req, res) => {
     try {
-        const {nombre, precio, precioRebajado, descripcion, url, categorias, populares, variaciones, stock, oferta1Producto1, oferta1Producto2, oferta1Producto3, oferta1Producto4, oferta1Producto5, oferta1Producto6, oferta1Producto7, oferta1Producto8, oferta1Producto9, oferta1Producto10, oferta1Producto11, oferta1Producto12, oferta1Producto13, oferta1Producto14, oferta1Producto15, precio1, oferta2Producto1, oferta2Producto2, oferta2Producto3, oferta2Producto4, oferta2Producto5, oferta2Producto6, oferta2Producto7, oferta2Producto8, oferta2Producto9, oferta2Producto10, oferta2Producto11, oferta2Producto12, oferta2Producto13, oferta2Producto14, oferta2Producto15, precio2} = req.body
+        const {nombre, precio, precioAnterior, descripcion, url, categorias, populares, variaciones, stock, oferta1Producto1, oferta1Producto2, oferta1Producto3, oferta1Producto4, oferta1Producto5, oferta1Producto6, oferta1Producto7, oferta1Producto8, oferta1Producto9, oferta1Producto10, oferta1Producto11, oferta1Producto12, oferta1Producto13, oferta1Producto14, oferta1Producto15, precio1, oferta2Producto1, oferta2Producto2, oferta2Producto3, oferta2Producto4, oferta2Producto5, oferta2Producto6, oferta2Producto7, oferta2Producto8, oferta2Producto9, oferta2Producto10, oferta2Producto11, oferta2Producto12, oferta2Producto13, oferta2Producto14, oferta2Producto15, precio2} = req.body
         const oferta = {
             oferta1: {
                 producto1: oferta1Producto1,
@@ -61,7 +61,7 @@ export const createProducto = async (req, res) => {
                 public_id: result.public_id
             }
         }
-        const nuevoProducto = new Producto({nombre, precio, precioRebajado, descripcion, url, categorias, populares, variaciones, stock, oferta, imagen})
+        const nuevoProducto = new Producto({nombre, precio, precioAnterior, descripcion, url, categorias, populares, variaciones, stock, oferta, imagen})
         await nuevoProducto.save()
         return res.json(nuevoProducto)
     } catch (error) {
