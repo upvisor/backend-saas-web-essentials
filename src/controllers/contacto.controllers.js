@@ -2,8 +2,7 @@ import Contacto from '../models/Contacto.js'
 import {uploadImage, deleteImage} from '../libs/cloudinary.js'
 import fs from 'fs-extra'
 import bizSdk from 'facebook-nodejs-business-sdk'
-import pkg from 'crypto-js/sha256.js'
-const { SHA256 } = pkg
+import sha256 from 'crypto-js/sha256.js'
 
 export const createMensaje = async (req, res) => {
     try {
@@ -17,9 +16,9 @@ export const createMensaje = async (req, res) => {
         const api = bizSdk.FacebookAdsApi.init(access_token)
         let current_timestamp = new Date()
         const userData = (new UserData())
-            .setEmail(SHA256(email))
-            .setPhone(SHA256(telefono))
-            .setFirstName(SHA256(nombre))
+            .setEmail(sha256(email))
+            .setPhone(sha256(telefono))
+            .setFirstName(sha256(nombre))
             .setClientIpAddress(req.connection.remoteAddress)
             .setClientUserAgent(req.headers['user-agent'])
             .setFbp(fbp)

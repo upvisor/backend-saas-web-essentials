@@ -1,5 +1,6 @@
 import Suscripcion from '../models/Suscripcion.js'
 import bizSdk from 'facebook-nodejs-business-sdk'
+import sha256 from 'crypto-js/sha256.js'
 
 export const createSuscripcion = async (req, res) => {
     try {
@@ -12,7 +13,7 @@ export const createSuscripcion = async (req, res) => {
         const api = bizSdk.FacebookAdsApi.init(access_token)
         let current_timestamp = new Date()
         const userData = (new UserData())
-            .setEmail(email)
+            .setEmail(sha256(email))
             .setClientIpAddress(req.connection.remoteAddress)
             .setClientUserAgent(req.headers['user-agent'])
             .setFbp(fbp)

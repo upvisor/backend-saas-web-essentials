@@ -1,7 +1,6 @@
 import Compra from '../models/Compra.js'
 import bizSdk from 'facebook-nodejs-business-sdk'
-import pkg from 'crypto-js/sha256.js'
-const { SHA256 } = pkg
+import sha256 from 'crypto-js/sha256.js'
 
 export const createCompra = async (req, res) => {
     try {
@@ -16,11 +15,11 @@ export const createCompra = async (req, res) => {
         const api = bizSdk.FacebookAdsApi.init(access_token)
         let current_timestamp = new Date()
         const userData = (new UserData())
-            .setEmail(SHA256(email))
-            .setPhone(SHA256(telefono))
-            .setFirstName(SHA256(nombre))
-            .setCity(SHA256(ciudad))
-            .setCountry(SHA256('cl'))
+            .setEmail(sha256(email))
+            .setPhone(sha256(telefono))
+            .setFirstName(sha256(nombre))
+            .setCity(sha256(ciudad))
+            .setCountry(sha256('cl'))
             .setClientIpAddress(req.connection.remoteAddress)
             .setClientUserAgent(req.headers['user-agent'])
             .setFbp(fbp)
@@ -99,11 +98,11 @@ export const updateCompra = async (req, res) => {
             const api = bizSdk.FacebookAdsApi.init(access_token)
             let current_timestamp = new Date()
             const userData = (new UserData())
-                .setEmail(SHA256(compra.email))
-                .setPhone(SHA256(compra.telefono))
-                .setFirstName(SHA256(compra.nombre))
-                .setCity(SHA256(compra.ciudad))
-                .setCountry(SHA256('cl'))
+                .setEmail(sha256(compra.email))
+                .setPhone(sha256(compra.telefono))
+                .setFirstName(sha256(compra.nombre))
+                .setCity(sha256(compra.ciudad))
+                .setCountry(sha256('cl'))
                 .setClientIpAddress(req.connection.remoteAddress)
                 .setClientUserAgent(req.headers['user-agent'])
                 .setFbp(fbp)
