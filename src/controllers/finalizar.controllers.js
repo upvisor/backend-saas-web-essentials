@@ -34,10 +34,16 @@ export const createFinalizar = async (req, res) => {
                 .setItemPrice(carrito.precio)
                 .setQuantity(carrito.cantidadProductos)
         }
+        let value
+        if ( carrito.length ) {
+            value = carrito.reduce((prev, current) => prev + (current.precio * current.cantidadProductos), 0)
+        } else {
+            value = carrito.precio * carrito.cantidadProductos
+        }
         const customData = (new CustomData())
             .setContents(content)
             .setCurrency('clp')
-            .setValue(carrito.reduce((prev, current) => prev + (current.precio * current.cantidadProductos), 0))
+            .setValue(value)
         const serverEvent = (new ServerEvent())
             .setEventName('AddPaymentInfo')
             .setEventTime(current_timestamp)
