@@ -25,18 +25,31 @@ export const createCompra = async (req, res) => {
             .setFbp(fbp)
             .setFbc(fbc)
         let content = []
-        carrito.map(producto => {
-            content = [...content, 
-                (new Content())
-                    .setTitle(producto.nombre)
-                    .setItemPrice(producto.precio)
-                    .setQuantity(producto.cantidadProductos)
-            ]
-        })
+        if ( carrito.length ) {
+            carrito.map(producto => {
+                content = [...content, 
+                    (new Content())
+                        .setTitle(producto.nombre)
+                        .setItemPrice(producto.precio)
+                        .setQuantity(producto.cantidadProductos)
+                ]
+            })
+        } else {
+            content = (new Content())
+                .setTitle(carrito.nombre)
+                .setItemPrice(carrito.precio)
+                .setQuantity(carrito.cantidadProductos)
+        }
+        let value
+        if ( carrito.length ) {
+            value = carrito.reduce((prev, current) => prev + (current.precio * current.cantidadProductos), 0)
+        } else {
+            value = carrito.precio * carrito.cantidadProductos
+        }
         const customData = (new CustomData())
             .setContents(content)
             .setCurrency('clp')
-            .setValue(carrito.reduce((prev, current) => prev + (current.precio * current.cantidadProductos), 0))
+            .setValue(value)
         const serverEvent = (new ServerEvent())
             .setEventName('InitiateCheckout')
             .setEventTime(current_timestamp)
@@ -108,18 +121,31 @@ export const updateCompra = async (req, res) => {
                 .setFbp(fbp)
                 .setFbc(fbc)
             let content = []
-            compra.carrito.map(producto => {
-                content = [...content, 
-                    (new Content())
-                        .setTitle(producto.nombre)
-                        .setItemPrice(producto.precio)
-                        .setQuantity(producto.cantidadProductos)
-                ]
-            })
+            if ( carrito.length ) {
+                carrito.map(producto => {
+                    content = [...content, 
+                        (new Content())
+                            .setTitle(producto.nombre)
+                            .setItemPrice(producto.precio)
+                            .setQuantity(producto.cantidadProductos)
+                    ]
+                })
+            } else {
+                content = (new Content())
+                    .setTitle(carrito.nombre)
+                    .setItemPrice(carrito.precio)
+                    .setQuantity(carrito.cantidadProductos)
+            }
+            let value
+            if ( carrito.length ) {
+                value = carrito.reduce((prev, current) => prev + (current.precio * current.cantidadProductos), 0)
+            } else {
+                value = carrito.precio * carrito.cantidadProductos
+            }
             const customData = (new CustomData())
                 .setContents(content)
                 .setCurrency('clp')
-                .setValue(compra.carrito.reduce((prev, current) => prev + (current.precio * current.cantidadProductos), 0))
+                .setValue(value)
             const serverEvent = (new ServerEvent())
                 .setEventName('Pucharse')
                 .setEventTime(current_timestamp)
