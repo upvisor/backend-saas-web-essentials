@@ -1,8 +1,54 @@
 import Finalizar from '../models/Finalizar.js'
+import bizSdk from 'facebook-nodejs-business-sdk'
 
 export const createFinalizar = async (req, res) => {
     try {
-        const carrito = req.body
+        const { carrito, fbp, fbc } = req.body
+        const Content = bizSdk.Content
+        const CustomData = bizSdk.CustomData
+        const EventRequest = bizSdk.EventRequest
+        const UserData = bizSdk.UserData
+        const ServerEvent = bizSdk.ServerEvent
+        const access_token = process.env.APIFACEBOOK_TOKEN
+        const pixel_id = process.env.APIFACEBOOK_PIXELID
+        const api = bizSdk.FacebookAdsApi.init(access_token)
+        let current_timestamp = new Date()
+        const userData = (new UserData())
+            .setClientIpAddress(req.connection.remoteAddress)
+            .setClientUserAgent(req.headers['user-agent'])
+            .setFbp(fbp)
+            .setFbc(fbc)
+        let content = []
+        carrito.map(producto => {
+            content = [...content, 
+                (new Content())
+                    .setTitle(producto.nombre)
+                    .setItemPrice(producto.precio)
+                    .setQuantity(producto.cantidadProductos)
+            ]
+        })
+        const customData = (new CustomData())
+            .setContents(content)
+            .setCurrency('clp')
+            .setValue(carrito.reduce((prev, current) => prev + (current.precio * current.cantidadProductos), 0))
+        const serverEvent = (new ServerEvent())
+            .setEventName('AddPaymentInfo')
+            .setEventTime(current_timestamp)
+            .setUserData(userData)
+            .setCustomData(customData)
+            .setEventSourceUrl('https://blaspod.cl/finalizar')
+            .setActionSource('website')
+        const eventsData = [serverEvent]
+        const eventRequest = (new EventRequest(access_token, pixel_id))
+            .setEvents(eventsData)
+            eventRequest.execute().then(
+                response => {
+                    console.log('Response: ', response)
+                },
+                err => {
+                    console.error('Error: ', err)
+                }
+            )
         const fecha = new Date()
         const nuevoFinalizar = new Finalizar({carrito, fecha})
         await nuevoFinalizar.save()
