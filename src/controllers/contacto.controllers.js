@@ -29,7 +29,7 @@ export const createMensaje = async (req, res) => {
             .setCurrency('clp')
             .setValue(precio)
         const serverEvent = (new ServerEvent())
-            .setEventName('AddToCart')
+            .setEventName('Lead')
             .setEventTime(current_timestamp)
             .setUserData(userData)
             .setCustomData(customData)

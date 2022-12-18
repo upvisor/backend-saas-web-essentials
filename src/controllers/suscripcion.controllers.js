@@ -18,10 +18,10 @@ export const createSuscripcion = async (req, res) => {
             .setFbp(fbp)
             .setFbc(fbc)
         const serverEvent = (new ServerEvent())
-            .setEventName('AddPaymentInfo')
+            .setEventName('Lead')
             .setEventTime(current_timestamp)
             .setUserData(userData)
-            .setEventSourceUrl('https://blaspod.cl/finalizar')
+            .setEventSourceUrl('https://blaspod.cl/')
             .setActionSource('website')
         const eventsData = [serverEvent]
         const eventRequest = (new EventRequest(access_token, pixel_id))
