@@ -2,7 +2,6 @@ import Contacto from '../models/Contacto.js'
 import {uploadImage, deleteImage} from '../libs/cloudinary.js'
 import fs from 'fs-extra'
 import bizSdk from 'facebook-nodejs-business-sdk'
-import sha256 from 'crypto-js/sha256.js'
 
 export const createMensaje = async (req, res) => {
     try {
@@ -16,22 +15,14 @@ export const createMensaje = async (req, res) => {
         const api = bizSdk.FacebookAdsApi.init(access_token)
         let current_timestamp = new Date()
         const userData = (new UserData())
-            .setEmail(sha256(email))
-            .setPhone(sha256(telefono))
-            .setFirstName(sha256(nombre))
             .setClientIpAddress(req.connection.remoteAddress)
             .setClientUserAgent(req.headers['user-agent'])
             .setFbp(fbp)
             .setFbc(fbc)
-        const customData = (new CustomData())
-            .setContents([content])
-            .setCurrency('clp')
-            .setValue(precio)
         const serverEvent = (new ServerEvent())
             .setEventName('Lead')
             .setEventTime(current_timestamp)
             .setUserData(userData)
-            .setCustomData(customData)
             .setEventSourceUrl('https://blaspod.cl/contacto')
             .setActionSource('website')
         const eventsData = [serverEvent]
