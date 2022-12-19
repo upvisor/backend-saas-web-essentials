@@ -1,11 +1,9 @@
 import Compra from '../models/Compra.js'
 import bizSdk from 'facebook-nodejs-business-sdk'
-import sha256 from 'crypto-js/sha256.js'
 
 export const createCompra = async (req, res) => {
     try {
         const {email, region, ciudad, nombre, apellido, direccion, departamento, telefono, cupon, carrito, envio, estado, pago, fecha, fbp, fbc} = req.body
-        const phone = `56${telefono}`
         const CustomData = bizSdk.CustomData
         const EventRequest = bizSdk.EventRequest
         const UserData = bizSdk.UserData
