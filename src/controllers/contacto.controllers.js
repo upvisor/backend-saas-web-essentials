@@ -6,7 +6,7 @@ import bizSdk from 'facebook-nodejs-business-sdk'
 export const createMensaje = async (req, res) => {
     try {
         const {nombre, email, telefono, metodoRespuesta, mensaje, fbp, fbc} = req.body
-        const CustomData = bizSdk.CustomData
+        const phone = `56${telefono}`
         const EventRequest = bizSdk.EventRequest
         const UserData = bizSdk.UserData
         const ServerEvent = bizSdk.ServerEvent
@@ -15,6 +15,9 @@ export const createMensaje = async (req, res) => {
         const api = bizSdk.FacebookAdsApi.init(access_token)
         let current_timestamp = new Date()
         const userData = (new UserData())
+            .setFirstName(nombre)
+            .setEmail(email)
+            .setPhone(phone)
             .setClientIpAddress(req.connection.remoteAddress)
             .setClientUserAgent(req.headers['user-agent'])
             .setFbp(fbp)

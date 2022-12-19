@@ -4,6 +4,7 @@ import bizSdk from 'facebook-nodejs-business-sdk'
 export const createCompra = async (req, res) => {
     try {
         const {email, region, ciudad, nombre, apellido, direccion, departamento, telefono, cupon, carrito, envio, estado, pago, fecha, fbp, fbc} = req.body
+        const phone = `56${telefono}`
         const CustomData = bizSdk.CustomData
         const EventRequest = bizSdk.EventRequest
         const UserData = bizSdk.UserData
@@ -13,6 +14,12 @@ export const createCompra = async (req, res) => {
         const api = bizSdk.FacebookAdsApi.init(access_token)
         let current_timestamp = new Date()
         const userData = (new UserData())
+            .setFirstName(nombre)
+            .setLastName(apellido)
+            .setEmail(email)
+            .setPhone(phone)
+            .setCity(ciudad)
+            .setCountry('cl')
             .setClientIpAddress(req.connection.remoteAddress)
             .setClientUserAgent(req.headers['user-agent'])
             .setFbp(fbp)
@@ -86,6 +93,11 @@ export const updateCompra = async (req, res) => {
             const api = bizSdk.FacebookAdsApi.init(access_token)
             let current_timestamp = new Date()
             const userData = (new UserData())
+                .setFirstName(compra.nombre)
+                .setLastName(compra.apellido)
+                .setEmail(compra.email)
+                .setPhone(compra.phone)
+                .setCity(compra.ciudad)
                 .setClientIpAddress(req.connection.remoteAddress)
                 .setClientUserAgent(req.headers['user-agent'])
                 .setFbp(fbp)
