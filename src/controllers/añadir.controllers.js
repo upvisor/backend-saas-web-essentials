@@ -4,7 +4,6 @@ import bizSdk from 'facebook-nodejs-business-sdk'
 export const createAñadir = async (req, res) => {
     try {
         const {cantidadProductos, nombre, precio, fecha, fbp, fbc, url} = req.body
-        const Content = bizSdk.Content
         const CustomData = bizSdk.CustomData
         const EventRequest = bizSdk.EventRequest
         const UserData = bizSdk.UserData
@@ -18,11 +17,8 @@ export const createAñadir = async (req, res) => {
             .setClientUserAgent(req.headers['user-agent'])
             .setFbp(fbp)
             .setFbc(fbc)
-        const content = (new Content())
-            .setTitle(nombre)
-            .setQuantity(cantidadProductos)
         const customData = (new CustomData())
-            .setContents([content])
+            .setContentName(nombre)
             .setCurrency('clp')
             .setValue(precio)
         const serverEvent = (new ServerEvent())
