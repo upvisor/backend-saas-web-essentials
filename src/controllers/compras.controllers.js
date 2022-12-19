@@ -132,15 +132,15 @@ export const updateCompra = async (req, res) => {
                 })
             } else {
                 content = (new Content())
-                    .setTitle(carrito.nombre)
-                    .setItemPrice(carrito.precio)
-                    .setQuantity(carrito.cantidadProductos)
+                    .setTitle(compra.carrito.nombre)
+                    .setItemPrice(compra.carrito.precio)
+                    .setQuantity(compra.carrito.cantidadProductos)
             }
             let value
             if ( carrito.length ) {
-                value = carrito.reduce((prev, current) => prev + (current.precio * current.cantidadProductos), 0)
+                value = compra.carrito.reduce((prev, current) => prev + (current.precio * current.cantidadProductos), 0)
             } else {
-                value = carrito.precio * carrito.cantidadProductos
+                value = compra.carrito.precio * compra.carrito.cantidadProductos
             }
             const customData = (new CustomData())
                 .setContents(content)
