@@ -4,7 +4,6 @@ import bizSdk from 'facebook-nodejs-business-sdk'
 export const createFinalizar = async (req, res) => {
     try {
         const { carrito, fbp, fbc } = req.body
-        const Content = bizSdk.Content
         const CustomData = bizSdk.CustomData
         const EventRequest = bizSdk.EventRequest
         const UserData = bizSdk.UserData
@@ -18,22 +17,6 @@ export const createFinalizar = async (req, res) => {
             .setClientUserAgent(req.headers['user-agent'])
             .setFbp(fbp)
             .setFbc(fbc)
-        let content = []
-        if ( carrito.length ) {
-            carrito.map(producto => {
-                content = [...content, 
-                    (new Content())
-                        .setTitle(producto.nombre)
-                        .setItemPrice(producto.precio)
-                        .setQuantity(producto.cantidadProductos)
-                ]
-            })
-        } else {
-            content = (new Content())
-                .setTitle(carrito.nombre)
-                .setItemPrice(carrito.precio)
-                .setQuantity(carrito.cantidadProductos)
-        }
         let value
         if ( carrito.length ) {
             value = carrito.reduce((prev, current) => prev + (current.precio * current.cantidadProductos), 0)
@@ -41,7 +24,6 @@ export const createFinalizar = async (req, res) => {
             value = carrito.precio * carrito.cantidadProductos
         }
         const customData = (new CustomData())
-            .setContents(content)
             .setCurrency('clp')
             .setValue(value)
         const serverEvent = (new ServerEvent())
