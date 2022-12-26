@@ -40,16 +40,14 @@ export const createSuscripcion = async (req, res) => {
         await nuevaSuscripcion.save()
         const enviarMail = async () => {
             const transporter = nodemailer.createTransport({
-                host: 'smtp.gmail.com',
-                port: 465,
-                secure: true,
+                service: 'gmail',
                 auth: {
                     user: process.env.EMAIL,
                     password: process.env.EMAIL_PASSWORD
                 }
             })
             await transporter.sendMail({
-                from: 'contacto@blaspod.cl',
+                from: 'jorge504tapia@gmail.com',
                 to: email,
                 subject: '<p>¡Te damos la Bienvenida a Blaspod Store! Nos hace muy felices tenerte con nosotros</p>',
                 html: '<p>Hola</p>'
