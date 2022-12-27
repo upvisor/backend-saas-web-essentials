@@ -19,11 +19,11 @@ export const createIngreso = async (req, res) => {
                 items.importacion.map(item => {
                     if (productos.length) {
                         productos.map(product => {
-                            if (item.nombre === product) {
+                            if (item.nombre.toLowerCase() === product.nombre.toLowerCase()) {
                                 precioProductos = Math.round(precioProductos + Number(item.precioImportacion) / Number(item.cantidad))
                             } else if (peticion2.data.length !== 0) {
                                 peticion2.data.map(e => {
-                                    if (product === e.nombre) {
+                                    if (product.nombre.toLowerCase() === e.nombre.toLowerCase()) {
                                         if (e.categorias === item.nombre.toLowerCase()) {
                                             precioProductos = Math.round(precioProductos + (Number(item.precioImportacion) + Number(item.precioAduanas)) / Number(item.cantidad))
                                         }
@@ -32,11 +32,11 @@ export const createIngreso = async (req, res) => {
                             }
                         })
                     } else {
-                        if (item.nombre === productos) {
+                        if (item.nombre.toLowerCase() === productos.nombre.toLowerCase()) {
                             precioProductos = Math.round(precioProductos + Number(item.precioImportacion) / Number(item.cantidad))
                         } else {
                             peticion2.data.map(e => {
-                                if (productos === e.nombre) {
+                                if (productos.nombre.toLowerCase() === e.nombre.toLowerCase()) {
                                     if (e.categorias === item.nombre.toLowerCase()) {
                                         precioProductos = Math.round(precioProductos + (Number(item.precioImportacion) + Number(item.precioAduanas)) / Number(item.cantidad))
                                     }
@@ -48,7 +48,7 @@ export const createIngreso = async (req, res) => {
             })
         }
         const ganancia = precio - precioProductos
-        const nuevoIngreso = new Ingreso({fecha, productos: producto, recibido, envio, precio, estado: 'Pago iniciado', capital: precioProductos, excedente: excedente, ganancia})
+        const nuevoIngreso = new Ingreso({fecha, productos: producto.nombre, recibido, envio, precio, estado: 'Pago iniciado', capital: precioProductos, excedente: excedente, ganancia})
         await nuevoIngreso.save()
         return res.json(nuevoIngreso)
     } catch (error) {
