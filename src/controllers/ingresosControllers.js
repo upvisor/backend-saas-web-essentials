@@ -64,3 +64,12 @@ export const getIngresos = async (req, res) => {
         return res.status(500).json({message: error.message})
     }
 }
+
+export const updateIngresos = async (req, res) => {
+    try {
+        const updateIngresos = await Ingreso.findByIdAndUpdate(req.params.id, req.body, { new: true })
+        return res.send(updateIngresos)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
