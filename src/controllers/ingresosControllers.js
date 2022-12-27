@@ -3,7 +3,7 @@ import axios from 'axios'
 
 export const createIngreso = async (req, res) => {
     try {
-        const {fecha, productos, recibido, envio, precio, estado} = req.body
+        const {fecha, productos, recibido, envio, precio} = req.body
         let producto = ''
         if (productos.length) {
             producto = productos[0]
@@ -48,10 +48,8 @@ export const createIngreso = async (req, res) => {
             })
         }
         const ganancia = precio - precioProductos
-        const nuevoIngreso = new Ingreso({fecha, productos: producto, recibido, envio, precio, estado, capital: precioProductos, excedente: excedente, ganancia})
-        if (estado === 'Pagado') {
-            await nuevoIngreso.save()
-        }
+        const nuevoIngreso = new Ingreso({fecha, productos: producto, recibido, envio, precio, estado: 'Pago iniciado', capital: precioProductos, excedente: excedente, ganancia})
+        await nuevoIngreso.save()
         return res.json(nuevoIngreso)
     } catch (error) {
         return res.status(500).json({message: error.message})
