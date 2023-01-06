@@ -25,7 +25,7 @@ export const createIngreso = async (req, res) => {
                                 peticion2.data.map(e => {
                                     if (product.nombre.toLowerCase() === e.nombre.toLowerCase()) {
                                         if (e.categorias === item.nombre.toLowerCase()) {
-                                            precioProductos = Math.round(precioProductos + (Number(item.precioImportacion) + Number(item.precioAduanas)) / Number(item.cantidad))
+                                            precioProductos = Math.round(precioProductos + (Number(item.precioImportacion) + Number(item.precioAduanas)) / Number(item.cantidad)) * product.cantidadProductos
                                         }
                                     }
                                 })
@@ -38,7 +38,7 @@ export const createIngreso = async (req, res) => {
                             peticion2.data.map(e => {
                                 if (productos.nombre.toLowerCase() === e.nombre.toLowerCase()) {
                                     if (e.categorias === item.nombre.toLowerCase()) {
-                                        precioProductos = Math.round(precioProductos + (Number(item.precioImportacion) + Number(item.precioAduanas)) / Number(item.cantidad))
+                                        precioProductos = Math.round(precioProductos + (Number(item.precioImportacion) + Number(item.precioAduanas)) / Number(item.cantidad)) * productos.cantidadProductos
                                     }
                                 }
                             })
