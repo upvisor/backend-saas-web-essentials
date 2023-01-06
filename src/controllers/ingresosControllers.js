@@ -59,7 +59,8 @@ export const createIngreso = async (req, res) => {
 export const getIngresos = async (req, res) => {
     try {
         const ingresos = await Ingreso.find()
-        res.send(ingresos)
+        const ingresosFiltrados = ingresos.filter(ingreso => ingreso.estado === 'Pago realizado')
+        res.send(ingresosFiltrados)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
