@@ -3,12 +3,18 @@ import axios from 'axios'
 
 export const createIngreso = async (req, res) => {
     try {
-        const {fecha, productos, recibido, envio, precio} = req.body
+        const {fecha, productos, recibido, envio, precio, estado} = req.body
         let producto = ''
         if (productos.length) {
             producto = productos[0]
         } else {
             producto = productos
+        }
+        let estadoActual = ''
+        if (estado) {
+            estadoActual = estado
+        } else {
+            estadoActual = 'Pago iniciado'
         }
         const excedente = recibido - envio - precio
         const peticion = await axios.get('https://server-blaspod-production.up.railway.app/importaciones')
@@ -20,12 +26,12 @@ export const createIngreso = async (req, res) => {
                     if (productos.length) {
                         productos.map(product => {
                             if (item.nombre.toLowerCase() === product.nombre.toLowerCase()) {
-                                precioProductos = Math.round(precioProductos + Number(item.precioImportacion) / Number(item.cantidad))
+                                precioProductos = Math.round(precioProductos + Number(item.precioImportacion) / Number(item.cantidad)) * Number(product.cantidadProductos)
                             } else if (peticion2.data.length !== 0) {
                                 peticion2.data.map(e => {
                                     if (product.nombre.toLowerCase() === e.nombre.toLowerCase()) {
                                         if (e.categorias === item.nombre.toLowerCase()) {
-                                            precioProductos = Math.round(precioProductos + (Number(item.precioImportacion) + Number(item.precioAduanas)) / Number(item.cantidad)) * product.cantidadProductos
+                                            precioProductos = Math.round(precioProductos + (Number(item.precioImportacion) + Number(item.precioAduanas)) / Number(item.cantidad)) * Number(product.cantidadProductos)
                                         }
                                     }
                                 })
@@ -33,12 +39,12 @@ export const createIngreso = async (req, res) => {
                         })
                     } else {
                         if (item.nombre.toLowerCase() === productos.nombre.toLowerCase()) {
-                            precioProductos = Math.round(precioProductos + Number(item.precioImportacion) / Number(item.cantidad))
+                            precioProductos = Math.round(precioProductos + Number(item.precioImportacion) / Number(item.cantidad)) * Number(productos.cantidadProductos)
                         } else {
                             peticion2.data.map(e => {
                                 if (productos.nombre.toLowerCase() === e.nombre.toLowerCase()) {
                                     if (e.categorias === item.nombre.toLowerCase()) {
-                                        precioProductos = Math.round(precioProductos + (Number(item.precioImportacion) + Number(item.precioAduanas)) / Number(item.cantidad)) * productos.cantidadProductos
+                                        precioProductos = Math.round(precioProductos + (Number(item.precioImportacion) + Number(item.precioAduanas)) / Number(item.cantidad)) * Number(productos.cantidadProductos)
                                     }
                                 }
                             })
@@ -48,7 +54,7 @@ export const createIngreso = async (req, res) => {
             })
         }
         const ganancia = precio - precioProductos
-        const nuevoIngreso = new Ingreso({fecha, productos: producto.nombre, recibido, envio, precio, estado: 'Pago iniciado', capital: precioProductos, excedente: excedente, ganancia})
+        const nuevoIngreso = new Ingreso({fecha, productos: producto.nombre, recibido, envio, precio, estado: estadoActual, capital: precioProductos, excedente: excedente, ganancia})
         await nuevoIngreso.save()
         return res.json(nuevoIngreso)
     } catch (error) {
