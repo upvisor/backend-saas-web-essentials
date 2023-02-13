@@ -1,11 +1,13 @@
-import Producto from '../models/Producto.js'
+import Product from '../models/Product.js'
 import {uploadImage, deleteImage} from '../libs/cloudinary.js'
 import fs from 'fs-extra'
 
-export const getProductos = async (req, res) => {
+export const getProducts = async (req, res) => {
     try {
-        const productos = await Producto.find()
-        res.send(productos)
+        const products = await Product.find()
+        .select('name images price beforePrice stock slug variations reviews stock -_id')
+        .lean()
+        res.send(products)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
@@ -87,17 +89,6 @@ export const deleteProducto = async (req, res) => {
         }
         return res.sendStatus(204)
     } catch (error) {
-        return res.status(500).json({message: error.message})
-    }
-}
-
-export const getProducto = async (req, res) => {
-    try {
-        const producto = await Producto.findById(req.params.id)
-        if (!producto) return res.sendStatus(404)
-        return res.json(producto)
-    } catch (error) {
-        console.error(error.message)
         return res.status(500).json({message: error.message})
     }
 }
