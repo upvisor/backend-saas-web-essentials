@@ -22,6 +22,7 @@ import inversionRoutes from './routes/inversion.routes.js'
 import conversacionRoutes from './routes/conversaciones.routes.js'
 import mensajesRoutes from './routes/mensajes.routes.js'
 import estadisticasRoutes from './routes/estadisticas.routes.js'
+import categoriesRoutes from './routes/categories.routes.js'
 import webplayPlusRouter from './routes/pagos.routes.js'
 import {Server as SocketServer} from 'socket.io'
 import http from 'http'
@@ -64,6 +65,7 @@ app.use(inversionRoutes)
 app.use(conversacionRoutes)
 app.use(mensajesRoutes)
 app.use(estadisticasRoutes)
+app.use(categoriesRoutes)
 app.use(webplayPlusRouter)
 
 let users = []
