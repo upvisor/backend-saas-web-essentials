@@ -5,11 +5,11 @@ import {connectDB} from './db.js'
 import productsRoutes from './routes/products.routes.js'
 import addCartRoutes from './routes/addCart.routes.js'
 import sellsRoutes from './routes/sells.routes.js'
-import contactoRoutes from './routes/contacto.routes.js'
+import contactRoutes from './routes/contact.routes.js'
 import informationRoutes from './routes/information.routes.js'
 import subscribeRoutes from './routes/subscribe.routes.js'
 import viewContentRoutes from './routes/viewContent.routes.js'
-import estadisticasRoutes from './routes/estadisticas.routes.js'
+import stadisticsRoutes from './routes/stadistics.routes.js'
 import categoriesRoutes from './routes/categories.routes.js'
 import http from 'http'
 
@@ -29,11 +29,11 @@ app.use(express.urlencoded({extended: false}))
 app.use(productsRoutes)
 app.use(addCartRoutes)
 app.use(sellsRoutes)
-app.use(contactoRoutes)
+app.use(contactRoutes)
 app.use(informationRoutes)
 app.use(subscribeRoutes)
 app.use(viewContentRoutes)
-app.use(estadisticasRoutes)
+app.use(stadisticsRoutes)
 app.use(categoriesRoutes)
 
 server.listen(process.env.PORT || 3000)

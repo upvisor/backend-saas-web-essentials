@@ -38,8 +38,7 @@ export const createViewContent = async (req, res) => {
                 err => {
                     console.error('Error: ', err)
                 }
-            );
-        const fecha = new Date()
+            )
         const nuevaVisualizacion = new ViewContent({name, price, category})
         await nuevaVisualizacion.save()
         return res.json(nuevaVisualizacion)
