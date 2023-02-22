@@ -1,11 +1,11 @@
-import Compra from '../models/Compra.js'
+import Sell from '../models/Sell.js'
 import bizSdk from 'facebook-nodejs-business-sdk'
 import nodemailer from 'nodemailer'
 
-export const createCompra = async (req, res) => {
+export const createSell = async (req, res) => {
     try {
-        const {email, region, ciudad, nombre, apellido, direccion, departamento, telefono, cupon, carrito, envio, estado, pago, fecha, fbp, fbc} = req.body
-        const phone = `56${telefono}`
+        const {email, region, city, firstName, lastName, address, departament, phone, coupon, cart, shipping, state, pay, total, fbp, fbc} = req.body
+        const phoneFormat = `56${phone}`
         const CustomData = bizSdk.CustomData
         const EventRequest = bizSdk.EventRequest
         const UserData = bizSdk.UserData
@@ -14,32 +14,27 @@ export const createCompra = async (req, res) => {
         const pixel_id = process.env.APIFACEBOOK_PIXELID
         const api = bizSdk.FacebookAdsApi.init(access_token)
         let current_timestamp = new Date()
+        const url = `${process.env.WEB_URL}/finalizar-compra/`
         const userData = (new UserData())
-            .setFirstName(nombre.toLowerCase())
-            .setLastName(apellido.toLowerCase())
+            .setFirstName(firstName.toLowerCase())
+            .setLastName(lastName.toLowerCase())
             .setEmail(email.toLowerCase())
-            .setPhone(phone)
-            .setCity(ciudad.toLowerCase())
+            .setPhone(phoneFormat)
+            .setCity(city.toLowerCase())
             .setCountry('cl')
             .setClientIpAddress(req.connection.remoteAddress)
             .setClientUserAgent(req.headers['user-agent'])
             .setFbp(fbp)
             .setFbc(fbc)
-        let value
-        if ( carrito.length ) {
-            value = carrito.reduce((prev, current) => prev + (current.precio * current.cantidadProductos), 0)
-        } else {
-            value = carrito.precio * carrito.cantidadProductos
-        }
         const customData = (new CustomData())
             .setCurrency('clp')
-            .setValue(value)
+            .setValue(total)
         const serverEvent = (new ServerEvent())
             .setEventName('InitiateCheckout')
             .setEventTime(current_timestamp)
             .setUserData(userData)
             .setCustomData(customData)
-            .setEventSourceUrl('https://blaspod.cl/finalizar')
+            .setEventSourceUrl(url)
             .setActionSource('website')
         const eventsData = [serverEvent]
         const eventRequest = (new EventRequest(access_token, pixel_id))
@@ -52,38 +47,38 @@ export const createCompra = async (req, res) => {
                     console.error('Error: ', err)
                 }
             )
-        const cuponUpper = cupon.toUpperCase()
-        const nuevaCompra = new Compra({email, region, ciudad, nombre, apellido, direccion, departamento, telefono, cupon: cuponUpper, carrito, envio, estado, pago, fecha})
-        await nuevaCompra.save()
-        return res.json(nuevaCompra)
+        const cuponUpper = coupon?.toUpperCase()
+        const newSell = new Sell({email, region, city, firstName: firstName[0].toUpperCase() + firstName.substring(1), lastName: lastName[0].toUpperCase() + lastName.substring(1), address, departament, phone: phoneFormat, coupon: cuponUpper, cart, shipping, state, pay, total})
+        await newSell.save()
+        return res.json(newSell)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
 }
 
-export const getCompras = async (req, res) => {
+export const getSells = async (req, res) => {
     try {
-        const compras = await Compra.find()
-        res.send(compras)
+        const sells = await Sell.find()
+        res.send(sells)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
 }
 
-export const getCompra = async (req, res) => {
+export const getSell = async (req, res) => {
     try {
-        const compra = await Compra.findById(req.params.id)
-        if (!compra) return res.sendStatus(404)
-        res.json(compra)
+        const sell = await Sell.findById(req.params.id)
+        if (!sell) return res.sendStatus(404)
+        res.json(sell)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
 }
 
-export const updateCompra = async (req, res) => {
+export const updateSell = async (req, res) => {
     try {
-        const { compra, fbp, fbc } = req.body
-        const updateCompra = await Compra.findByIdAndUpdate(req.params.id, compra, {new: true})
+        const { sell, fbp, fbc } = req.body
+        const updateSell = await Sell.findByIdAndUpdate(req.params.id, compra, {new: true})
         if (req.body.estado === 'Pago realizado') {
             const CustomData = bizSdk.CustomData
             const EventRequest = bizSdk.EventRequest
@@ -93,31 +88,26 @@ export const updateCompra = async (req, res) => {
             const pixel_id = process.env.APIFACEBOOK_PIXELID
             const api = bizSdk.FacebookAdsApi.init(access_token)
             let current_timestamp = new Date()
+            const url = `${process.env.WEB_URL}/gracias-por-comprar/`
             const userData = (new UserData())
-                .setFirstName(compra.nombre.toLowerCase())
-                .setLastName(compra.apellido.toLowerCase())
-                .setEmail(compra.email.toLowerCase())
-                .setPhone(compra.phone)
-                .setCity(compra.ciudad.toLowerCase())
+                .setFirstName(sell.firstName.toLowerCase())
+                .setLastName(sell.lastName.toLowerCase())
+                .setEmail(sell.email.toLowerCase())
+                .setPhone(sell.phone)
+                .setCity(sell.city.toLowerCase())
                 .setClientIpAddress(req.connection.remoteAddress)
                 .setClientUserAgent(req.headers['user-agent'])
                 .setFbp(fbp)
                 .setFbc(fbc)
-            let value
-            if ( carrito.length ) {
-                value = compra.carrito.reduce((prev, current) => prev + (current.precio * current.cantidadProductos), 0)
-            } else {
-                value = compra.carrito.precio * compra.carrito.cantidadProductos
-            }
             const customData = (new CustomData())
                 .setCurrency('clp')
-                .setValue(value)
+                .setValue(sell.total)
             const serverEvent = (new ServerEvent())
                 .setEventName('Pucharse')
                 .setEventTime(current_timestamp)
                 .setUserData(userData)
                 .setCustomData(customData)
-                .setEventSourceUrl('https://blaspod.cl/gracias-por-comprar')
+                .setEventSourceUrl(url)
                 .setActionSource('website')
             const eventsData = [serverEvent]
             const eventRequest = (new EventRequest(access_token, pixel_id))
@@ -136,8 +126,8 @@ export const updateCompra = async (req, res) => {
                     port: 465,
                     secure: true,
                     auth: {
-                        user: 'contacto@blaspod.cl',
-                        pass: 'Estevan5966@',
+                        user: process.env.EMAIL,
+                        pass: process.env.EMAIL_PASSWORD,
                     },
                 })
                 await transporter.sendMail({
@@ -176,7 +166,7 @@ export const updateCompra = async (req, res) => {
             }
             main().catch(console.error)
         }
-        return res.send(updateCompra)
+        return res.send(updateSell)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }

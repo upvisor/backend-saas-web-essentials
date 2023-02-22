@@ -1,9 +1,9 @@
-import Finalizar from '../models/Finalizar.js'
+import Information from '../models/Information.js'
 import bizSdk from 'facebook-nodejs-business-sdk'
 
-export const createFinalizar = async (req, res) => {
+export const createInformation = async (req, res) => {
     try {
-        const { carrito, fbp, fbc } = req.body
+        const { cart, fbp, fbc } = req.body
         const CustomData = bizSdk.CustomData
         const EventRequest = bizSdk.EventRequest
         const UserData = bizSdk.UserData
@@ -12,16 +12,17 @@ export const createFinalizar = async (req, res) => {
         const pixel_id = process.env.APIFACEBOOK_PIXELID
         const api = bizSdk.FacebookAdsApi.init(access_token)
         let current_timestamp = new Date()
+        const url = `${process.env.WEB_URL}/finalizar-compra/`
         const userData = (new UserData())
             .setClientIpAddress(req.connection.remoteAddress)
             .setClientUserAgent(req.headers['user-agent'])
             .setFbp(fbp)
             .setFbc(fbc)
         let value
-        if ( carrito.length ) {
-            value = carrito.reduce((prev, current) => prev + (current.precio * current.cantidadProductos), 0)
+        if ( cart.length ) {
+            value = cart.reduce((prev, current) => prev + (current.precio * current.cantidadProductos), 0)
         } else {
-            value = carrito.precio * carrito.cantidadProductos
+            value = cart.precio * cart.cantidadProductos
         }
         const customData = (new CustomData())
             .setCurrency('clp')
@@ -31,7 +32,7 @@ export const createFinalizar = async (req, res) => {
             .setEventTime(current_timestamp)
             .setUserData(userData)
             .setCustomData(customData)
-            .setEventSourceUrl('https://blaspod.cl/finalizar')
+            .setEventSourceUrl(url)
             .setActionSource('website')
         const eventsData = [serverEvent]
         const eventRequest = (new EventRequest(access_token, pixel_id))
@@ -44,8 +45,7 @@ export const createFinalizar = async (req, res) => {
                     console.error('Error: ', err)
                 }
             )
-        const fecha = new Date()
-        const nuevoFinalizar = new Finalizar({carrito, fecha})
+        const nuevoFinalizar = new Information({cart})
         await nuevoFinalizar.save()
         return res.json(nuevoFinalizar)
     } catch (error) {
@@ -53,9 +53,9 @@ export const createFinalizar = async (req, res) => {
     }
 }
 
-export const getFinalizar = async (req, res) => {
+export const getInformation = async (req, res) => {
     try {
-        const finalizar = await Finalizar.find()
+        const finalizar = await Information.find()
         res.send(finalizar)
     } catch (error) {
         return res.status(500).json({message: error.message})

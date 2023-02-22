@@ -1,9 +1,9 @@
-import Visualizacion from '../models/Visualizacion.js'
+import ViewContent from '../models/ViewContent.js'
 import bizSdk from 'facebook-nodejs-business-sdk'
 
-export const createVisualizacion = async (req, res) => {
+export const createViewContent = async (req, res) => {
     try {
-        const {producto, precio, url, fbp, fbc} = req.body
+        const {name, price, category, url, fbp, fbc} = req.body
         const CustomData = bizSdk.CustomData
         const EventRequest = bizSdk.EventRequest
         const UserData = bizSdk.UserData
@@ -18,15 +18,15 @@ export const createVisualizacion = async (req, res) => {
             .setFbp(fbp)
             .setFbc(fbc)
         const customData = (new CustomData())
-            .setContentName(producto)
+            .setContentName(name)
             .setCurrency('clp')
-            .setValue(precio)
+            .setValue(price)
         const serverEvent = (new ServerEvent())
             .setEventName('ViewContent')
             .setEventTime(current_timestamp)
             .setUserData(userData)
             .setCustomData(customData)
-            .setEventSourceUrl(`https://blaspod.cl/productos/${url}`)
+            .setEventSourceUrl(`${process.env.WEB_URL}/${url}`)
             .setActionSource('website')
         const eventsData = [serverEvent]
         const eventRequest = (new EventRequest(access_token, pixel_id))
@@ -40,7 +40,7 @@ export const createVisualizacion = async (req, res) => {
                 }
             );
         const fecha = new Date()
-        const nuevaVisualizacion = new Visualizacion({producto, precio, fecha})
+        const nuevaVisualizacion = new ViewContent({name, price, category})
         await nuevaVisualizacion.save()
         return res.json(nuevaVisualizacion)
     } catch (error) {
@@ -48,9 +48,9 @@ export const createVisualizacion = async (req, res) => {
     }
 }
 
-export const getVisualizacion = async (req, res) => {
+export const getViewContent = async (req, res) => {
     try {
-        const visualizaciones = await Visualizacion.find()
+        const visualizaciones = await ViewContent.find()
         res.send(visualizaciones)
     } catch (error) {
         return res.status(500).json({message: error.message})

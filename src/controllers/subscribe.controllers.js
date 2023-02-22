@@ -1,8 +1,8 @@
-import Suscripcion from '../models/Suscripcion.js'
+import Subscribe from '../models/Subscribe.js'
 import bizSdk from 'facebook-nodejs-business-sdk'
 import nodemailer from 'nodemailer'
 
-export const createSuscripcion = async (req, res) => {
+export const createSubscribe = async (req, res) => {
     try {
         const { email, fbp, fbc } = req.body
         const EventRequest = bizSdk.EventRequest
@@ -36,8 +36,6 @@ export const createSuscripcion = async (req, res) => {
                 }
             )
         const fecha = new Date()
-        const nuevaSuscripcion = new Suscripcion({email, fecha})
-        await nuevaSuscripcion.save()
         async function main() {
             let transporter = nodemailer.createTransport({
                 host: "smtp.hostinger.com",
@@ -82,6 +80,8 @@ export const createSuscripcion = async (req, res) => {
             </div>`
             })
         }
+        const nuevaSuscripcion = new Subscribe({email, fecha})
+        await nuevaSuscripcion.save()
         main().catch(console.error)
         return res.json(nuevaSuscripcion)
     } catch (error) {
@@ -89,9 +89,9 @@ export const createSuscripcion = async (req, res) => {
     }
 }
 
-export const getSuscripcion = async (req, res) => {
+export const getSubscribe = async (req, res) => {
     try {
-        const suscripciones = await Suscripcion.find()
+        const suscripciones = await Subscribe.find()
         res.send(suscripciones)
     } catch (error) {
         return res.status(500).json({message: error.message})
