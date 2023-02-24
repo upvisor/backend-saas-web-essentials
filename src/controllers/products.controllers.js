@@ -5,7 +5,7 @@ import fs from 'fs-extra'
 export const getProducts = async (req, res) => {
     try {
         const products = await Product.find()
-        .select('name images price beforePrice stock slug variations reviews stock category -_id')
+        .select('name images price beforePrice stock slug variations reviews stock category state -_id')
         .lean()
         res.send(products)
     } catch (error) {
@@ -63,7 +63,7 @@ export const createProduct = async (req, res) => {
                 public_id: result.public_id
             }
         }
-        const nuevoProducto = new Producto({nombre, precio, precioAnterior, descripcion, url, categorias, populares, variaciones, stock, oferta, imagen})
+        const nuevoProducto = new Product({nombre, precio, precioAnterior, descripcion, url, categorias, populares, variaciones, stock, oferta, imagen})
         await nuevoProducto.save()
         return res.json(nuevoProducto)
     } catch (error) {
@@ -73,7 +73,7 @@ export const createProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
     try {
-        const updateProducto = await Producto.findByIdAndUpdate(req.params.id, req.body, {new: true})
+        const updateProducto = await Product.findByIdAndUpdate(req.params.id, req.body, {new: true})
         return res.send(updateProducto)
     } catch (error) {
         return res.status(500).json({message: error.message})
@@ -82,7 +82,7 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
     try {
-        const productoRemoved = await Producto.findByIdAndDelete(req.params.id)
+        const productoRemoved = await Product.findByIdAndDelete(req.params.id)
         if (!productoRemoved) return res.sendStatus(404)
         if (productoRemoved.imagen.public_id) {
             await deleteImage(productoRemoved.imagen.public_id)

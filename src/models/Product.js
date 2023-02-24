@@ -13,7 +13,8 @@ const productSchema = new mongoose.Schema({
   slug: { type: String, required: true, unique: true },
   tags: [{ type: String }],
   category: { type: String, required: true },
-  reviews: [{ calification: { type: Number, required: true }, name: { type: String, required: true }, email: { type: String }, title: { type: String }, review: { type: String, required: true }, createdAt: { type: Date } }]
+  reviews: [{ calification: { type: Number, required: true }, name: { type: String, required: true }, email: { type: String }, title: { type: String }, review: { type: String, required: true }, createdAt: { type: Date } }],
+  state: { type: Boolean, required: true }
 },{
   timestamps: true
 })
