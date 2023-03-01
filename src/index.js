@@ -11,6 +11,9 @@ import subscribeRoutes from './routes/subscribe.routes.js'
 import viewContentRoutes from './routes/viewContent.routes.js'
 import stadisticsRoutes from './routes/stadistics.routes.js'
 import categoriesRoutes from './routes/categories.routes.js'
+import aiDescriptionProductRoutes from './routes/aiDescriptionProduct.routes.js'
+import aiProductSeo from './routes/aiProductSeo.routes.js'
+import aiDescriptionCategoryRoutes from './routes/aiDescriptionCategory.routes.js'
 import http from 'http'
 
 connectDB()
@@ -35,6 +38,9 @@ app.use(subscribeRoutes)
 app.use(viewContentRoutes)
 app.use(stadisticsRoutes)
 app.use(categoriesRoutes)
+app.use(aiDescriptionProductRoutes)
+app.use(aiProductSeo)
+app.use(aiDescriptionCategoryRoutes)
 
 server.listen(process.env.PORT || 3000)
 console.log('Server on port', process.env.PORT || 3000)
