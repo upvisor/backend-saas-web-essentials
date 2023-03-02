@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import { createSeo } from '../controllers/aiProductSeo.js'
+import { createSeo } from '../controllers/aiProductSeo.controllers.js'
 
 const router = Router()
 

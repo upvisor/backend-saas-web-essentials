@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import { createDescription } from '../controllers/aiDescriptionCategory.js'
+import { createDescription } from '../controllers/aiDescriptionCategory.controllers.js'
 
 const router = Router()
 

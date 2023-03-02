@@ -14,6 +14,7 @@ import categoriesRoutes from './routes/categories.routes.js'
 import aiDescriptionProductRoutes from './routes/aiDescriptionProduct.routes.js'
 import aiProductSeo from './routes/aiProductSeo.routes.js'
 import aiDescriptionCategoryRoutes from './routes/aiDescriptionCategory.routes.js'
+import aiCategorySeoRoutes from './routes/aiCategorySeo.routes.js'
 import http from 'http'
 
 connectDB()
@@ -41,6 +42,7 @@ app.use(categoriesRoutes)
 app.use(aiDescriptionProductRoutes)
 app.use(aiProductSeo)
 app.use(aiDescriptionCategoryRoutes)
+app.use(aiCategorySeoRoutes)
 
 server.listen(process.env.PORT || 3000)
 console.log('Server on port', process.env.PORT || 3000)
