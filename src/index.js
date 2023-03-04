@@ -12,9 +12,11 @@ import viewContentRoutes from './routes/viewContent.routes.js'
 import stadisticsRoutes from './routes/stadistics.routes.js'
 import categoriesRoutes from './routes/categories.routes.js'
 import aiDescriptionProductRoutes from './routes/aiDescriptionProduct.routes.js'
-import aiProductSeo from './routes/aiProductSeo.routes.js'
+import aiDescriptionProductSeo from './routes/aiDescriptionProductSeo.routes.js'
 import aiDescriptionCategoryRoutes from './routes/aiDescriptionCategory.routes.js'
-import aiCategorySeoRoutes from './routes/aiCategorySeo.routes.js'
+import aiDescriptionCategorySeoRoutes from './routes/aiDescriptionCategorySeo.routes.js'
+import aiTitleCategorySeoRoutes from './routes/aiTitleCategorySeo.routes.js'
+import aiTitleProductSeo from './routes/aiTitleProductSeo.routes.js'
 import http from 'http'
 
 connectDB()
@@ -40,9 +42,11 @@ app.use(viewContentRoutes)
 app.use(stadisticsRoutes)
 app.use(categoriesRoutes)
 app.use(aiDescriptionProductRoutes)
-app.use(aiProductSeo)
+app.use(aiDescriptionProductSeo)
 app.use(aiDescriptionCategoryRoutes)
-app.use(aiCategorySeoRoutes)
+app.use(aiDescriptionCategorySeoRoutes)
+app.use(aiTitleProductSeo)
+app.use(aiTitleCategorySeoRoutes)
 
 server.listen(process.env.PORT || 3000)
 console.log('Server on port', process.env.PORT || 3000)

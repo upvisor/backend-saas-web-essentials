@@ -1,6 +1,6 @@
 import { Configuration, OpenAIApi } from "openai"
 
-export const createSeo = async (req, res) => {
+export const createDescriptionSeo = async (req, res) => {
     try {
         const { description } = req.body
         const configuration = new Configuration({
@@ -10,7 +10,7 @@ export const createSeo = async (req, res) => {
         const openai = new OpenAIApi(configuration)
         const response = await openai.createCompletion({
             model: "text-davinci-003",
-            prompt: `I want you to pretend that you are an E-commerce SEO expert who writes compelling product descriptions for users looking to buy online. Write a persuasive and professional sounding Meta Title and Description that integrates similar language present in the new product summary text. Make sure to include a numerical aspect in the Meta Title. Do not echo my prompt. Do not remind me what I asked you for. Do not apologize. Do not self-reference. Write all output in Spanish. Please use the following products: ${description}`,
+            prompt: `Respóndeme como un experto en copywriting y seo especializado en E-commerce con mas de 15 años de experiencia. Quiero que redactes una meta descripción para un producto de un E-commerce, habla acerca del producto con la palabra "nuestro". El producto es: ${description}`,
             max_tokens: 1000,
             temperature: 0
         })

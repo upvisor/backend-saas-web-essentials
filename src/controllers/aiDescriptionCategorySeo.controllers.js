@@ -1,6 +1,6 @@
 import { Configuration, OpenAIApi } from "openai"
 
-export const createSeo = async (req, res) => {
+export const createDescriptionSeo = async (req, res) => {
     try {
         const { description } = req.body
         const configuration = new Configuration({
@@ -10,7 +10,7 @@ export const createSeo = async (req, res) => {
         const openai = new OpenAIApi(configuration)
         const response = await openai.createCompletion({
             model: "text-davinci-003",
-            prompt: `Actua como si fueras un experto en SEO especializado en ecommerces con 15 años de experiencia escribiendo meta titulos y meta descripciones par tiendas online, necesito que escribas un meta titulo y una meta descripcion persuasivos y que suenen profesionales para una categoria de la tienda online, la categoria es la siguiente: ${description}`,
+            prompt: `ARespóndeme como un experto en copywriting y seo especializado en E-commerce con mas de 15 años de experiencia. Quiero que redactes una meta descripción para una categoria de un E-commerce. La categoria es: ${description}`,
             max_tokens: 1000,
             temperature: 0
         })

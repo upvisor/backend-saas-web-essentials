@@ -10,7 +10,7 @@ export const createDescription = async (req, res) => {
         const openai = new OpenAIApi(configuration)
         const response = await openai.createCompletion({
             model: "text-davinci-003",
-            prompt: `I want you to pretend that you are an E-commerce SEO expert who writes compelling product descriptions for users looking to buy online. I am going to provide the title of one e-commerce product and I want you to come up the product description. The main point of these commands is for you to developing a new content informative, and captivating product summary/description that is less than 200 words. The purpose of product description is marketing the products to users looking to buy. Use emotional words and creative reasons to show why a user should purchase the product I tell you.  Do not echo my prompt. Do not remind me what I asked you for. Do not apologize. Do not self-reference. Do not ask questions. Write all output in Spanish. Please use the following products: ${description}`,
+            prompt: `Respóndeme como un experto en copywriting y seo especializado en E-commerce con mas de 15 años de experiencia. Quiero que redactes una descripción para un producto de un E-commerce, habla acerca del producto con la palabra "nuestro", no repitas partes de la descripción y no pongas "en resumen" en el parrafo final. El producto es: ${description}`,
             max_tokens: 1000,
             temperature: 0
         })
