@@ -10,7 +10,7 @@ export const createTitleSeo = async (req, res) => {
         const openai = new OpenAIApi(configuration)
         const response = await openai.createCompletion({
             model: "text-davinci-003",
-            prompt: `Respóndeme como un experto en copywriting y seo especializado en E-commerce con mas de 15 años de experiencia. Quiero que redactes 5 meta títulos para un producto de un E-commerce. Finaliza el meta titulo con "| ${nameShop}". El producto es: ${description}`,
+            prompt: `Respóndeme como un experto en copywriting y seo especializado en E-commerce con mas de 15 años de experiencia. Quiero que redactes un meta título para un producto de un E-commerce. Finaliza el meta titulo con "| ${nameShop}". El producto es: ${description}`,
             max_tokens: 1000,
             temperature: 0
         })
