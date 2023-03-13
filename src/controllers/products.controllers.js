@@ -19,6 +19,9 @@ export const createProduct = async (req, res) => {
         if (data.variations[0].variation === '') {
             data.variations = undefined
         }
+        if (data.productsOffer[0].productsSale[0].name) {
+            data.productsOffer = undefined
+        }
         const nuevoProducto = new Product(data)
         await nuevoProducto.save()
         return res.json(nuevoProducto)
