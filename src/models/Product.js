@@ -7,14 +7,18 @@ const productSchema = new mongoose.Schema({
   stock: { type: Number, required: true, default: 0 },
   price: { type: Number, required: true, default: 0 },
   beforePrice: { type: Number },
+  cost: { type: Number },
   timeOffer: { type: String },
-  variations: [{ type: String }],
-  productsOffer: [{ products: [{ type: String }], price: { type: Number, required: true } }],
+  variations: [{ variation: { type: String, required: true }, stock: { type: Number }, sku: { type: String }, image: { type: String } }],
+  productsOffer: [{ productsSale: [], price: { type: Number, required: true } }],
   slug: { type: String, required: true, unique: true },
   tags: [{ type: String }],
   category: { type: String, required: true },
   reviews: [{ calification: { type: Number, required: true }, name: { type: String, required: true }, email: { type: String }, title: { type: String }, review: { type: String, required: true }, createdAt: { type: Date } }],
-  state: { type: Boolean, required: true }
+  state: { type: Boolean, required: true },
+  titleSeo: { type: String },
+  descriptionSeo: { type: String },
+  nameVariations: { type: String }
 },{
   timestamps: true
 })
