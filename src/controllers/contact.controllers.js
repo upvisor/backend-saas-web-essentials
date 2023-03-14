@@ -5,7 +5,7 @@ import bizSdk from 'facebook-nodejs-business-sdk'
 
 export const createMessage = async (req, res) => {
     try {
-        const {name, email, message, fbp, fbc} = req.body
+        const {name, email, message, images, fbp, fbc} = req.body
         const EventRequest = bizSdk.EventRequest
         const UserData = bizSdk.UserData
         const ServerEvent = bizSdk.ServerEvent
@@ -37,16 +37,7 @@ export const createMessage = async (req, res) => {
                     console.error('Error: ', err)
                 }
             )
-        let image
-        if (req.files?.image) {
-            const result = await uploadImage(req.files.image.tempFilePath)
-            await fs.remove(req.files.image.tempFilePath)
-            image = {
-                url: result.secure_url,
-                public_id: result.public_id
-            }
-        }
-        const nuevoMensaje = new Contact({name, email, message, image})
+        const nuevoMensaje = new Contact({name, email, message, images})
         await nuevoMensaje.save()
         return res.json(nuevoMensaje)
     } catch (error) {
