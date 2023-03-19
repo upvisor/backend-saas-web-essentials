@@ -70,3 +70,17 @@ export const uploadImageProduct = async (req, res) => {
         return res.status(500).json({message: error.message})
     }
 }
+
+export const getProductBySlug = async (req, res) => {
+    const product = await Product.findOne(req.body.slug).lean()
+  
+    if ( !product ) {
+      return null
+    }
+  
+    product.images = product.images.map( image => {
+      return image.includes('http') ? image : `${ process.env.HOST_NAME}products/${ image }`
+    })
+  
+    return res.send(product)
+  }
