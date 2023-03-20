@@ -8,3 +8,26 @@ export const getCategories = async (req, res) => {
     return res.status(500).json({message: error.message})
   }
 }
+
+export const createCategory = async (req, res) => {
+  try {
+    const { category, slug, titleSeo, descriptionSeo, image, description } = req.body
+    const newCategory = new Category({category, slug, titleSeo, descriptionSeo, image, description})
+    await newCategory.save()
+    res.send(newCategory)
+  } catch (error) {
+    return res.status(500).json({message: error.message})
+  }
+}
+
+export const getCategoryBySlug = async (req, res) => {
+  try {
+    const category = await Category.findOne({slug: req.params.id}).lean()
+    if ( !category ) {
+      return null
+    }
+    res.send(category)
+  } catch (error) {
+    return res.status(500).json({message: error.message})
+  }
+}

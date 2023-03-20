@@ -72,7 +72,7 @@ export const uploadImageProduct = async (req, res) => {
 }
 
 export const getProductBySlug = async (req, res) => {
-    const product = await Product.findOne(req.body.slug).lean()
+    const product = await Product.findOne({slug: req.params.id}).lean()
   
     if ( !product ) {
       return null
