@@ -31,3 +31,13 @@ export const getCategoryBySlug = async (req, res) => {
     return res.status(500).json({message: error.message})
   }
 }
+
+export const deleteCategory = async (req, res) => {
+  try {
+    const categoryRemove = await Category.findByIdAndDelete(req.params.id)
+    if (!categoryRemove) return res.sendStatus(404)
+    return res.sendStatus(204)
+  } catch (error) {
+    return res.status(500).json({message: error.message})
+  }
+}
