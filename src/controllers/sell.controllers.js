@@ -4,7 +4,7 @@ import nodemailer from 'nodemailer'
 
 export const createSell = async (req, res) => {
     try {
-        const {email, region, city, firstName, lastName, address, departament, phone, coupon, cart, shipping, state, pay, total, fbp, fbc} = req.body
+        const {email, region, city, firstName, lastName, address, departament, phone, coupon, cart, shipping, state, pay, total, fbp, fbc, shippingMethod, shippingState} = req.body
         const phoneFormat = `56${phone}`
         const CustomData = bizSdk.CustomData
         const EventRequest = bizSdk.EventRequest
@@ -48,7 +48,7 @@ export const createSell = async (req, res) => {
                 }
             )
         const cuponUpper = coupon?.toUpperCase()
-        const newSell = new Sell({email, region, city, firstName: firstName[0].toUpperCase() + firstName.substring(1), lastName: lastName[0].toUpperCase() + lastName.substring(1), address, departament, phone: phoneFormat, coupon: cuponUpper, cart, shipping, state, pay, total})
+        const newSell = new Sell({email, region, city, firstName: firstName[0].toUpperCase() + firstName.substring(1), lastName: lastName[0].toUpperCase() + lastName.substring(1), address, departament, phone: phoneFormat, coupon: cuponUpper, cart, shipping, state, pay, total, shippingMethod, shippingState})
         await newSell.save()
         return res.json(newSell)
     } catch (error) {
