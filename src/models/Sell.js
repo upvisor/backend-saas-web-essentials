@@ -16,7 +16,8 @@ const SellSchema = mongoose.Schema({
   pay: { type: String, required: true },
   total: { type: Number, required: true },
   shippingMethod: { type: String, required: true },
-  shippingState: { type: String, required: true }
+  shippingState: { type: String, required: true },
+  shippingCode: { type: String }
 }, {
   timestamps: true
 })

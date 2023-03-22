@@ -77,8 +77,8 @@ export const getSell = async (req, res) => {
 
 export const updateSell = async (req, res) => {
     try {
-        const { sell, fbp, fbc } = req.body
-        const updateSell = await Sell.findByIdAndUpdate(req.params.id, sell, {new: true})
+        const { sell, shippingCode, fbp, fbc } = req.body
+        const updateSell = await Sell.findByIdAndUpdate(req.params.id, {...sell, shippingCode: shippingCode}, {new: true})
         if (sell.shippingState === 'Productos empaquetados') {
             async function main() {
                 let transporter = nodemailer.createTransport({
@@ -100,24 +100,45 @@ export const updateSell = async (req, res) => {
             main().catch(console.error)
         }
         if (sell.shippingState === 'Envío realizado') {
-            async function main() {
-                let transporter = nodemailer.createTransport({
-                    host: "smtp.hostinger.com",
-                    port: 465,
-                    secure: true,
-                    auth: {
-                        user: process.env.EMAIL,
-                        pass: process.env.EMAIL_PASSWORD,
-                    },
-                })
-                await transporter.sendMail({
-                    from: '"Tienda 1 Maaide" <tienda1@maaide.com>',
-                    to: sell.email,
-                    subject: `Prueba`,
-                    html: `Prueba`
-                })
+            if (shippingCode) {
+                async function main() {
+                    let transporter = nodemailer.createTransport({
+                        host: "smtp.hostinger.com",
+                        port: 465,
+                        secure: true,
+                        auth: {
+                            user: process.env.EMAIL,
+                            pass: process.env.EMAIL_PASSWORD,
+                        },
+                    })
+                    await transporter.sendMail({
+                        from: '"Tienda 1 Maaide" <tienda1@maaide.com>',
+                        to: sell.email,
+                        subject: `Prueba`,
+                        html: `Prueba`
+                    })
+                }
+                main().catch(console.error)
+            } else {
+                async function main() {
+                    let transporter = nodemailer.createTransport({
+                        host: "smtp.hostinger.com",
+                        port: 465,
+                        secure: true,
+                        auth: {
+                            user: process.env.EMAIL,
+                            pass: process.env.EMAIL_PASSWORD,
+                        },
+                    })
+                    await transporter.sendMail({
+                        from: '"Tienda 1 Maaide" <tienda1@maaide.com>',
+                        to: sell.email,
+                        subject: `Prueba`,
+                        html: `Prueba`
+                    })
+                }
+                main().catch(console.error)
             }
-            main().catch(console.error)
         }
         // if (sell.state === 'Pago realizado') {
         //     const CustomData = bizSdk.CustomData
