@@ -1,6 +1,4 @@
 import Contact from '../models/Contact.js'
-import {uploadImage, deleteImage} from '../libs/cloudinary.js'
-import fs from 'fs-extra'
 import bizSdk from 'facebook-nodejs-business-sdk'
 
 export const createMessage = async (req, res) => {
