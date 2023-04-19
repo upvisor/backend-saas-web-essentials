@@ -18,6 +18,7 @@ import aiDescriptionCategorySeoRoutes from './routes/aiDescriptionCategorySeo.ro
 import aiTitleCategorySeoRoutes from './routes/aiTitleCategorySeo.routes.js'
 import aiTitleProductSeoRoutes from './routes/aiTitleProductSeo.routes.js'
 import promotionalCodeRoutes from './routes/promotionalCode.routes.js'
+import clientsRoutes from './routes/client.routers.js'
 import payRoutes from './routes/pay.routes.js'
 import tagsRoutes from './routes/tags.routes.js'
 import http from 'http'
@@ -51,6 +52,7 @@ app.use(aiDescriptionCategorySeoRoutes)
 app.use(aiTitleProductSeoRoutes)
 app.use(aiTitleCategorySeoRoutes)
 app.use(promotionalCodeRoutes)
+app.use(clientsRoutes)
 app.use(payRoutes)
 app.use(tagsRoutes)
 
