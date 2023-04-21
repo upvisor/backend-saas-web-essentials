@@ -10,6 +10,8 @@ const ClientSchema = mongoose.Schema({
   region: { type: String },
   city: { type: String },
   tags: [{ type: String }]
+}, {
+  timestamps: true
 })
 
 const Client = mongoose.models.Client || mongoose.model('Client', ClientSchema)
