@@ -1,11 +1,11 @@
 import mongoose from 'mongoose'
 
-const TagClientsSchema = mongoose.Schema({
+const ClientTagSchema = mongoose.Schema({
   tag: { type: String, required: true, unique: true }
 }, {
   timestamps: true
 })
 
-const TagClient = mongoose.models.TagClient || mongoose.model('TagClient', TagClientsSchema)
+const ClientTag = mongoose.models.ClientTag || mongoose.model('ClientTag', ClientTagSchema)
 
-export default TagClient
+export default ClientTag
