@@ -32,3 +32,17 @@ export const updateClient = async (req, res) => {
     return res.status(500).json({message: error.message})
   }
 }
+
+export const getClient = async (req, res) => {
+  try {
+    const client = await Client.findById(req.params.id)
+
+    if (!client) {
+      return undefined
+    }
+
+    return res.send(client)
+  } catch (error) {
+    return res.status(500).json({message: error.message})
+  }
+}
