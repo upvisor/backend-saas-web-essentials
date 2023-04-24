@@ -232,3 +232,17 @@ export const updateSell = async (req, res) => {
         return res.status(500).json({message: error.message})
     }
 }
+
+export const getSellByEmail = async (req, res) => {
+    try {
+        const sells = await Sell.findOne({email: req.body.email})
+
+        if (!sells) {
+            return undefined
+        }
+
+        return res.send(sells)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
