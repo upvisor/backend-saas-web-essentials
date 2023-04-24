@@ -11,6 +11,6 @@ router.get('/sells/:id', getSell)
 
 router.put('/sells/:id', updateSell)
 
-router.get('/sells/:email', getSellByEmail)
+router.get('/sells-client/:id', getSellByEmail)
 
 export default router
