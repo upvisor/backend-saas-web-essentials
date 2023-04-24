@@ -235,7 +235,7 @@ export const updateSell = async (req, res) => {
 
 export const getSellByEmail = async (req, res) => {
     try {
-        const sells = await Sell.find({email: req.body.id})
+        const sells = await Sell.find({email: req.params.id})
 
         if (!sells) {
             return undefined
