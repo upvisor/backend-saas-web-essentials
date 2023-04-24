@@ -7,7 +7,7 @@ router.post('/clients', createClient)
 
 router.get('/clients', getClients)
 
-router.put('/clients', updateClient)
+router.put('/clients/:id', updateClient)
 
 router.get('/clients/:id', getClient)
 
