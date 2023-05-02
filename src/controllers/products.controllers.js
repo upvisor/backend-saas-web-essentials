@@ -5,7 +5,6 @@ import fs from 'fs-extra'
 export const getProducts = async (req, res) => {
     try {
         const products = await Product.find()
-        .select('name images price beforePrice stock slug variations reviews stock category state -_id')
         .lean()
         res.send(products)
     } catch (error) {
