@@ -14,7 +14,6 @@ export const createDescription = async (req, res) => {
             max_tokens: 1000,
             temperature: 0
         })
-        console.log(response.data.choices)
         return res.json(response.data.choices)
     } catch (error) {
         return res.status(500).json({message: error.message})

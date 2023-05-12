@@ -20,6 +20,8 @@ import aiTitleProductSeoRoutes from './routes/aiTitleProductSeo.routes.js'
 import promotionalCodeRoutes from './routes/promotionalCode.routes.js'
 import clientTagRoutes from './routes/clientTag.routes.js'
 import clientsRoutes from './routes/client.routers.js'
+import storeDataRoutes from './routes/storeData.routes.js'
+import chatRoutes from './routes/chat.routes.js'
 import payRoutes from './routes/pay.routes.js'
 import tagsRoutes from './routes/tags.routes.js'
 import http from 'http'
@@ -55,6 +57,8 @@ app.use(aiTitleCategorySeoRoutes)
 app.use(promotionalCodeRoutes)
 app.use(clientsRoutes)
 app.use(clientTagRoutes)
+app.use(storeDataRoutes)
+app.use(chatRoutes)
 app.use(payRoutes)
 app.use(tagsRoutes)
 

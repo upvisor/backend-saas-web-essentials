@@ -80,9 +80,9 @@ export const createSubscribe = async (req, res) => {
             </div>`
             })
         }
+        main().catch(console.error)
         const nuevaSuscripcion = new Subscribe({email, fecha})
         await nuevaSuscripcion.save()
-        main().catch(console.error)
         return res.json(nuevaSuscripcion)
     } catch (error) {
         return res.status(500).json({message: error.message})
