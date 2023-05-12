@@ -2,6 +2,9 @@ import express from 'express'
 import cors from 'cors'
 import fileUpload from 'express-fileupload'
 import {connectDB} from './db.js'
+import http from 'http'
+import request from 'request'
+
 import productsRoutes from './routes/products.routes.js'
 import addCartRoutes from './routes/addCart.routes.js'
 import sellsRoutes from './routes/sells.routes.js'
@@ -24,7 +27,7 @@ import storeDataRoutes from './routes/storeData.routes.js'
 import chatRoutes from './routes/chat.routes.js'
 import payRoutes from './routes/pay.routes.js'
 import tagsRoutes from './routes/tags.routes.js'
-import http from 'http'
+import webhookRoutes from './routes/webhook.routes.js'
 
 connectDB()
 
@@ -61,6 +64,7 @@ app.use(storeDataRoutes)
 app.use(chatRoutes)
 app.use(payRoutes)
 app.use(tagsRoutes)
+app.use(webhookRoutes)
 
 server.listen(process.env.PORT || 3000)
 console.log('Server on port', process.env.PORT || 3000)
