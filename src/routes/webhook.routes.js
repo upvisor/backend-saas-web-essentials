@@ -11,4 +11,9 @@ router.get('/webhook', function(req, res) {
     }
 })
 
+router.post('/webhook', function (req, res) {
+    console.log('Incoming webhook: ' + JSON.stringify(req.body))
+    res.sendStatus(200)
+})
+
 export default router
