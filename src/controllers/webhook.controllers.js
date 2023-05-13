@@ -39,7 +39,6 @@ export const getMessage = async (req, res) => {
             ],
         })
         const responseMessage = responseChat.data.choices[0].message.content
-        console.log(responseMessage)
         await axios.post('https://graph.facebook.com/v16.0/108940562202993/messages', {
             "messaging_product": "whatsapp",
             "to": number,
@@ -52,6 +51,7 @@ export const getMessage = async (req, res) => {
             }
         })
         res.sendStatus(200)
+    } else {
+        res.sendStatus(404)
     }
-    res.sendStatus(200)
 }
