@@ -11,7 +11,6 @@ export const createWebhook = (req, res) => {
 }
 
 export const getMessage = async (req, res) => {
-    console.log('se ejecuto la funcion')
     if (req.body.entry[0].changes[0].value.messages[0].text.body) {
         const message = req.body.entry[0].changes[0].value.messages[0].text.body
         const number = req.body.entry[0].changes[0].value.messages[0].from
@@ -31,6 +30,7 @@ export const getMessage = async (req, res) => {
           const products = await Product.find().select('name description stock price beforePrice category tags variations -_id').lean()
           information = `${information}. ${JSON.stringify(products)}`
         }
+        console.log('llegaste lejos')
         const responseChat = await openai.createChatCompletion({
             model: "gpt-3.5-turbo",
             temperature: 0,
@@ -40,6 +40,7 @@ export const getMessage = async (req, res) => {
             ],
         })
         const responseMessage = responseChat.data.choices[0].message
+        console.log(responseMessage)
         await axios.post('https://graph.facebook.com/v16.0/108940562202993/messages', {
             "messaging_product": "whatsapp",
             "to": number,
