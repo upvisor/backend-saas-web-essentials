@@ -30,7 +30,6 @@ export const getMessage = async (req, res) => {
           const products = await Product.find().select('name description stock price beforePrice category tags variations -_id').lean()
           information = `${information}. ${JSON.stringify(products)}`
         }
-        console.log('llegaste lejos')
         const responseChat = await openai.createChatCompletion({
             model: "gpt-3.5-turbo",
             temperature: 0,
@@ -39,7 +38,7 @@ export const getMessage = async (req, res) => {
                 {"role": "user", "content": message}
             ],
         })
-        const responseMessage = responseChat.data.choices[0].message
+        const responseMessage = responseChat.data.choices[0].message.content
         console.log(responseMessage)
         await axios.post('https://graph.facebook.com/v16.0/108940562202993/messages', {
             "messaging_product": "whatsapp",
