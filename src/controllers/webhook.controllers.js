@@ -32,7 +32,7 @@ export const getMessage = async (req, res) => {
             const products = await Product.find().select('name description stock price beforePrice variations -_id').lean()
             information = `${information}. ${JSON.stringify(products)}`
         }
-        const ultimateMessage = await WhatsappMessage.findOne({phone: number}).select('-phone -_id').lean()
+        const ultimateMessage = await WhatsappMessage.findOne({phone: number}).sort({_id: -1}).select('-phone -_id').lean()
         console.log(ultimateMessage)
         let structure
         if (ultimateMessage) {
