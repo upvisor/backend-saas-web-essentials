@@ -13,11 +13,8 @@ export const createWebhook = (req, res) => {
 export const getMessage = async (req, res) => {
     console.log('se ejecuto la funcion')
     if (req.body.entry[0].changes[0].value.messages[0].text.body) {
-        console.log('se ejecuto la condicion')
         const message = req.body.entry[0].changes[0].value.messages[0].text.body
         const number = req.body.entry[0].changes[0].value.messages[0].from
-        console.log(message)
-        console.log(number)
         const configuration = new Configuration({
             organization: "org-s20w0nZ3MxE2TSG8LAAzz4TO",
             apiKey: process.env.OPENAI_API_KEY,
@@ -29,7 +26,6 @@ export const getMessage = async (req, res) => {
           max_tokens: 500
         })
         const categories = responseCategorie.data.choices[0].text.toLowerCase()
-        console.log(categories)
         let information = ''
         if (categories.includes('productos')) {
           const products = await Product.find().select('name description stock price beforePrice category tags variations -_id').lean()
@@ -43,20 +39,18 @@ export const getMessage = async (req, res) => {
                 {"role": "user", "content": message}
             ],
         })
-        const prueba = await axios.post('https://graph.facebook.com/v16.0/108940562202993/messages', {
+        const responseMessage = responseChat.data.choices[0].message
+        await axios.post('https://graph.facebook.com/v16.0/108940562202993/messages', {
             "messaging_product": "whatsapp",
             "to": number,
             "type": "text",
-            "text": {"body": message}
+            "text": {"body": responseMessage}
         }, {
             headers: {
                 'Content-Type': 'application/json',
                 "Authorization": `Bearer ${process.env.WHATSAPP_TOKEN}`
             }
         })
-        console.log(prueba)
-        console.log(responseChat.data.choices[0].message)
-        console.log('Incoming webhook: ' + JSON.stringify(req.body))
         res.sendStatus(200)
     }
     res.sendStatus(200)
