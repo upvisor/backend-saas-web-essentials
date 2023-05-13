@@ -51,7 +51,7 @@ export const getMessage = async (req, res) => {
         }, {
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": "Bearer EAAUMZAI78GWEBABXMasOQJQcb8ho3dQZB3taP4ML2iZAPUTAABUsS1S4akhLMQHR8ESPRXhiWPyQ5ZBbp0RHVrZCZCMNZAgW724G7eW7lwqsZAisPP16R66dAMsQbqbPjievzdWoaVHn7tGB5iNN41rJqbfyayM9uERFrdZATkoJJQVfRB5ReOgxkOZCQj3j9ZAawzCbytq2udSj6g0QSZBBr7SE"
+                "Authorization": `Bearer ${process.env.WHATSAPP_TOKEN}`
             }
         })
         console.log(prueba)
