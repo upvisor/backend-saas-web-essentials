@@ -34,12 +34,20 @@ export const getMessage = async (req, res) => {
         }
         const ultimateMessage = await WhatsappMessage.findOne({phone: number}).select('-phone -updatedAt -__v -_id')
         console.log(ultimateMessage)
-        const structure = [
-            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, responde la siguiente pregunta utilizando unicamente la siguiente informacion: ${information}`},
-            {"role": "user", "content": ultimateMessage.message},
-            {"role": "assistant", "content": ultimateMessage.response},
-            {"role": "user", "content": message}
-        ]
+        let structure
+        if (ultimateMessage) {
+            structure = [
+                {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, responde la siguiente pregunta utilizando unicamente la siguiente informacion: ${information}`},
+                {"role": "user", "content": ultimateMessage.message},
+                {"role": "assistant", "content": ultimateMessage.response},
+                {"role": "user", "content": message}
+            ]
+        } else {
+            structure = [
+                {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, responde la siguiente pregunta utilizando unicamente la siguiente informacion: ${information}`},
+                {"role": "user", "content": message}
+            ]
+        }
         const responseChat = await openai.createChatCompletion({
             model: "gpt-3.5-turbo",
             temperature: 0,
