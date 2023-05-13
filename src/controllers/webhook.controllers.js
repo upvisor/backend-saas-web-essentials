@@ -32,14 +32,14 @@ export const getMessage = async (req, res) => {
             const products = await Product.find().select('name description stock price beforePrice variations -_id').lean()
             information = `${information}. ${JSON.stringify(products)}`
         }
-        const ultimateMessage = await WhatsappMessage.findOne({phone: number}).sort({_id: -1}).select('-phone -_id').lean()
+        const ultimateMessage = await WhatsappMessage.find({phone: number}).select('-phone -_id').lean()
         console.log(ultimateMessage)
         let structure
-        if (ultimateMessage) {
+        if (ultimateMessage.length) {
             structure = [
                 {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, responde la siguiente pregunta utilizando unicamente la siguiente informacion: ${information}`},
-                {"role": "user", "content": ultimateMessage.message},
-                {"role": "assistant", "content": ultimateMessage.response},
+                {"role": "user", "content": ultimateMessage[0].message},
+                {"role": "assistant", "content": ultimateMessage[0].response},
                 {"role": "user", "content": message}
             ]
         } else {
