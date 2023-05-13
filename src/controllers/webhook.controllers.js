@@ -11,7 +11,8 @@ export const createWebhook = (req, res) => {
 }
 
 export const getMessage = async (req, res) => {
-   if (req.body?.entry[0]?.changes[0]?.value?.messages[0]?.text?.body) {
+    if (req.body?.entry && req.body.entry[0]?.changes && req.body.entry[0].changes[0]?.value?.messages && 
+        req.body.entry[0].changes[0].value.messages[0]?.text && req.body.entry[0].changes[0].value.messages[0].text.body) {    
         const message = req.body.entry[0].changes[0].value.messages[0].text.body
         const number = req.body.entry[0].changes[0].value.messages[0].from
         const configuration = new Configuration({
