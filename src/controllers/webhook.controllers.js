@@ -29,7 +29,7 @@ export const getMessage = async (req, res) => {
         const categories = responseCategorie.data.choices[0].text.toLowerCase()
         let information = ''
         if (categories.includes('productos')) {
-            const products = await Product.find().select('name description stock price beforePrice variations -__v -createdAt -updatedAt -_id').lean()
+            const products = await Product.find().select('name description stock price beforePrice variations -createdAt -updatedAt -_id').lean()
             information = `${information}. ${JSON.stringify(products)}`
         }
         const ultimateMessage = await WhatsappMessage.findOne({phone: number}).select('-phone -createdAt -updatedAt -_id')
