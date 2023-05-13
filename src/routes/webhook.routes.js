@@ -1,19 +1,10 @@
 import {Router} from 'express'
+import { createWebhook, getMessage } from '../controllers/webhook.controllers.js'
 
 const router = Router()
 
-router.get('/webhook', function(req, res) {
-    console.log('hola')
-    if (req.query['hub.verify_token'] === 'maaide_token') {
-        res.send(req.query['hub.challenge'])
-    } else {
-        res.send('No tienes permisos.')
-    }
-})
+router.get('/webhook', createWebhook)
 
-router.post('/webhook', function (req, res) {
-    console.log('Incoming webhook: ' + JSON.stringify(req.body))
-    res.sendStatus(200)
-})
+router.post('/webhook', getMessage)
 
 export default router
