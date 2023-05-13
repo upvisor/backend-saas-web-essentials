@@ -23,8 +23,9 @@ export const getMessage = async (req, res) => {
         const openai = new OpenAIApi(configuration)
         const responseCategorie = await openai.createCompletion({
             model: "text-davinci-003",
-            prompt: `Con las siguientes categorias: productos, envios, horarios, seguridad, garantia, promociones y devoluciones. Cuales se relacionan mejor con la siguiente pregunta: ${message}`,
-            max_tokens: 500
+            prompt: `Con las siguientes categorias: saludo, productos, envios, horarios, seguridad, garantia, promociones y devoluciones. Cuales encajan mejor con la siguiente pregunta: ${message}`,
+            temperature: 0,
+            max_tokens: 100
         })
         const categories = responseCategorie.data.choices[0].text.toLowerCase()
         console.log(categories)
