@@ -28,7 +28,6 @@ export const getMessage = async (req, res) => {
             max_tokens: 100
         })
         const categories = responseCategorie.data.choices[0].text.toLowerCase()
-        console.log(categories)
         let information = ''
         if (categories.includes('productos')) {
             const products = await Product.find().select('name description stock price beforePrice variations -_id').lean()
