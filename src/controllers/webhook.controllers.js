@@ -37,16 +37,19 @@ export const getMessage = async (req, res) => {
             const messages = await WhatsappMessage.find({phone: number}).select('-phone -_id').lean()
             const ultimateMessage = messages.reverse()
             let structure
+            let agent
             if (message.toLowerCase() === 'agente') {
                 structure = [
                     {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, deseo que expreses de la mejor forma que estas transfiriendo al usuario con un agente'},
                     {"role": "user", "content": message}
                 ]
+                agent = true
             } else if (information === '') {
                 structure = [
                     {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
                     {"role": "user", "content": message}
                 ]
+                agent = false
             } else if (ultimateMessage.length) {
                 structure = [
                     {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
@@ -54,11 +57,13 @@ export const getMessage = async (req, res) => {
                     {"role": "assistant", "content": ultimateMessage[0].response},
                     {"role": "user", "content": message}
                 ]
+                agent = false
             } else {
                 structure = [
                     {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                     {"role": "user", "content": message}
                 ]
+                agent = false
             }
             const responseChat = await openai.createChatCompletion({
                 model: "gpt-3.5-turbo",
@@ -77,7 +82,7 @@ export const getMessage = async (req, res) => {
                     "Authorization": `Bearer ${process.env.WHATSAPP_TOKEN}`
                 }
             })
-            const newMessage = new WhatsappMessage({phone: number, message: message, response: responseMessage})
+            const newMessage = new WhatsappMessage({phone: number, message: message, response: responseMessage, agent: agent})
             await newMessage.save()
             return res.sendStatus(200)
         } else {
