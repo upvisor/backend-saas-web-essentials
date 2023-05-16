@@ -40,14 +40,14 @@ export const getMessage = async (req, res) => {
             let structure
             if (ultimateMessage.length) {
                 structure = [
-                    {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, es sumamente importante que si no tienes la informacion para responder la pregunta lo comuniques con un agente, la informacion para responder la pregunta es la siguiente: ${information}`},
+                    {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                     {"role": "user", "content": ultimateMessage[0].message},
                     {"role": "assistant", "content": ultimateMessage[0].response},
                     {"role": "user", "content": message}
                 ]
             } else {
                 structure = [
-                    {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, es sumamente importante que si no tienes la informacion para responder la pregunta lo comuniques con un agente, la informacion para responder la pregunta es la siguiente: ${information}`},
+                    {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                     {"role": "user", "content": message}
                 ]
             }
