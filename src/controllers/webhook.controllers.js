@@ -62,7 +62,7 @@ export const getMessage = async (req, res) => {
                     ]
                 } else {
                     structure = [
-                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, responde la siguiente pregunta utilizando unicamente la siguiente informacion: ${information}`},
+                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, si no puedes responder la pregunta con la información dada, indica que pueden hablar con un agente escribiendo "agente" en el chat, responde la siguiente pregunta utilizando únicamente la siguiente información: ${information}`},
                         {"role": "user", "content": message}
                     ]
                 }
