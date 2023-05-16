@@ -37,46 +37,28 @@ export const getMessage = async (req, res) => {
             const messages = await WhatsappMessage.find({phone: number}).select('-phone -_id').lean()
             const ultimateMessage = messages.reverse()
             let structure
-            if (ultimateMessage.length) {
-                if (message.toLowerCase() === 'agente') {
-                    structure = [
-                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, deseo que expreses de la mejor forma que estas transfiriendo al usuario con un agente (tu no eres el agente)'},
-                        {"role": "user", "content": ultimateMessage[0].message},
-                        {"role": "assistant", "content": ultimateMessage[0].response},
-                        {"role": "user", "content": message}
-                    ]
-                } else if (information === '') {
-                    structure = [
-                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
-                        {"role": "user", "content": ultimateMessage[0].message},
-                        {"role": "assistant", "content": ultimateMessage[0].response},
-                        {"role": "user", "content": message}
-                    ]
-                } else {
-                    structure = [
-                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
-                        {"role": "user", "content": ultimateMessage[0].message},
-                        {"role": "assistant", "content": ultimateMessage[0].response},
-                        {"role": "user", "content": message}
-                    ]
-                }
+            if (message.toLowerCase() === 'agente') {
+                structure = [
+                    {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, deseo que expreses de la mejor forma que estas transfiriendo al usuario con un agente'},
+                    {"role": "user", "content": message}
+                ]
+            } else if (information === '') {
+                structure = [
+                    {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
+                    {"role": "user", "content": message}
+                ]
+            } else if (ultimateMessage.length) {
+                structure = [
+                    {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                    {"role": "user", "content": ultimateMessage[0].message},
+                    {"role": "assistant", "content": ultimateMessage[0].response},
+                    {"role": "user", "content": message}
+                ]
             } else {
-                if (message.toLowerCase() === 'agente') {
-                    structure = [
-                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, deseo que expreses de la mejor forma que estas transfiriendo al usuario con un agente'},
-                        {"role": "user", "content": message}
-                    ]
-                } else if (information === '') {
-                    structure = [
-                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
-                        {"role": "user", "content": message}
-                    ]
-                } else {
-                    structure = [
-                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
-                        {"role": "user", "content": message}
-                    ]
-                }
+                structure = [
+                    {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                    {"role": "user", "content": message}
+                ]
             }
             const responseChat = await openai.createChatCompletion({
                 model: "gpt-3.5-turbo",
