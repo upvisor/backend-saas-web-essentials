@@ -18,20 +18,24 @@ export const getMessage = async (req, res) => {
             const message = req.body.entry[0].changes[0].value.messages[0].text.body
             const number = req.body.entry[0].changes[0].value.messages[0].from
             if (message.toLowerCase() === 'agente') {
-                await axios.post('https://graph.facebook.com/v16.0/108940562202993/messages', {
-                "messaging_product": "whatsapp",
-                "to": number,
-                "type": "text",
-                "text": {"body": "¡Perfecto! Ahora te estamos transfiriendo con un agente"}
+                const sendMessage = await axios.post('https://graph.facebook.com/v16.0/108940562202993/messages', {
+                    "messaging_product": "whatsapp",
+                    "to": number,
+                    "type": "text",
+                    "text": {"body": "¡Perfecto! Ahora te estamos transfiriendo con un agente"}
                 }, {
                     headers: {
                         'Content-Type': 'application/json',
                         "Authorization": `Bearer ${process.env.WHATSAPP_TOKEN}`
                     }
                 })
-                const newMessage = new WhatsappMessage({phone: number, message: message, response: responseMessage, agent: true})
-                await newMessage.save()
-                return res.sendStatus(200)
+                if (sendMessage) {
+                    const newMessage = new WhatsappMessage({phone: number, message: message, response: responseMessage, agent: true})
+                    await newMessage.save()
+                    return res.sendStatus(200)
+                } else {
+                    return
+                }
             } else {
                 const configuration = new Configuration({
                     organization: "org-s20w0nZ3MxE2TSG8LAAzz4TO",
@@ -72,7 +76,7 @@ export const getMessage = async (req, res) => {
                     messages: structure
                 })
                 const responseMessage = responseChat.data.choices[0].message.content
-                await axios.post('https://graph.facebook.com/v16.0/108940562202993/messages', {
+                const sendMessage = await axios.post('https://graph.facebook.com/v16.0/108940562202993/messages', {
                     "messaging_product": "whatsapp",
                     "to": number,
                     "type": "text",
@@ -83,9 +87,13 @@ export const getMessage = async (req, res) => {
                         "Authorization": `Bearer ${process.env.WHATSAPP_TOKEN}`
                     }
                 })
-                const newMessage = new WhatsappMessage({phone: number, message: message, response: responseMessage, agent: false})
-                await newMessage.save()
-                return res.sendStatus(200)
+                if (sendMessage) {
+                    const newMessage = new WhatsappMessage({phone: number, message: message, response: responseMessage, agent: false})
+                    await newMessage.save()
+                    return res.sendStatus(200)
+                } else {
+                    return
+                }
             }
         } else {
             return res.sendStatus(404)
