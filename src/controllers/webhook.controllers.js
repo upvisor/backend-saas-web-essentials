@@ -40,7 +40,7 @@ export const getMessage = async (req, res) => {
             if (ultimateMessage.length) {
                 if (message.toLowerCase() === 'agente') {
                     structure = [
-                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, deseo que expreses de la mejor forma que estas transfiriendo al usuario con un agente'},
+                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, deseo que expreses de la mejor forma que estas transfiriendo al usuario con un agente (tu no eres el agente)'},
                         {"role": "user", "content": ultimateMessage[0].message},
                         {"role": "assistant", "content": ultimateMessage[0].response},
                         {"role": "user", "content": message}
