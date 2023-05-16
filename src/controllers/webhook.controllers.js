@@ -20,7 +20,7 @@ export const getMessage = async (req, res) => {
             if (message.toLowerCase() === 'agente') {
                 const messages = await WhatsappMessage.find({phone: number}).select('-phone -_id').lean()
                 const ultimateMessage = messages.reverse()
-                if (ultimateMessage[0].message.toLowerCase() === 'agente') {
+                if (ultimateMessage[0].message.toLowerCase() !== 'agente') {
                     const sendMessage = await axios.post('https://graph.facebook.com/v16.0/108940562202993/messages', {
                         "messaging_product": "whatsapp",
                         "to": number,
