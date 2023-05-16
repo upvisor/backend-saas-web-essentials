@@ -19,7 +19,9 @@ export const getMessage = async (req, res) => {
             const number = req.body.entry[0].changes[0].value.messages[0].from
             const messages = await WhatsappMessage.find({phone: number}).select('-phone -_id').lean()
             const ultimateMessage = messages.reverse()
-            if (ultimateMessage[0].agent === false) {
+            if (ultimateMessage[0].agent) {
+                return res.sendStatus(200)
+            } else {
                 const configuration = new Configuration({
                     organization: "org-s20w0nZ3MxE2TSG8LAAzz4TO",
                     apiKey: process.env.OPENAI_API_KEY,
@@ -85,8 +87,6 @@ export const getMessage = async (req, res) => {
                 })
                 const newMessage = new WhatsappMessage({phone: number, message: message, response: responseMessage, agent: agent})
                 await newMessage.save()
-                return res.sendStatus(200)
-            } else {
                 return res.sendStatus(200)
             }
         } else {
