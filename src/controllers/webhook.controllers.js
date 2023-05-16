@@ -38,7 +38,12 @@ export const getMessage = async (req, res) => {
             const messages = await WhatsappMessage.find({phone: number}).select('-phone -_id').lean()
             const ultimateMessage = messages.reverse()
             let structure
-            if (information === '') {
+            if (message.toLowerCase() === 'agente') {
+                structure = [
+                    {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, el usuario solicito hablar con un agente, responde que en este momento te estamos transfiriendo con un agente'},
+                    {"role": "user", "content": message}
+                ]
+            } else if (information === '') {
                 structure = [
                     {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
                     {"role": "user", "content": message}
