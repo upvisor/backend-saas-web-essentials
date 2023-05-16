@@ -38,7 +38,12 @@ export const getMessage = async (req, res) => {
             const messages = await WhatsappMessage.find({phone: number}).select('-phone -_id').lean()
             const ultimateMessage = messages.reverse()
             let structure
-            if (ultimateMessage.length) {
+            if (information === '') {
+                structure = [
+                    {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
+                    {"role": "user", "content": message}
+                ]
+            } else if (ultimateMessage.length) {
                 structure = [
                     {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                     {"role": "user", "content": ultimateMessage[0].message},
@@ -68,7 +73,7 @@ export const getMessage = async (req, res) => {
                     "Authorization": `Bearer ${process.env.WHATSAPP_TOKEN}`
                 }
             })
-            const newMessage = new WhatsappMessage({phone: number, message: message, response: responseMessage, agent: false})
+            const newMessage = new WhatsappMessage({phone: number, message: message, response: responseMessage})
             await newMessage.save()
             return res.sendStatus(200)
         } else {

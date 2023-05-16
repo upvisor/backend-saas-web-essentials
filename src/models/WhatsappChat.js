@@ -3,8 +3,7 @@ import mongoose from 'mongoose'
 const WhatsappMessageSchema = mongoose.Schema({
     phone: { type: Number, required: true },
     message: { type: String, required: true },
-    response: { type: String, required: true },
-    agent: { type: Boolean, required: true }
+    response: { type: String, required: true }
 }, {
     timestamps: true
 })
