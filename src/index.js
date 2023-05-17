@@ -22,6 +22,7 @@ import aiTitleCategorySeoRoutes from './routes/aiTitleCategorySeo.routes.js'
 import aiTitleProductSeoRoutes from './routes/aiTitleProductSeo.routes.js'
 import promotionalCodeRoutes from './routes/promotionalCode.routes.js'
 import clientTagRoutes from './routes/clientTag.routes.js'
+import whatsappRoutes from './routes/whatsapp.routes.js'
 import clientsRoutes from './routes/client.routers.js'
 import storeDataRoutes from './routes/storeData.routes.js'
 import chatRoutes from './routes/chat.routes.js'
@@ -58,6 +59,7 @@ app.use(aiDescriptionCategorySeoRoutes)
 app.use(aiTitleProductSeoRoutes)
 app.use(aiTitleCategorySeoRoutes)
 app.use(promotionalCodeRoutes)
+app.use(whatsappRoutes)
 app.use(clientsRoutes)
 app.use(clientTagRoutes)
 app.use(storeDataRoutes)
