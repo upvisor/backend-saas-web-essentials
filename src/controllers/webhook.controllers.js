@@ -20,6 +20,8 @@ export const getMessage = async (req, res) => {
             const messages = await WhatsappMessage.find({phone: number}).select('-phone -_id').lean()
             const ultimateMessage = messages.reverse()
             if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].agent) {
+                const newMessage = new WhatsappMessage({phone: number, message: message, agent: true})
+                await newMessage.save()
                 return res.sendStatus(200)
             } else {
                 const configuration = new Configuration({
