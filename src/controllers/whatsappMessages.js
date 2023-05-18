@@ -1,20 +1,29 @@
 import WhatsappChat from '../models/WhatsappChat.js'
 
-export const getMessages = async (req, res) => {
+export const getPhones = async (req, res) => {
     try {
         const messages = await WhatsappChat.find().select('-message -response').lean()
         const filter = messages.filter(message => message.agent === true)
         const phoneNumbers = filter.map(item => item.phone)
         const uniquePhoneNumbersSet = new Set(phoneNumbers)
         const uniquePhoneNumbersArray = [...uniquePhoneNumbersSet]
-        let chats = []
-        await Promise.all(
-            uniquePhoneNumbersArray.map(async phone => {
-                const messagesPhone = await WhatsappChat.find({phone: phone}).lean()
-                chats = chats.concat(messagesPhone)
-            })
-        )
-        return res.send(chats)
+        // let chats = []
+        // await Promise.all(
+        //     uniquePhoneNumbersArray.map(async phone => {
+        //         const messagesPhone = await WhatsappChat.find({phone: phone}).lean()
+        //         chats = chats.concat(messagesPhone)
+        //     })
+        // )
+        return res.send(uniquePhoneNumbersArray)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
+
+export const getMessagesPhone = async (req, res) => {
+    try {
+        const messages = await WhatsappChat.find({phone: req.params.id})
+        res.send(messages)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }

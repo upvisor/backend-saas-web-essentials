@@ -1,8 +1,10 @@
 import {Router} from 'express'
-import { getMessages } from '../controllers/whatsappMessages.js'
+import { getPhones, getMessagesPhone } from '../controllers/whatsappMessages.js'
 
 const router = Router()
 
-router.get('/whatsapp', getMessages)
+router.get('/whatsapp', getPhones)
+
+router.get('/whatsapp/:id', getMessagesPhone)
 
 export default router
