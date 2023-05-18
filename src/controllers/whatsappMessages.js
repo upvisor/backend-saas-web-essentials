@@ -7,13 +7,6 @@ export const getPhones = async (req, res) => {
         const phoneNumbers = filter.map(item => item.phone)
         const uniquePhoneNumbersSet = new Set(phoneNumbers)
         const uniquePhoneNumbersArray = [...uniquePhoneNumbersSet]
-        // let chats = []
-        // await Promise.all(
-        //     uniquePhoneNumbersArray.map(async phone => {
-        //         const messagesPhone = await WhatsappChat.find({phone: phone}).lean()
-        //         chats = chats.concat(messagesPhone)
-        //     })
-        // )
         return res.send(uniquePhoneNumbersArray)
     } catch (error) {
         return res.status(500).json({message: error.message})
@@ -24,6 +17,16 @@ export const getMessagesPhone = async (req, res) => {
     try {
         const messages = await WhatsappChat.find({phone: req.params.id})
         res.send(messages)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
+
+export const newMessage = async (req, res) => {
+    try {
+        const newMessage = new WhatsappChat(req.body)
+        await newMessage.save()
+        return res.send(newMessage)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
