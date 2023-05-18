@@ -11,7 +11,6 @@ export const getMessages = async (req, res) => {
         await Promise.all(
             uniquePhoneNumbersArray.map(async phone => {
                 const messagesPhone = await WhatsappChat.find({phone: phone}).lean()
-                console.log(messagesPhone)
                 chats = chats.concat(messagesPhone)
             })
         )
