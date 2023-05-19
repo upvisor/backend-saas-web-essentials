@@ -33,7 +33,7 @@ export const getMessage = async (req, res) => {
                     model: "text-davinci-003",
                     prompt: `Con las siguientes categorias: saludo, productos, envios, horarios, seguridad, garantia, promociones y devoluciones. Cuales encajan mejor con la siguiente pregunta: ${message}`,
                     temperature: 0,
-                    max_tokens: 100
+                    max_tokens: 50
                 })
                 const categories = responseCategorie.data.choices[0].text.toLowerCase()
                 let information = ''
@@ -73,7 +73,8 @@ export const getMessage = async (req, res) => {
                 const responseChat = await openai.createChatCompletion({
                     model: "gpt-3.5-turbo",
                     temperature: 0,
-                    messages: structure
+                    messages: structure,
+                    max_tokens: 150
                 })
                 const responseMessage = responseChat.data.choices[0].message.content
                 await axios.post('https://graph.facebook.com/v16.0/108940562202993/messages', {
