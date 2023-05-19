@@ -24,6 +24,17 @@ export const getMessagesPhone = async (req, res) => {
 
 export const newMessage = async (req, res) => {
     try {
+        await axios.post('https://graph.facebook.com/v16.0/108940562202993/messages', {
+            "messaging_product": "whatsapp",
+            "to": req.body.phone,
+            "type": "text",
+            "text": {"body": req.body.response}
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${process.env.WHATSAPP_TOKEN}`
+            }
+        })
         const newMessage = new WhatsappChat(req.body)
         await newMessage.save()
         return res.send(newMessage)
