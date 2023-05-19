@@ -7,7 +7,7 @@ export const createWebhook = (req, res) => {
     if (req.query['hub.verify_token'] === 'maaide_token') {
         res.send(req.query['hub.challenge'])
     } else {
-        res.send('No tienes permisos.')
+        res.send('No tienes permisos')
     }
 }
 
