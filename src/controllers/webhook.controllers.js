@@ -92,8 +92,8 @@ export const getMessage = async (req, res) => {
                 await newMessage.save()
                 return res.sendStatus(200)
             }
-        } else if (req.body?.entry && req.body.entry[0]?.messaging) {
-            console.log(req.body.entry[0].messaging)
+        } else if (req.body?.entry && req.body.entry[0]?.messaging && req.body.entry[0].messaging[0]?.message?.text) {
+            console.log(req.body.entry[0].messaging[0].message)
             return res.sendStatus(200)
         } else {
             return res.sendStatus(200)
