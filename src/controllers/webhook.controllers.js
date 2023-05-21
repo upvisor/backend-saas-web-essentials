@@ -1,7 +1,7 @@
 import { Configuration, OpenAIApi } from "openai"
 import Product from '../models/Product.js'
 import axios from "axios"
-import WhatsappMessage from "../models/WhatsappChat.js"
+import MessengerMessage from "../models/MessengerChat.js"
 
 export const createWebhook = (req, res) => {
     if (req.query['hub.verify_token'] === 'maaide_token') {
@@ -94,7 +94,85 @@ export const getMessage = async (req, res) => {
             }
         } else if (req.body?.entry && req.body.entry[0]?.messaging && req.body.entry[0].messaging[0]?.message?.text) {
             console.log(req.body.entry[0].messaging[0].message)
-            return res.sendStatus(200)
+            const message = req.body.entry[0].messaging[0].message.text
+            const sender = req.body.entry[0].messaging[0].senser.id
+            const messages = await MessengerMessage.find({messengerId: sender}).select('-messengerId -_id').lean()
+            const ultimateMessage = messages.reverse()
+            if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].agent) {
+                const newMessage = new WhatsappMessage({phone: number, message: message, agent: true})
+                await newMessage.save()
+                return res.sendStatus(200)
+            } else {
+                const configuration = new Configuration({
+                    organization: "org-s20w0nZ3MxE2TSG8LAAzz4TO",
+                    apiKey: process.env.OPENAI_API_KEY,
+                })
+                const openai = new OpenAIApi(configuration)
+                const responseCategorie = await openai.createCompletion({
+                    model: "text-davinci-003",
+                    prompt: `Con las siguientes categorias: saludo, productos, envios, horarios, seguridad, garantia, promociones y devoluciones. Cuales encajan mejor con la siguiente pregunta: ${message}`,
+                    temperature: 0,
+                    max_tokens: 50
+                })
+                const categories = responseCategorie.data.choices[0].text.toLowerCase()
+                let information = ''
+                if (categories.includes('productos')) {
+                    const products = await Product.find().select('name description stock price beforePrice variations -_id').lean()
+                    information = `${information}. ${JSON.stringify(products)}`
+                }
+                let structure
+                let agent
+                if (message.toLowerCase() === 'agente') {
+                    structure = [
+                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, deseo que expreses de la mejor forma que estas transfiriendo al usuario con un agente'},
+                        {"role": "user", "content": message}
+                    ]
+                    agent = true
+                } else if (information === '') {
+                    structure = [
+                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
+                        {"role": "user", "content": message}
+                    ]
+                    agent = false
+                } else if (ultimateMessage.length) {
+                    structure = [
+                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                        {"role": "user", "content": ultimateMessage[0].message},
+                        {"role": "assistant", "content": ultimateMessage[0].response},
+                        {"role": "user", "content": message}
+                    ]
+                    agent = false
+                } else {
+                    structure = [
+                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                        {"role": "user", "content": message}
+                    ]
+                    agent = false
+                }
+                const responseChat = await openai.createChatCompletion({
+                    model: "gpt-3.5-turbo",
+                    temperature: 0,
+                    messages: structure,
+                    max_tokens: 150
+                })
+                const responseMessage = responseChat.data.choices[0].message.content
+                await axios.post(`https://graph.facebook.com/v16.0/106714702292810/messages?access_token=${process.env.MESSENGER_TOKEN}`, {
+                    "recipient": {
+                        "id": sender
+                    },
+                    "messaging_type": "RESPONSE",
+                    "message": {
+                        "text": responseMessage
+                    }
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                const newMessage = new MessengerMessage({messengerId: sender, message: message, response: responseMessage, agent: agent})
+                await newMessage.save()
+                return res.sendStatus(200)
+            }
         } else {
             return res.sendStatus(200)
         }
