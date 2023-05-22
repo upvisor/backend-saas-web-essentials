@@ -93,17 +93,18 @@ export const getMessage = async (req, res) => {
                 return res.sendStatus(200)
             }
         } else if (req.body?.entry && req.body.entry[0]?.messaging && req.body.entry[0].messaging[0]?.message?.text) {
-            console.log('entro el condicional')
             const message = req.body.entry[0].messaging[0].message.text
             const sender = req.body.entry[0].messaging[0].senser.id
+            console.log(req.body.entry[0].messaging[0].message.text)
+            console.log(req.body.entry[0].messaging[0].senser.id)
             const messages = await MessengerMessage.find({messengerId: sender}).select('-messengerId -_id').lean()
             const ultimateMessage = messages.reverse()
+            console.log(ultimateMessage)
             if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].agent) {
                 const newMessage = new MessengerMessage({messengerId: sender, message: message, agent: true})
                 await newMessage.save()
                 return res.sendStatus(200)
             } else {
-                console.log('entro al condicional no hay mensajes anteriores')
                 const configuration = new Configuration({
                     organization: "org-s20w0nZ3MxE2TSG8LAAzz4TO",
                     apiKey: process.env.OPENAI_API_KEY,
@@ -116,7 +117,7 @@ export const getMessage = async (req, res) => {
                     max_tokens: 50
                 })
                 const categories = responseCategorie.data.choices[0].text.toLowerCase()
-                console.log('primera peticion openai')
+                console.log(categories)
                 let information = ''
                 if (categories.includes('productos')) {
                     const products = await Product.find().select('name description stock price beforePrice variations -_id').lean()
@@ -158,7 +159,7 @@ export const getMessage = async (req, res) => {
                     max_tokens: 150
                 })
                 const responseMessage = responseChat.data.choices[0].message.content
-                console.log('segunda peticion openai')
+                console.log(responseMessage)
                 await axios.post(`https://graph.facebook.com/v16.0/106714702292810/messages?access_token=${process.env.MESSENGER_TOKEN}`, {
                     "recipient": {
                         "id": sender
