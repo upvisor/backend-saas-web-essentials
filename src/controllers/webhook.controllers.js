@@ -95,7 +95,7 @@ export const getMessage = async (req, res) => {
         } else if (req.body?.entry && req.body.entry[0]?.messaging && req.body.entry[0].messaging[0]?.message?.text) {
             console.log(req.body.entry[0].messaging)
             const message = req.body.entry[0].messaging[0].message.text
-            const sender = req.body.entry[0].messaging[0].senser.id
+            const sender = req.body.entry[0].messaging[0].sender.id
             console.log(message)
             console.log(sender)
             const messages = await MessengerMessage.find({messengerId: sender}).select('-messengerId -_id').lean()
