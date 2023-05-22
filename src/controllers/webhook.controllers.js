@@ -156,6 +156,7 @@ export const getMessage = async (req, res) => {
                     max_tokens: 150
                 })
                 const responseMessage = responseChat.data.choices[0].message.content
+                console.log(responseMessage)
                 await axios.post(`https://graph.facebook.com/v16.0/106714702292810/messages?access_token=${process.env.MESSENGER_TOKEN}`, {
                     "recipient": {
                         "id": sender
