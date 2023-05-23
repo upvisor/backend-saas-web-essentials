@@ -94,7 +94,6 @@ export const getMessage = async (req, res) => {
             }
         } else if (req.body?.entry && req.body.entry[0]?.messaging && req.body.entry[0].messaging[0]?.message?.text) {
             const message = req.body.entry[0].messaging[0].message.text
-            console.log(message)
             const sender = req.body.entry[0].messaging[0].sender.id
             const messages = await MessengerMessage.find({messengerId: sender}).select('-messengerId -_id').lean()
             const ultimateMessage = messages.reverse()
@@ -174,6 +173,7 @@ export const getMessage = async (req, res) => {
                 return res.sendStatus(200)
             }
         } else {
+            console.log(req.body)
             return res.sendStatus(200)
         }
     } catch (error) {
