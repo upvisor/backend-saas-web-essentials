@@ -1,4 +1,27 @@
 import InstagramMessage from '../models/InstagramChat.js'
+import axios from 'axios'
+
+export const getInstagramIds = async (req, res) => {
+    try {
+        const messages = await InstagramMessage.find().select('-message -response').lean()
+        const filter = messages.filter(message => message.agent === true)
+        const instagramIds = filter.map(item => item.instagramId)
+        const uniqueInstagramIdsSet = new Set(instagramIds)
+        const uniqueInstagramIdsArray = [...uniqueInstagramIdsSet]
+        return res.send(uniqueInstagramIdsArray)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
+
+export const getMessagesInstagram = async (req, res) => {
+    try {
+        const messages = await InstagramMessage.find({instagramId: req.params.id})
+        res.send(messages)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
 
 export const createMessage = async (req, res) => {
     try {
