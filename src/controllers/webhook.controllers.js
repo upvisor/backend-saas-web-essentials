@@ -173,7 +173,7 @@ export const getMessage = async (req, res) => {
                 return res.sendStatus(200)
             }
         } else {
-            console.log(req.body)
+            console.log(req.body?.entry)
             return res.sendStatus(200)
         }
     } catch (error) {
