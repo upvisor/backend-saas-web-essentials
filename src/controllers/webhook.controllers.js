@@ -34,8 +34,7 @@ export const getMessage = async (req, res) => {
                 const responseCategorie = await openai.createCompletion({
                     model: "text-davinci-003",
                     prompt: `Con las siguientes categorias: saludo, productos, envios, horarios, seguridad, garantia, promociones y devoluciones. Cuales encajan mejor con la siguiente pregunta: ${message}`,
-                    temperature: 0,
-                    max_tokens: 50
+                    temperature: 0
                 })
                 const categories = responseCategorie.data.choices[0].text.toLowerCase()
                 let information = ''
@@ -75,8 +74,7 @@ export const getMessage = async (req, res) => {
                 const responseChat = await openai.createChatCompletion({
                     model: "gpt-3.5-turbo",
                     temperature: 0,
-                    messages: structure,
-                    max_tokens: 150
+                    messages: structure
                 })
                 const responseMessage = responseChat.data.choices[0].message.content
                 await axios.post('https://graph.facebook.com/v16.0/108940562202993/messages', {
@@ -112,8 +110,7 @@ export const getMessage = async (req, res) => {
                 const responseCategorie = await openai.createCompletion({
                     model: "text-davinci-003",
                     prompt: `Con las siguientes categorias: saludo, productos, envios, horarios, seguridad, garantia, promociones y devoluciones. Cuales encajan mejor con la siguiente pregunta: ${message}`,
-                    temperature: 0,
-                    max_tokens: 50
+                    temperature: 0
                 })
                 const categories = responseCategorie.data.choices[0].text.toLowerCase()
                 let information = ''
@@ -153,8 +150,7 @@ export const getMessage = async (req, res) => {
                 const responseChat = await openai.createChatCompletion({
                     model: "gpt-3.5-turbo",
                     temperature: 0,
-                    messages: structure,
-                    max_tokens: 150
+                    messages: structure
                 })
                 const responseMessage = responseChat.data.choices[0].message.content
                 await axios.post(`https://graph.facebook.com/v16.0/106714702292810/messages?access_token=${process.env.MESSENGER_TOKEN}`, {
@@ -192,8 +188,7 @@ export const getMessage = async (req, res) => {
                 const responseCategorie = await openai.createCompletion({
                     model: "text-davinci-003",
                     prompt: `Con las siguientes categorias: saludo, productos, envios, horarios, seguridad, garantia, promociones y devoluciones. Cuales encajan mejor con la siguiente pregunta: ${message}`,
-                    temperature: 0,
-                    max_tokens: 50
+                    temperature: 0
                 })
                 const categories = responseCategorie.data.choices[0].text.toLowerCase()
                 let information = ''
@@ -233,8 +228,7 @@ export const getMessage = async (req, res) => {
                 const responseChat = await openai.createChatCompletion({
                     model: "gpt-3.5-turbo",
                     temperature: 0,
-                    messages: structure,
-                    max_tokens: 150
+                    messages: structure
                 })
                 const responseMessage = responseChat.data.choices[0].message.content
                 await axios.post(`https://graph.facebook.com/v16.0/106714702292810/messages?access_token=${process.env.MESSENGER_TOKEN}`, {
