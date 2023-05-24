@@ -1,33 +1,73 @@
 import { Configuration, OpenAIApi } from "openai"
 import Product from '../models/Product.js'
+import ChatMessage from '../models/Chat.js'
 
 export const responseMessage = async (req, res) => {
     try {
-        const configuration = new Configuration({
-            organization: "org-s20w0nZ3MxE2TSG8LAAzz4TO",
-            apiKey: process.env.OPENAI_API_KEY,
-        });
-        const openai = new OpenAIApi(configuration)
-        const responseCategorie = await openai.createCompletion({
-          model: "text-davinci-003",
-          prompt: `En base a las siguientes categorias: productos, envios, horarios, seguridad, garantia, promociones y devoluciones. Cuales categorias son las que mas encajan (maximo 2) con la siguiente pregunta: ${req.body.message}`,
-          max_tokens: 500
-        })
-        const categories = responseCategorie.data.choices[0].text.toLowerCase()
-        let information = ''
-        if (categories.includes('productos')) {
-          const products = await Product.find().select('name description stock price beforePrice category tags variations -_id').lean()
-          information = `${information}. ${JSON.stringify(products)}`
+        const message = req.body.message
+        const senderId = req.body.senderId
+        const messages = await ChatMessage.find({senderId: senderId}).select('-senderId -_id').lean()
+        const ultimateMessage = messages.reverse()
+        if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].agent) {
+            const newMessage = new ChatMessage({senderId: senderId, message: message, agent: true})
+            await newMessage.save()
+            return res.sendStatus(200)
+        } else {
+            const configuration = new Configuration({
+                organization: "org-s20w0nZ3MxE2TSG8LAAzz4TO",
+                apiKey: process.env.OPENAI_API_KEY,
+            })
+            const openai = new OpenAIApi(configuration)
+            const responseCategorie = await openai.createCompletion({
+                model: "text-davinci-003",
+                prompt: `Con las siguientes categorias: saludo, productos, envios, horarios, seguridad, garantia, promociones y devoluciones. Cuales encajan mejor con la siguiente pregunta: ${message}`,
+                temperature: 0
+            })
+            const categories = responseCategorie.data.choices[0].text.toLowerCase()
+            let information = ''
+            if (categories.includes('productos')) {
+                const products = await Product.find().select('name description stock price beforePrice variations -_id').lean()
+                information = `${information}. ${JSON.stringify(products)}`
+            }
+            let structure
+            let agent
+            if (message.toLowerCase() === 'agente') {
+                structure = [
+                    {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, deseo que expreses de la mejor forma que estas transfiriendo al usuario con un agente'},
+                    {"role": "user", "content": message}
+                ]
+                agent = true
+            } else if (information === '') {
+                structure = [
+                    {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
+                    {"role": "user", "content": message}
+                ]
+                agent = false
+            } else if (ultimateMessage.length) {
+                structure = [
+                    {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                    {"role": "user", "content": ultimateMessage[0].message},
+                    {"role": "assistant", "content": ultimateMessage[0].response},
+                    {"role": "user", "content": message}
+                ]
+                agent = false
+            } else {
+                structure = [
+                    {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                    {"role": "user", "content": message}
+                ]
+                agent = false
+            }
+            const responseChat = await openai.createChatCompletion({
+                model: "gpt-3.5-turbo",
+                temperature: 0,
+                messages: structure
+            })
+            const responseMessage = responseChat.data.choices[0].message.content
+            const newMessage = new ChatMessage({senderId: senderId, message: message, response: responseMessage, agent: agent})
+            await newMessage.save()
+            return res.send(newMessage)
         }
-        const responseChat = await openai.createChatCompletion({
-            model: "gpt-3.5-turbo",
-            temperature: 0,
-            messages:[
-                {"role": "system", "content": `Eres un asistente de ayuda llamado Maaibot de la tienda Maaide, para responder las preguntas utiliza unicamente la siguiente informacion: ${information}`},
-                {"role": "user", "content": req.body.message}
-            ],
-        })
-        res.send(responseChat.data.choices[0].message)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
