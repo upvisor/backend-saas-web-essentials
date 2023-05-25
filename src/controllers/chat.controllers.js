@@ -81,3 +81,13 @@ export const getMessages = async (req, res) => {
         return res.status(500).json({message: error.message})
     }
 }
+
+export const createMessage = async (req, res) => {
+    try {
+        const newMessage = new ChatMessage({senderId: req.body.senderId, response: req.body.response, agent: false})
+        await newMessage.save()
+        return res.send(newMessage)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
