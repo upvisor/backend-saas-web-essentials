@@ -75,7 +75,7 @@ export const responseMessage = async (req, res) => {
 
 export const getMessages = async (req, res) => {
     try {
-        const messages = await ChatMessage.find({senderId: req.params.id}).lean()
+        const messages = await ChatMessage.find({senderId: req.params.id}).select('-messages -response').lean()
         return res.send(messages)
     } catch (error) {
         return res.status(500).json({message: error.message})

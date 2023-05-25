@@ -16,7 +16,7 @@ export const getPhones = async (req, res) => {
 
 export const getMessagesPhone = async (req, res) => {
     try {
-        const messages = await WhatsappChat.find({phone: req.params.id})
+        const messages = await WhatsappChat.find({phone: req.params.id}).lean()
         res.send(messages)
     } catch (error) {
         return res.status(500).json({message: error.message})

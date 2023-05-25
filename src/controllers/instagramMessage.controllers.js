@@ -16,7 +16,7 @@ export const getInstagramIds = async (req, res) => {
 
 export const getMessagesInstagram = async (req, res) => {
     try {
-        const messages = await InstagramMessage.find({instagramId: req.params.id})
+        const messages = await InstagramMessage.find({instagramId: req.params.id}).lean()
         res.send(messages)
     } catch (error) {
         return res.status(500).json({message: error.message})

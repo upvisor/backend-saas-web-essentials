@@ -16,7 +16,7 @@ export const getMessengerIds = async (req, res) => {
 
 export const getMessagesMessenger = async (req, res) => {
     try {
-        const messages = await MessengerMessage.find({messengerId: req.params.id})
+        const messages = await MessengerMessage.find({messengerId: req.params.id}).lean()
         res.send(messages)
     } catch (error) {
         return res.status(500).json({message: error.message})
