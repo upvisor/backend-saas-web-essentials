@@ -75,7 +75,7 @@ export const responseMessage = async (req, res) => {
 
 export const getIds = async (req, res) => {
     try {
-        const chatIds = await ChatMessage.find().secret('-response -message').lean()
+        const chatIds = await ChatMessage.find().lean()
         return res.send(chatIds)
     } catch (error) {
         return res.status(500).json({message: error.message})
