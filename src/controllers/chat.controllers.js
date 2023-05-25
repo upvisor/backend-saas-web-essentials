@@ -75,8 +75,12 @@ export const responseMessage = async (req, res) => {
 
 export const getIds = async (req, res) => {
     try {
-        const chatIds = await ChatMessage.find().lean()
-        return res.send(chatIds)
+        const messages = await ChatMessage.find().select('-message -response').lean()
+        const filter = messages.filter(message => message.agent === true)
+        const phoneNumbers = filter.map(item => item.senderId)
+        const uniquePhoneNumbersSet = new Set(phoneNumbers)
+        const uniquePhoneNumbersArray = [...uniquePhoneNumbersSet]
+        return res.send(uniquePhoneNumbersArray)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
