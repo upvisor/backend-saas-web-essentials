@@ -97,7 +97,7 @@ export const getMessages = async (req, res) => {
 
 export const createMessage = async (req, res) => {
     try {
-        const newMessage = new ChatMessage({senderId: req.body.senderId, response: req.body.response, agent: false})
+        const newMessage = new ChatMessage({senderId: req.body.senderId, response: req.body.response, agent: req.body.agent})
         await newMessage.save()
         return res.send(newMessage)
     } catch (error) {
