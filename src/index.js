@@ -86,6 +86,9 @@ io.on('connection', async (socket) => {
             socket.broadcast.emit('message', message)
         }
     })
+    socket.on('messageAdmin', (message) => {
+        socket.broadcast.emit('messageAdmin', message)
+    })
 })
 
 server.listen(process.env.PORT || 3000)
