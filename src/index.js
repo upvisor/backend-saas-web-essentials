@@ -3,6 +3,8 @@ import cors from 'cors'
 import fileUpload from 'express-fileupload'
 import {connectDB} from './db.js'
 import http from 'http'
+import {Server as SocketServer} from 'socket.io'
+import ChatMessage from './models/Chat.js'
 
 import productsRoutes from './routes/products.routes.js'
 import addCartRoutes from './routes/addCart.routes.js'
@@ -35,6 +37,11 @@ connectDB()
 
 const app = express()
 const server = http.createServer(app)
+const io = new SocketServer(server, {
+    cors: {
+        origin: '*'
+    }
+})
 
 app.use(cors())
 app.use(express.json())
@@ -70,6 +77,16 @@ app.use(tagsRoutes)
 app.use(webhookRoutes)
 app.use(messengerRoutes)
 app.use(instagramRoutes)
+
+io.on('connection', async (socket) => {
+    socket.on('message', async (message) => {
+        const messages = await ChatMessage.find({senderId: message.senderId}).select('-senderId -_id').lean()
+        const ultimateMessage = messages.reverse()
+        if (ultimateMessage[0]?.agent || message.message.toLowerCase() === 'agente') {
+            socket.broadcast.emit('message', message)
+        }
+    })
+})
 
 server.listen(process.env.PORT || 3000)
 console.log('Server on port', process.env.PORT || 3000)
