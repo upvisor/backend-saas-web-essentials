@@ -11,7 +11,7 @@ export const responseMessage = async (req, res) => {
         if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].agent) {
             const newMessage = new ChatMessage({senderId: senderId, message: message, agent: true})
             await newMessage.save()
-            return res.sendStatus(200)
+            return res.send(newMessage)
         } else {
             const configuration = new Configuration({
                 organization: "org-s20w0nZ3MxE2TSG8LAAzz4TO",
