@@ -4,7 +4,9 @@ const ChatSchema = mongoose.Schema({
     senderId: { type: String, required: true },
     message: { type: String },
     response: { type: String },
-    agent: { type: Boolean, required: true }
+    agent: { type: Boolean, required: true },
+    adminView: { type: Boolean },
+    userView: { type: Boolean }
 }, {
     timestamps: true
 })

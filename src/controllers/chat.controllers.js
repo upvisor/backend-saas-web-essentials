@@ -9,7 +9,7 @@ export const responseMessage = async (req, res) => {
         const messages = await ChatMessage.find({senderId: senderId}).select('-senderId -_id').lean()
         const ultimateMessage = messages.reverse()
         if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].agent) {
-            const newMessage = new ChatMessage({senderId: senderId, message: message, agent: true})
+            const newMessage = new ChatMessage({senderId: senderId, message: message, agent: true, adminView: false, userView: true})
             await newMessage.save()
             return res.send(newMessage)
         } else {
@@ -64,7 +64,7 @@ export const responseMessage = async (req, res) => {
                 messages: structure
             })
             const responseMessage = responseChat.data.choices[0].message.content
-            const newMessage = new ChatMessage({senderId: senderId, message: message, response: responseMessage, agent: agent})
+            const newMessage = new ChatMessage({senderId: senderId, message: message, response: responseMessage, agent: agent, adminView: false, userView: true})
             await newMessage.save()
             return res.send(newMessage)
         }
@@ -75,7 +75,7 @@ export const responseMessage = async (req, res) => {
 
 export const getIds = async (req, res) => {
     try {
-        const messages = await ChatMessage.find().select('-message -response').lean()
+        const messages = await ChatMessage.find().select('-message -response -userView').lean()
         const filter = messages.filter(message => message.agent === true)
         const phoneNumbers = filter.map(item => item.senderId)
         const uniquePhoneNumbersSet = new Set(phoneNumbers)
@@ -100,6 +100,15 @@ export const createMessage = async (req, res) => {
         const newMessage = new ChatMessage({senderId: req.body.senderId, response: req.body.response, agent: req.body.agent})
         await newMessage.save()
         return res.send(newMessage)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
+
+export const editMessage = async (req, res) => {
+    try {
+        const message = await ChatMessage.findByIdAndUpdate(req.params.id, req.body, { new: true })
+        res.send(message)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
