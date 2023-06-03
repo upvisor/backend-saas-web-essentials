@@ -89,13 +89,13 @@ export const getIds = async (req, res) => {
                 $replaceRoot: { newRoot: '$lastDocument' }
             },
             {
-                $sort: { updatedAt: -1 }
+                $sort: { createdAt: -1 }
             }
         ]).exec((err, result) => {
             if (err) {
                 return res.sendStatus(404)
             }
-            const filtered = result.map(({senderId, adminView, updatedAt}) => ({senderId, adminView, updatedAt}))
+            const filtered = result.map(({senderId, adminView, createdAt}) => ({senderId, adminView, createdAt}))
             return res.send(filtered)
         })
     } catch (error) {
