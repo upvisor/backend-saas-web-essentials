@@ -87,6 +87,9 @@ export const getIds = async (req, res) => {
             },
             {
                 $replaceRoot: { newRoot: '$lastDocument' }
+            },
+            {
+                $sort: { updatedAt: -1 }
             }
         ]).exec((err, result) => {
             if (err) {
