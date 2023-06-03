@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import { responseMessage, getMessages, createMessage, getIds, editMessage } from '../controllers/chat.controllers.js'
+import { responseMessage, getMessages, createMessage, getIds, viewAdminMessage } from '../controllers/chat.controllers.js'
 
 const router = Router()
 
@@ -11,6 +11,6 @@ router.get('/chat/:id', getMessages)
 
 router.post('/chat/create', createMessage)
 
-router.put('/chat/:id', editMessage)
+router.put('/chat/:id', viewAdminMessage)
 
 export default router

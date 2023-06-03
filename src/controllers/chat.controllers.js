@@ -119,10 +119,14 @@ export const createMessage = async (req, res) => {
     }
 }
 
-export const editMessage = async (req, res) => {
+export const viewAdminMessage = async (req, res) => {
     try {
-        const message = await ChatMessage.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        res.send(message)
+        const messages = await ChatMessage.find({senderId: req.params.id})
+        const reverseMessages = messages.reverse()
+        const ultimateMessage = reverseMessages[0]
+        ultimateMessage.adminView = true
+        const saveMessage = await ChatMessage.findByIdAndUpdate(ultimateMessage._id, ultimateMessage, { new: true })
+        res.send(saveMessage)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
