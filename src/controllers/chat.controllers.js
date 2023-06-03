@@ -88,11 +88,12 @@ export const getIds = async (req, res) => {
             {
                 $replaceRoot: { newRoot: '$lastDocument' }
             }
-        ]).toArray((err, result) => {
+        ]).exec((err, result) => {
             if (err) {
                 return res.sendStatus(404)
             }
-            return res.send(result)
+            const filtered = result.map(({senderId, adminView}) => ({senderId, adminView}))
+            return res.send(filtered)
         })
     } catch (error) {
         return res.status(500).json({message: error.message})
