@@ -92,7 +92,7 @@ export const getIds = async (req, res) => {
             if (err) {
                 return res.sendStatus(404)
             }
-            const filtered = result.map(({senderId, adminView}) => ({senderId, adminView}))
+            const filtered = result.map(({senderId, adminView, updatedAt}) => ({senderId, adminView, updatedAt}))
             return res.send(filtered)
         })
     } catch (error) {
