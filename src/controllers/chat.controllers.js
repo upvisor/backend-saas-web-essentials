@@ -75,12 +75,25 @@ export const responseMessage = async (req, res) => {
 
 export const getIds = async (req, res) => {
     try {
-        const messages = await ChatMessage.find().select('-message -response -userView').lean()
-        const filter = messages.filter(message => message.agent === true)
-        const phoneNumbers = filter.map(item => item.senderId)
-        const uniquePhoneNumbersSet = new Set(phoneNumbers)
-        const uniquePhoneNumbersArray = [...uniquePhoneNumbersSet]
-        return res.send(uniquePhoneNumbersArray)
+        ChatMessage.aggregate([
+            {
+                $sort: { senderId: 1, _id: -1 }
+            },
+            {
+                $group: {
+                    _id: '$senderId',
+                    lastDocument: { $first: '$$ROOT' }
+                }
+            },
+            {
+                $replaceRoot: { newRoot: '$lastDocument' }
+            }
+        ]).toArray((err, result) => {
+            if (err) {
+                return res.sendStatus(404)
+            }
+            return res.send(result)
+        })
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
