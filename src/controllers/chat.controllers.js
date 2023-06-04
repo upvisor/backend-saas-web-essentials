@@ -58,6 +58,7 @@ export const responseMessage = async (req, res) => {
                 ]
                 agent = false
             }
+            console.log(structure)
             const responseChat = await openai.createChatCompletion({
                 model: "gpt-3.5-turbo",
                 temperature: 0,
