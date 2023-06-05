@@ -12,7 +12,7 @@ export const createNotification = async (req, res) => {
 
 export const getNotifications = async (req, res) => {
     try {
-        const notifications = Notification.find().lean()
+        const notifications = await Notification.find().lean()
         return res.send(notifications)
     } catch (error) {
         return res.status(500).json({message: error.message})
