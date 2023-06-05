@@ -88,7 +88,7 @@ export const getMessage = async (req, res) => {
                         "Authorization": `Bearer ${process.env.WHATSAPP_TOKEN}`
                     }
                 })
-                const newMessage = new WhatsappMessage({phone: number, message: message, response: responseMessage, agent: agent})
+                const newMessage = new WhatsappMessage({phone: number, message: message, response: responseMessage, agent: agent, view: false})
                 await newMessage.save()
                 return res.sendStatus(200)
             }
@@ -166,7 +166,7 @@ export const getMessage = async (req, res) => {
                         'Content-Type': 'application/json'
                     }
                 })
-                const newMessage = new MessengerMessage({messengerId: sender, message: message, response: responseMessage, agent: agent})
+                const newMessage = new MessengerMessage({messengerId: sender, message: message, response: responseMessage, agent: agent, view: false})
                 await newMessage.save()
                 return res.sendStatus(200)
             }
@@ -244,7 +244,7 @@ export const getMessage = async (req, res) => {
                         'Content-Type': 'application/json'
                     }
                 })
-                const newMessage = new InstagramMessage({instagramId: sender, message: message, response: responseMessage, agent: agent})
+                const newMessage = new InstagramMessage({instagramId: sender, message: message, response: responseMessage, agent: agent, view: false})
                 await newMessage.save()
                 return res.sendStatus(200)
             }

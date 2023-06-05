@@ -4,7 +4,8 @@ const WhatsappMessageSchema = mongoose.Schema({
     phone: { type: Number, required: true },
     message: { type: String },
     response: { type: String },
-    agent: { type: Boolean, required: true }
+    agent: { type: Boolean, required: true },
+    view: { type: Boolean }
 }, {
     timestamps: true
 })
