@@ -3,12 +3,32 @@ import axios from 'axios'
 
 export const getMessengerIds = async (req, res) => {
     try {
-        const messages = await MessengerMessage.find().select('-message -response').lean()
-        const filter = messages.filter(message => message.agent === true)
-        const messengerIds = filter.map(item => item.messengerId)
-        const uniqueMessengerIdsSet = new Set(messengerIds)
-        const uniqueMessengerIdsArray = [...uniqueMessengerIdsSet]
-        return res.send(uniqueMessengerIdsArray)
+        MessengerMessage.aggregate([
+            {
+                $sort: { messengerId: 1, _id: -1 }
+            },
+            {
+                $group: {
+                    _id: '$messengerId',
+                    lastDocument: { $first: '$$ROOT' }
+                }
+            },
+            {
+                $replaceRoot: { newRoot: '$lastDocument' }
+            },
+            {
+                $match: { agent: true }
+            },
+            {
+                $sort: { createdAt: -1 }
+            }
+        ]).exec((err, result) => {
+            if (err) {
+                return res.sendStatus(404)
+            }
+            const filtered = result.map(({messengerId, adminView, createdAt}) => ({messengerId, adminView, createdAt}))
+            return res.send(filtered)
+        })
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
@@ -38,7 +58,7 @@ export const createMessage = async (req, res) => {
                 'Content-Type': 'application/json'
             }
         })
-        const newMessage = new MessengerMessage({messengerId: req.body.sender, response: req.body.response, agent: req.body.agent})
+        const newMessage = new MessengerMessage({messengerId: req.body.sender, response: req.body.response, agent: req.body.agent, view: false})
         await newMessage.save()
         return res.send(newMessage)
     } catch (error) {

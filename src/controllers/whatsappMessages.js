@@ -3,12 +3,32 @@ import axios from "axios"
 
 export const getPhones = async (req, res) => {
     try {
-        const messages = await WhatsappChat.find().select('-message -response').lean()
-        const filter = messages.filter(message => message.agent === true)
-        const phoneNumbers = filter.map(item => item.phone)
-        const uniquePhoneNumbersSet = new Set(phoneNumbers)
-        const uniquePhoneNumbersArray = [...uniquePhoneNumbersSet]
-        return res.send(uniquePhoneNumbersArray)
+        WhatsappChat.aggregate([
+            {
+                $sort: { phone: 1, _id: -1 }
+            },
+            {
+                $group: {
+                    _id: '$phone',
+                    lastDocument: { $first: '$$ROOT' }
+                }
+            },
+            {
+                $replaceRoot: { newRoot: '$lastDocument' }
+            },
+            {
+                $match: { agent: true }
+            },
+            {
+                $sort: { createdAt: -1 }
+            }
+        ]).exec((err, result) => {
+            if (err) {
+                return res.sendStatus(404)
+            }
+            const filtered = result.map(({phone, adminView, createdAt}) => ({phone, adminView, createdAt}))
+            return res.send(filtered)
+        })
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
@@ -36,7 +56,7 @@ export const newMessage = async (req, res) => {
                 "Authorization": `Bearer ${process.env.WHATSAPP_TOKEN}`
             }
         })
-        const newMessage = new WhatsappChat(req.body)
+        const newMessage = new WhatsappChat({phone: req.body.phone, response: req.body.response, agent: req.body.agent, view: false})
         await newMessage.save()
         return res.send(newMessage)
     } catch (error) {
