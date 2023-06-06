@@ -56,7 +56,7 @@ export const newMessage = async (req, res) => {
                 "Authorization": `Bearer ${process.env.WHATSAPP_TOKEN}`
             }
         })
-        const newMessage = new WhatsappChat({phone: req.body.phone, response: req.body.response, agent: req.body.agent, view: false})
+        const newMessage = new WhatsappChat({phone: req.body.phone, response: req.body.response, agent: req.body.agent, view: true})
         await newMessage.save()
         return res.send(newMessage)
     } catch (error) {
