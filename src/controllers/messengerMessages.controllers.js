@@ -65,3 +65,16 @@ export const createMessage = async (req, res) => {
         return res.status(500).json({message: error.message})
     }
 }
+
+export const viewMessage = async (req, res) => {
+    try {
+        const messages = await MessengerMessage.find({messengerId: req.params.id})
+        const reverseMessages = messages.reverse()
+        const ultimateMessage = reverseMessages[0]
+        ultimateMessage.view = true
+        const saveMessage = await MessengerMessage.findByIdAndUpdate(ultimateMessage._id, ultimateMessage, { new: true })
+        res.send(saveMessage)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
