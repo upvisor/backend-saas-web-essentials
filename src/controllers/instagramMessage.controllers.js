@@ -26,7 +26,7 @@ export const getInstagramIds = async (req, res) => {
             if (err) {
                 return res.sendStatus(404)
             }
-            const filtered = result.map(({instagramId, adminView, createdAt}) => ({instagramId, adminView, createdAt}))
+            const filtered = result.map(({instagramId, view, createdAt}) => ({instagramId, view, createdAt}))
             return res.send(filtered)
         })
     } catch (error) {

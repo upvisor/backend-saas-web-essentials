@@ -26,7 +26,7 @@ export const getMessengerIds = async (req, res) => {
             if (err) {
                 return res.sendStatus(404)
             }
-            const filtered = result.map(({messengerId, adminView, createdAt}) => ({messengerId, adminView, createdAt}))
+            const filtered = result.map(({messengerId, view, createdAt}) => ({messengerId, view, createdAt}))
             return res.send(filtered)
         })
     } catch (error) {

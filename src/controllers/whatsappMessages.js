@@ -26,7 +26,7 @@ export const getPhones = async (req, res) => {
             if (err) {
                 return res.sendStatus(404)
             }
-            const filtered = result.map(({phone, adminView, createdAt}) => ({phone, adminView, createdAt}))
+            const filtered = result.map(({phone, view, createdAt}) => ({phone, view, createdAt}))
             return res.send(filtered)
         })
     } catch (error) {
