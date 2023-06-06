@@ -91,7 +91,18 @@ io.on('connection', async (socket) => {
     socket.on('messageAdmin', (message) => {
         socket.broadcast.emit('messageAdmin', message)
     })
+    socket.on('whatsapp', (message) => {
+        socket.broadcast.emit('whatsapp', message)
+    })
+    socket.on('messenger', (message) => {
+        socket.broadcast.emit('messenger', message)
+    })
+    socket.on('instagram', (message) => {
+        socket.broadcast.emit('instagram', message)
+    })
 })
+
+export { io }
 
 server.listen(process.env.PORT || 3000)
 console.log('Server on port', process.env.PORT || 3000)

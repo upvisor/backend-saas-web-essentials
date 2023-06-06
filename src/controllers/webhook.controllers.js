@@ -4,6 +4,7 @@ import axios from "axios"
 import MessengerMessage from "../models/MessengerChat.js"
 import WhatsappMessage from '../models/WhatsappChat.js'
 import InstagramMessage from '../models/InstagramChat.js'
+import { io } from '../index.js'
 
 export const createWebhook = (req, res) => {
     if (req.query['hub.verify_token'] === 'maaide_token') {
@@ -24,6 +25,7 @@ export const getMessage = async (req, res) => {
             if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].agent) {
                 const newMessage = new WhatsappMessage({phone: number, message: message, agent: true, view: false})
                 await newMessage.save()
+                io.emit('whatsapp', newMessage)
                 return res.sendStatus(200)
             } else {
                 const configuration = new Configuration({
@@ -100,6 +102,7 @@ export const getMessage = async (req, res) => {
             if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].agent) {
                 const newMessage = new MessengerMessage({messengerId: sender, message: message, agent: true, view: false})
                 await newMessage.save()
+                io.emit('messenger', newMessage)
                 return res.sendStatus(200)
             } else {
                 const configuration = new Configuration({
@@ -178,6 +181,7 @@ export const getMessage = async (req, res) => {
             if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].agent) {
                 const newMessage = new InstagramMessage({messengerId: sender, message: message, agent: true, view: false})
                 await newMessage.save()
+                io.emit('instagram', newMessage)
                 return res.sendStatus(200)
             } else {
                 const configuration = new Configuration({
