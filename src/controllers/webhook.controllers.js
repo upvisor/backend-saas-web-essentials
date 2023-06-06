@@ -22,7 +22,7 @@ export const getMessage = async (req, res) => {
             const messages = await WhatsappMessage.find({phone: number}).select('-phone -_id').lean()
             const ultimateMessage = messages.reverse()
             if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].agent) {
-                const newMessage = new WhatsappMessage({phone: number, message: message, agent: true})
+                const newMessage = new WhatsappMessage({phone: number, message: message, agent: true, view: false})
                 await newMessage.save()
                 return res.sendStatus(200)
             } else {
@@ -98,7 +98,7 @@ export const getMessage = async (req, res) => {
             const messages = await MessengerMessage.find({messengerId: sender}).select('-messengerId -_id').lean()
             const ultimateMessage = messages.reverse()
             if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].agent) {
-                const newMessage = new MessengerMessage({messengerId: sender, message: message, agent: true})
+                const newMessage = new MessengerMessage({messengerId: sender, message: message, agent: true, view: false})
                 await newMessage.save()
                 return res.sendStatus(200)
             } else {
@@ -176,7 +176,7 @@ export const getMessage = async (req, res) => {
             const messages = await InstagramMessage.find({messengerId: sender}).select('-messengerId -_id').lean()
             const ultimateMessage = messages.reverse()
             if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].agent) {
-                const newMessage = new InstagramMessage({messengerId: sender, message: message, agent: true})
+                const newMessage = new InstagramMessage({messengerId: sender, message: message, agent: true, view: false})
                 await newMessage.save()
                 return res.sendStatus(200)
             } else {
