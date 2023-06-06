@@ -92,7 +92,6 @@ io.on('connection', async (socket) => {
         socket.broadcast.emit('messageAdmin', message)
     })
     socket.on('whatsapp', (message) => {
-        console.log(message)
         socket.broadcast.emit('whatsapp', message)
     })
     socket.on('messenger', (message) => {
