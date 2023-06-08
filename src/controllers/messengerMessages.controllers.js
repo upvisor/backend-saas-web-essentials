@@ -45,7 +45,8 @@ export const getMessagesMessenger = async (req, res) => {
 
 export const createMessage = async (req, res) => {
     try {
-        const prueba = await axios.post(`https://graph.facebook.com/v16.0/106714702292810/messages?access_token=${process.env.MESSENGER_TOKEN}`, {
+        console.log(req.body)
+        await axios.post(`https://graph.facebook.com/v16.0/106714702292810/messages?access_token=${process.env.MESSENGER_TOKEN}`, {
             "recipient": {
                 "id": req.body.sender
             },
@@ -58,7 +59,6 @@ export const createMessage = async (req, res) => {
                 'Content-Type': 'application/json'
             }
         })
-        console.log(prueba)
         const newMessage = new MessengerMessage({messengerId: req.body.sender, response: req.body.response, agent: req.body.agent, view: true})
         await newMessage.save()
         return res.send(newMessage)
