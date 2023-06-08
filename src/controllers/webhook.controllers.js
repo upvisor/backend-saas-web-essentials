@@ -185,7 +185,7 @@ export const getMessage = async (req, res) => {
             const messages = await InstagramMessage.find({messengerId: sender}).select('-messengerId -_id').lean()
             const ultimateMessage = messages.reverse()
             if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].agent) {
-                const newMessage = new InstagramMessage({messengerId: sender, message: message, agent: true, view: false})
+                const newMessage = new InstagramMessage({instagramId: sender, message: message, agent: true, view: false})
                 await newMessage.save()
                 io.emit('instagram', newMessage)
                 return res.sendStatus(200)
