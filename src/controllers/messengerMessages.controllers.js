@@ -79,7 +79,7 @@ export const viewMessage = async (req, res) => {
 
 export const saveMessage = async (req, res) => {
     try {
-        const newMessage = new MessengerMessage({messengerId: req.body.sender, response: req.body.response, agent: req.body.agent, view: true})
+        const newMessage = new MessengerMessage({messengerId: req.body.messengerId, response: req.body.response, agent: req.body.agent, view: true})
         await newMessage.save()
         return res.send(newMessage)
     } catch (error) {
