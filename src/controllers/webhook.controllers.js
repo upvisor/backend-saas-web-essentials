@@ -92,6 +92,9 @@ export const getMessage = async (req, res) => {
                 })
                 const newMessage = new WhatsappMessage({phone: number, message: message, response: responseMessage, agent: agent, view: false})
                 await newMessage.save()
+                if (agent) {
+                    io.emit('whatsapp', newMessage)
+                }
                 return res.sendStatus(200)
             }
         } else if (req.body?.entry && req.body.entry[0]?.messaging && req.body.entry[0].messaging[0]?.message?.text && req.body.entry[0].id === '106714702292810') {
