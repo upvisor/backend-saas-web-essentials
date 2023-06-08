@@ -27,3 +27,12 @@ export const getUltimateNotifications = async (req, res) => {
         return res.status(500).json({message: error.message})
     }
 }
+
+export const viewNotification = async (req, res) => {
+    try {
+        const notification = await Notification.findByIdAndUpdate(req.params.id, { view: true }, { new: true })
+        return res.send(notification)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
