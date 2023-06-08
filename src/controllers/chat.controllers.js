@@ -1,7 +1,6 @@
 import { Configuration, OpenAIApi } from "openai"
 import Product from '../models/Product.js'
 import ChatMessage from '../models/Chat.js'
-import { io } from '../index.js'
 
 export const responseMessage = async (req, res) => {
     try {
@@ -12,7 +11,6 @@ export const responseMessage = async (req, res) => {
         if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].agent) {
             const newMessage = new ChatMessage({senderId: senderId, message: message, agent: true, adminView: false, userView: true})
             await newMessage.save()
-            io.emit('newMessage', true)
             return res.send(newMessage)
         } else {
             const configuration = new Configuration({
