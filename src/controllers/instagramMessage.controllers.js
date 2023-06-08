@@ -45,7 +45,7 @@ export const getMessagesInstagram = async (req, res) => {
 
 export const createMessage = async (req, res) => {
     try {
-        await axios.post(`https://graph.facebook.com/v16.0/106714702292810/messages?access_token=${process.env.INSTAGRAM_TOKEN}`, {
+        await axios.post(`https://graph.facebook.com/v16.0/106714702292810/messages?access_token=${process.env.MESSENGER}`, {
             "recipient": {
                 "id": req.body.sender
             },
