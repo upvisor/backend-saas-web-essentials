@@ -45,7 +45,7 @@ export const getMessagesInstagram = async (req, res) => {
 
 export const createMessage = async (req, res) => {
     try {
-        await axios.post(`https://graph.facebook.com/v16.0/106714702292810/messages?access_token=${process.env.MESSENGER_TOKEN}`, {
+        const response = await axios.post(`https://graph.facebook.com/v16.0/106714702292810/messages?access_token=${process.env.MESSENGER_TOKEN}`, {
             "recipient": {
                 "id": req.body.instagramId
             },
@@ -58,9 +58,9 @@ export const createMessage = async (req, res) => {
                 'Content-Type': 'application/json'
             }
         })
-        const newMessage = new InstagramMessage({instagramId: req.body.sender, response: req.body.response, agent: req.body.agent, view: true})
-        await newMessage.save()
-        return res.send(newMessage)
+        // const newMessage = new InstagramMessage({instagramId: req.body.sender, response: req.body.response, agent: req.body.agent, view: true})
+        // await newMessage.save()
+        return res.send(response)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
