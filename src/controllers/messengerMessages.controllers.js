@@ -60,7 +60,7 @@ export const createMessage = async (req, res) => {
         })
         // const newMessage = new MessengerMessage({messengerId: req.body.sender, response: req.body.response, agent: req.body.agent, view: true})
         // await newMessage.save()
-        return res.send(response)
+        return res.sendStatus(200)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
