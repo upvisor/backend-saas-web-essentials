@@ -18,3 +18,12 @@ export const getNotifications = async (req, res) => {
         return res.status(500).json({message: error.message})
     }
 }
+
+export const getUltimateNotifications = async (req, res) => {
+    try {
+        const ultimateNotifications = await Notification.find().sort({ _id: -1 }).limit(10).lean()
+        return res.send(ultimateNotifications)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
