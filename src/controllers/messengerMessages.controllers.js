@@ -58,6 +58,8 @@ export const createMessage = async (req, res) => {
                 'Content-Type': 'application/json'
             }
         })
+        const newMessage = new MessengerMessage({messengerId: req.body.messengerId, response: req.body.response, agent: req.body.agent, view: true})
+        await newMessage.save()
         return res.sendStatus(200)
     } catch (error) {
         return res.status(500).json({message: error.message})
@@ -72,16 +74,6 @@ export const viewMessage = async (req, res) => {
         ultimateMessage.view = true
         const saveMessage = await MessengerMessage.findByIdAndUpdate(ultimateMessage._id, ultimateMessage, { new: true })
         res.send(saveMessage)
-    } catch (error) {
-        return res.status(500).json({message: error.message})
-    }
-}
-
-export const saveMessage = async (req, res) => {
-    try {
-        const newMessage = new MessengerMessage({messengerId: req.body.messengerId, response: req.body.response, agent: req.body.agent, view: true})
-        await newMessage.save()
-        return res.send(newMessage)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
