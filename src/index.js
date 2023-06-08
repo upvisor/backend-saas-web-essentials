@@ -100,6 +100,9 @@ io.on('connection', async (socket) => {
     socket.on('instagram', (message) => {
         socket.broadcast.emit('instagram', message)
     })
+    socket.on('newNotification', (message) => {
+        socket.broadcast.emit('newNotification', message)
+    })
 })
 
 export { io }
