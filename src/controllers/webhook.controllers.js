@@ -174,6 +174,9 @@ export const getMessage = async (req, res) => {
                 })
                 const newMessage = new MessengerMessage({messengerId: sender, message: message, response: responseMessage, agent: agent, view: false})
                 await newMessage.save()
+                if (agent) {
+                    io.emit('messenger', newMessage)
+                }
                 return res.sendStatus(200)
             }
         } else if (req.body?.entry && req.body.entry[0]?.messaging && req.body.entry[0].messaging[0]?.message?.text && req.body.entry[0].id === '17841457418025747') {
@@ -253,6 +256,9 @@ export const getMessage = async (req, res) => {
                 })
                 const newMessage = new InstagramMessage({instagramId: sender, message: message, response: responseMessage, agent: agent, view: false})
                 await newMessage.save()
+                if (agent) {
+                    io.emit('instagram', newMessage)
+                }
                 return res.sendStatus(200)
             }
         } else {
