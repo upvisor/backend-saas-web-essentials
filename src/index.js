@@ -103,6 +103,9 @@ io.on('connection', async (socket) => {
     socket.on('newNotification', (message) => {
         socket.broadcast.emit('newNotification', message)
     })
+    socket.on('newMessage', (message) => {
+        socket.broadcast.emit('newMessage', message)
+    })
 })
 
 export { io }
