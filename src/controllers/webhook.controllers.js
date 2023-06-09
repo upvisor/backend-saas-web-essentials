@@ -48,7 +48,7 @@ export const getMessage = async (req, res) => {
                 let agent
                 if (message.toLowerCase() === 'agente') {
                     structure = [
-                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, deseo que expreses de la mejor forma que estas transfiriendo al usuario con un agente'},
+                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, deseo que expreses de la mejor forma en menos de 100 caracteres que estas transfiriendo al usuario con un agente'},
                         {"role": "user", "content": message}
                     ]
                     agent = true
@@ -128,7 +128,7 @@ export const getMessage = async (req, res) => {
                 let agent
                 if (message.toLowerCase() === 'agente') {
                     structure = [
-                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, deseo que expreses de la mejor forma que estas transfiriendo al usuario con un agente'},
+                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, deseo que expreses de la mejor forma en menos de 100 caracteres que estas transfiriendo al usuario con un agente'},
                         {"role": "user", "content": message}
                     ]
                     agent = true
@@ -210,7 +210,7 @@ export const getMessage = async (req, res) => {
                 let agent
                 if (message.toLowerCase() === 'agente') {
                     structure = [
-                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, deseo que expreses de la mejor forma que estas transfiriendo al usuario con un agente'},
+                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, deseo que expreses de la mejor forma en menos de 100 caracteres que estas transfiriendo al usuario con un agente'},
                         {"role": "user", "content": message}
                     ]
                     agent = true
