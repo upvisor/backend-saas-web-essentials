@@ -182,7 +182,7 @@ export const getMessage = async (req, res) => {
         } else if (req.body?.entry && req.body.entry[0]?.messaging && req.body.entry[0].messaging[0]?.message?.text && req.body.entry[0].id === '17841457418025747') {
             const message = req.body.entry[0].messaging[0].message.text
             const sender = req.body.entry[0].messaging[0].sender.id
-            const messages = await InstagramMessage.find({messengerId: sender}).select('-messengerId -_id').lean()
+            const messages = await InstagramMessage.find({messengerId: sender}).select('-instagramId -_id').lean()
             const ultimateMessage = messages.reverse()
             if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].agent) {
                 const newMessage = new InstagramMessage({instagramId: sender, message: message, agent: true, view: false})
