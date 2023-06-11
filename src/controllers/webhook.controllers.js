@@ -184,7 +184,7 @@ export const getMessage = async (req, res) => {
             const sender = req.body.entry[0].messaging[0].sender.id
             const messages = await InstagramMessage.find({messengerId: sender}).select('-instagramId -_id').lean()
             const ultimateMessage = messages.reverse()
-            if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].agent) {
+            if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].agent && sender !== '17841457418025747') {
                 const newMessage = new InstagramMessage({instagramId: sender, message: message, agent: true, view: false})
                 await newMessage.save()
                 io.emit('instagram', newMessage)
@@ -241,25 +241,27 @@ export const getMessage = async (req, res) => {
                     messages: structure
                 })
                 const responseMessage = responseChat.data.choices[0].message.content
-                await axios.post(`https://graph.facebook.com/v16.0/106714702292810/messages?access_token=${process.env.MESSENGER_TOKEN}`, {
-                    "recipient": {
-                        "id": sender
-                    },
-                    "messaging_type": "RESPONSE",
-                    "message": {
-                        "text": responseMessage
+                if (sender !== '17841457418025747') {
+                    await axios.post(`https://graph.facebook.com/v16.0/106714702292810/messages?access_token=${process.env.MESSENGER_TOKEN}`, {
+                        "recipient": {
+                            "id": sender
+                        },
+                        "messaging_type": "RESPONSE",
+                        "message": {
+                            "text": responseMessage
+                        }
+                    }, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    const newMessage = new InstagramMessage({instagramId: sender, message: message, response: responseMessage, agent: agent, view: false})
+                    await newMessage.save()
+                    if (agent) {
+                        io.emit('instagram', newMessage)
                     }
-                }, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                const newMessage = new InstagramMessage({instagramId: sender, message: message, response: responseMessage, agent: agent, view: false})
-                await newMessage.save()
-                if (agent) {
-                    io.emit('instagram', newMessage)
+                    return res.sendStatus(200)
                 }
-                return res.sendStatus(200)
             }
         } else {
             return res.sendStatus(200)
