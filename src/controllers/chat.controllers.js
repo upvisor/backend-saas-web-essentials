@@ -38,19 +38,21 @@ export const responseMessage = async (req, res) => {
                 return res.send(newMessage)
             } else if (information === '') {
                 if (ultimateMessage.length) {
-                    structure = [
-                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
-                        {"role": "user", "content": ultimateMessage[0].message},
-                        {"role": "assistant", "content": ultimateMessage[0].response},
-                        {"role": "user", "content": message}
-                    ]
                     agent = false
+                    const newMessage = new ChatMessage({senderId: senderId, message: message, response: 'Lo siento, no tengo la información necesaria para responder tu pregunta, puedes ingresar "agente" en el chat para comunicarte con un operador', agent: agent, adminView: false, userView: true})
+                    await newMessage.save()
+                    return res.send(newMessage)
                 } else {
-                    structure = [
-                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
-                        {"role": "user", "content": message}
-                    ]
                     agent = false
+                    if (message.toLowerCase().includes('hola') || message.toLowerCase().includes('buenas') || message.toLowerCase().includes('buenos') || message.toLowerCase().includes('que tal')) {
+                        const newMessage = new ChatMessage({senderId: senderId, message: message, response: '¡Hola! Mi nombre es Maaibot, el asistente virtual de la tienda Maaide, ¿En que te puedo ayudar?', agent: agent, adminView: false, userView: true})
+                        await newMessage.save()
+                        return res.send(newMessage)
+                    } else {
+                        const newMessage = new ChatMessage({senderId: senderId, message: message, response: 'Lo siento, no tengo la información necesaria para responder tu pregunta, puedes ingresar "agente" en el chat para comunicarte con un operador', agent: agent, adminView: false, userView: true})
+                        await newMessage.save()
+                        return res.send(newMessage)
+                    }
                 }
             } else if (ultimateMessage.length) {
                 structure = [
