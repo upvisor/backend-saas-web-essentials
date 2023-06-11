@@ -47,11 +47,24 @@ export const getMessage = async (req, res) => {
                 let structure
                 let agent
                 if (message.toLowerCase() === 'agente') {
-                    structure = [
-                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, deseo que expreses de la mejor forma en menos de 100 caracteres que estas transfiriendo al usuario con un agente'},
-                        {"role": "user", "content": message}
-                    ]
                     agent = true
+                    await axios.post('https://graph.facebook.com/v16.0/108940562202993/messages', {
+                        "messaging_product": "whatsapp",
+                        "to": number,
+                        "type": "text",
+                        "text": {"body": '¡Perfecto! En este momento te estamos transfiriendo con un operador, espera unos minutos'}
+                    }, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            "Authorization": `Bearer ${process.env.WHATSAPP_TOKEN}`
+                        }
+                    })
+                    const newMessage = new WhatsappMessage({phone: number, message: message, response: '¡Perfecto! En este momento te estamos transfiriendo con un operador, espera unos minutos', agent: agent, view: false})
+                    await newMessage.save()
+                    if (agent) {
+                        io.emit('whatsapp', newMessage)
+                    }
+                    return res.sendStatus(200)
                 } else if (information === '') {
                     structure = [
                         {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
@@ -127,11 +140,26 @@ export const getMessage = async (req, res) => {
                 let structure
                 let agent
                 if (message.toLowerCase() === 'agente') {
-                    structure = [
-                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, deseo que expreses de la mejor forma en menos de 100 caracteres que estas transfiriendo al usuario con un agente'},
-                        {"role": "user", "content": message}
-                    ]
                     agent = true
+                    await axios.post(`https://graph.facebook.com/v16.0/106714702292810/messages?access_token=${process.env.MESSENGER_TOKEN}`, {
+                        "recipient": {
+                            "id": sender
+                        },
+                        "messaging_type": "RESPONSE",
+                        "message": {
+                            "text": '¡Perfecto! En este momento te estamos transfiriendo con un operador, espera unos minutos'
+                        }
+                    }, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    const newMessage = new MessengerMessage({messengerId: sender, message: message, response: '¡Perfecto! En este momento te estamos transfiriendo con un operador, espera unos minutos', agent: agent, view: false})
+                    await newMessage.save()
+                    if (agent) {
+                        io.emit('messenger', newMessage)
+                    }
+                    return res.sendStatus(200)
                 } else if (information === '') {
                     structure = [
                         {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
@@ -209,11 +237,28 @@ export const getMessage = async (req, res) => {
                 let structure
                 let agent
                 if (message.toLowerCase() === 'agente') {
-                    structure = [
-                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, deseo que expreses de la mejor forma en menos de 100 caracteres que estas transfiriendo al usuario con un agente'},
-                        {"role": "user", "content": message}
-                    ]
-                    agent = true
+                    if (sender !== '17841457418025747') {
+                        agent = true
+                        await axios.post(`https://graph.facebook.com/v16.0/106714702292810/messages?access_token=${process.env.MESSENGER_TOKEN}`, {
+                            "recipient": {
+                                "id": sender
+                            },
+                            "messaging_type": "RESPONSE",
+                            "message": {
+                                "text": '¡Perfecto! En este momento te estamos transfiriendo con un operador, espera unos minutos'
+                            }
+                        }, {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        const newMessage = new InstagramMessage({instagramId: sender, message: message, response: '¡Perfecto! En este momento te estamos transfiriendo con un operador, espera unos minutos', agent: agent, view: false})
+                        await newMessage.save()
+                        if (agent) {
+                            io.emit('instagram', newMessage)
+                        }
+                        return res.sendStatus(200)
+                    }
                 } else if (information === '') {
                     structure = [
                         {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
