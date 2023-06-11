@@ -66,11 +66,21 @@ export const getMessage = async (req, res) => {
                     }
                     return res.sendStatus(200)
                 } else if (information === '') {
-                    structure = [
-                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
-                        {"role": "user", "content": message}
-                    ]
-                    agent = false
+                    if (ultimateMessage.length) {
+                        structure = [
+                            {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
+                            {"role": "user", "content": ultimateMessage[0].message},
+                            {"role": "assistant", "content": ultimateMessage[0].response},
+                            {"role": "user", "content": message}
+                        ]
+                        agent = false
+                    } else {
+                        structure = [
+                            {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
+                            {"role": "user", "content": message}
+                        ]
+                        agent = false
+                    }
                 } else if (ultimateMessage.length) {
                     structure = [
                         {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
@@ -161,11 +171,21 @@ export const getMessage = async (req, res) => {
                     }
                     return res.sendStatus(200)
                 } else if (information === '') {
-                    structure = [
-                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
-                        {"role": "user", "content": message}
-                    ]
-                    agent = false
+                    if (ultimateMessage.length) {
+                        structure = [
+                            {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
+                            {"role": "user", "content": ultimateMessage[0].message},
+                            {"role": "assistant", "content": ultimateMessage[0].response},
+                            {"role": "user", "content": message}
+                        ]
+                        agent = false
+                    } else {
+                        structure = [
+                            {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
+                            {"role": "user", "content": message}
+                        ]
+                        agent = false
+                    }
                 } else if (ultimateMessage.length) {
                     structure = [
                         {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
@@ -275,7 +295,6 @@ export const getMessage = async (req, res) => {
                         ]
                         agent = false
                     }
-                    
                 } else if (ultimateMessage.length) {
                     structure = [
                         {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},

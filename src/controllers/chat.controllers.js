@@ -32,17 +32,26 @@ export const responseMessage = async (req, res) => {
             let structure
             let agent
             if (message.toLowerCase() === 'agente') {
-                structure = [
-                    {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide, deseo que expreses de la mejor forma en menos de 100 caracteres que estas transfiriendo al usuario con un agente'},
-                    {"role": "user", "content": message}
-                ]
                 agent = true
+                const newMessage = new ChatMessage({senderId: senderId, message: message, response: '¡Perfecto! En este momento te estamos transfiriendo con un operador, espera unos minutos', agent: agent, adminView: false, userView: true})
+                await newMessage.save()
+                return res.send(newMessage)
             } else if (information === '') {
-                structure = [
-                    {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
-                    {"role": "user", "content": message}
-                ]
-                agent = false
+                if (ultimateMessage.length) {
+                    structure = [
+                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
+                        {"role": "user", "content": ultimateMessage[0].message},
+                        {"role": "assistant", "content": ultimateMessage[0].response},
+                        {"role": "user", "content": message}
+                    ]
+                    agent = false
+                } else {
+                    structure = [
+                        {"role": "system", "content": 'Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, si el usuario esta haciendo una pregunta, no tienes información para responderla, entonces debes indicarle que para hablar con un agente tiene que escribir "agente" en el chat'},
+                        {"role": "user", "content": message}
+                    ]
+                    agent = false
+                }
             } else if (ultimateMessage.length) {
                 structure = [
                     {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
