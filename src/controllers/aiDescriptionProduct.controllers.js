@@ -10,7 +10,7 @@ export const createDescription = async (req, res) => {
         const openai = new OpenAIApi(configuration)
         const response = await openai.createCompletion({
             model: "text-davinci-003",
-            prompt: `Respóndeme como un experto en copywriting y seo especializado en E-commerce con mas de 15 años de experiencia. Quiero que redactes una descripción con un tono ${type} para un producto de un E-commerce, habla acerca del producto con la palabra "nuestro", no repitas partes de la descripción y no pongas "en resumen" en el parrafo final. El producto es: ${description}`,
+            prompt: `Respóndeme como un experto en copywriting y seo especializado en E-commerce con mas de 15 años de experiencia. Quiero que redactes una descripción con un tono ${type} con un maximo de 500 caracteres para un producto de un E-commerce, habla acerca del producto con la palabra "nuestro", no repitas partes de la descripción y no pongas "en resumen" en el parrafo final. El producto es: ${description}`,
             max_tokens: 1000,
             temperature: 0
         })
