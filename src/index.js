@@ -16,11 +16,10 @@ import viewContentRoutes from './routes/viewContent.routes.js'
 import stadisticsRoutes from './routes/stadistics.routes.js'
 import categoriesRoutes from './routes/categories.routes.js'
 import aiDescriptionProductRoutes from './routes/aiDescriptionProduct.routes.js'
-import aiDescriptionProductSeo from './routes/aiDescriptionProductSeo.routes.js'
+import aiProductSeo from './routes/aiProductSeo.routes.js'
 import aiDescriptionCategoryRoutes from './routes/aiDescriptionCategory.routes.js'
 import aiDescriptionCategorySeoRoutes from './routes/aiDescriptionCategorySeo.routes.js'
 import aiTitleCategorySeoRoutes from './routes/aiTitleCategorySeo.routes.js'
-import aiTitleProductSeoRoutes from './routes/aiTitleProductSeo.routes.js'
 import promotionalCodeRoutes from './routes/promotionalCode.routes.js'
 import clientTagRoutes from './routes/clientTag.routes.js'
 import whatsappRoutes from './routes/whatsapp.routes.js'
@@ -62,10 +61,9 @@ app.use(viewContentRoutes)
 app.use(stadisticsRoutes)
 app.use(categoriesRoutes)
 app.use(aiDescriptionProductRoutes)
-app.use(aiDescriptionProductSeo)
+app.use(aiProductSeo)
 app.use(aiDescriptionCategoryRoutes)
 app.use(aiDescriptionCategorySeoRoutes)
-app.use(aiTitleProductSeoRoutes)
 app.use(aiTitleCategorySeoRoutes)
 app.use(promotionalCodeRoutes)
 app.use(whatsappRoutes)
