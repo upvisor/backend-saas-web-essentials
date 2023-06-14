@@ -18,7 +18,8 @@ const productSchema = new mongoose.Schema({
   state: { type: Boolean, required: true },
   titleSeo: { type: String },
   descriptionSeo: { type: String },
-  nameVariations: { type: String }
+  nameVariations: { type: String },
+  quantityOffers: [{ quantity: { type: Number, required: true }, descount: { type: Number, required: true } }]
 },{
   timestamps: true
 })
