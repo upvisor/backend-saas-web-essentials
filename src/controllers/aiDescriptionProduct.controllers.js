@@ -8,13 +8,15 @@ export const createDescription = async (req, res) => {
             apiKey: process.env.OPENAI_API_KEY,
         });
         const openai = new OpenAIApi(configuration)
-        const response = await openai.createCompletion({
-            model: "text-davinci-003",
-            prompt: `Respóndeme como un experto en copywriting y seo especializado en E-commerce con mas de 15 años de experiencia. Quiero que redactes una descripción con un tono ${type} con un maximo de 1000 caracteres para un producto de un E-commerce, habla acerca del producto con la palabra "nuestro", no repitas partes de la descripción y no pongas "en resumen" en el parrafo final. El producto es: ${description}`,
-            max_tokens: 1000,
-            temperature: 0
+        const response = await openai.createChatCompletion({
+            model: "gpt-3.5-turbo",
+            temperature: 0,
+            messages: [
+                {"role": "system", "content": `Ponte en la piel de un experto en copywriting especializado en ecommerce, quiero que redactes una descripción para la pagina de producto de máximo 1000 caracteres con un tono ${type}`},
+                {"role": "user", "content": description}
+            ]
         })
-        return res.json(response.data.choices)
+        return res.json(response.data.choices[0].message.content)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
