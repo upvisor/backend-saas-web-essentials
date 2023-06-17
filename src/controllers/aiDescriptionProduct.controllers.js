@@ -10,13 +10,13 @@ export const createDescription = async (req, res) => {
         const openai = new OpenAIApi(configuration)
         const response = await openai.createChatCompletion({
             model: "gpt-3.5-turbo",
-            temperature: 0,
+            temperature: 1,
             messages: [
                 {"role": "system", "content": `Ponte en la piel de un experto en copywriting especializado en ecommerce, quiero que redactes una descripción para la pagina de producto de máximo 1000 caracteres con un tono ${type}`},
                 {"role": "user", "content": description}
             ]
         })
-        return res.json(response.data.choices[0].message.content)
+        return res.json(response.data.choices)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
