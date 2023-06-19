@@ -54,7 +54,7 @@ export const getClientByEmail = async (req, res) => {
       return undefined
     }
     client.tags = ['Suscripcion']
-    const updatedClient = Client.findByIdAndUpdate(client._id, { tags: 'Suscripcion' }, { new: true })
+    const updatedClient = await Client.findByIdAndUpdate(client._id, { tags: 'Suscripcion' }, { new: true })
     return res.send(updatedClient)
   } catch (error) {
     return res.status(500).json({message: error.message})
