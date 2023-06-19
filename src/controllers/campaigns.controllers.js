@@ -10,7 +10,7 @@ export const createCampaign = async (req, res) => {
         await newCampaign.save()
         const format = formatDateToCron(date)
         cron.schedule(format, () => {
-          sendEmail()
+          sendEmail({ address, affair, title, paragraph, buttonText, url })
         })
         return res.send(newCampaign)
     } catch (error) {

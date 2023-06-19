@@ -11,7 +11,6 @@ import addCartRoutes from './routes/addCart.routes.js'
 import sellsRoutes from './routes/sells.routes.js'
 import contactRoutes from './routes/contact.routes.js'
 import informationRoutes from './routes/information.routes.js'
-import subscribeRoutes from './routes/subscribe.routes.js'
 import viewContentRoutes from './routes/viewContent.routes.js'
 import stadisticsRoutes from './routes/stadistics.routes.js'
 import categoriesRoutes from './routes/categories.routes.js'
@@ -57,7 +56,6 @@ app.use(addCartRoutes)
 app.use(sellsRoutes)
 app.use(contactRoutes)
 app.use(informationRoutes)
-app.use(subscribeRoutes)
 app.use(viewContentRoutes)
 app.use(stadisticsRoutes)
 app.use(categoriesRoutes)
