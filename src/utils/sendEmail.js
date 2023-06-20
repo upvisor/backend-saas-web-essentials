@@ -2,12 +2,12 @@ import nodemailer from 'nodemailer'
 
 export const sendEmail = ({ address, affair, title, paragraph, buttonText, url }) => {
     let transporter = nodemailer.createTransport({
-        host: '',
+        host: "smtp.hostinger.com",
         post: 465,
         secure: true,
         auth: {
-            user: '',
-            pas: ''
+            user: process.env.EMAIL,
+            pass: process.env.EMAIL_PASSWORD,
         }
     })
     const message = {

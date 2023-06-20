@@ -16,8 +16,7 @@ export const createCampaign = async (req, res) => {
         }
         cron.schedule(format, () => {
             subscribers.map(subscriber => {
-                const mail = subscriber.email
-                sendEmail({ mail, affair, title, paragraph, buttonText, url })
+                sendEmail({ address: subscriber.email, affair, title, paragraph, buttonText, url })
             })
         })
         return res.send(newCampaign)
