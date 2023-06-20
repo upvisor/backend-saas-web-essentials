@@ -47,7 +47,7 @@ export const getClient = async (req, res) => {
   }
 }
 
-export const getClientByEmail = async (req, res) => {
+export const subscribreEmail = async (req, res) => {
   try {
     const client = await Client.find({ email: req.params.id })
     if (!client) {
