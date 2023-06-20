@@ -11,7 +11,7 @@ export const sendEmail = ({ address, affair, title, paragraph, buttonText, url }
         }
     })
     const message = {
-      from: 'contacto@blaspod.cl',
+      from: 'ayuda@maaide.com',
       to: address,
       subject: affair,
       text: `<!DOCTYPE html>

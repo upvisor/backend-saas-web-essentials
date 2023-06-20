@@ -15,6 +15,7 @@ export const createCampaign = async (req, res) => {
         if (address === 'Todos los suscriptores') {
             subscribers = await Client.find().lean()
         }
+        console.log(subscribers)
         cron.schedule(format, () => {
             subscribers.map(subscriber => {
                 sendEmail({ address: subscriber.email, affair, title, paragraph, buttonText, url })
