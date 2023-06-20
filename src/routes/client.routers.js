@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import { createClient, getClients, updateClient, getClient, subscribreEmail } from '../controllers/client.controllers.js'
+import { createClient, getClients, updateClient, getClient, subscribeEmail } from '../controllers/client.controllers.js'
 
 const router = Router()
 
@@ -11,6 +11,6 @@ router.put('/clients/:id', updateClient)
 
 router.get('/clients/:id', getClient)
 
-router.put('/clients-subscribe/:id', subscribreEmail)
+router.put('/clients-subscribe/:id', subscribeEmail)
 
 export default router

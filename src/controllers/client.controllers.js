@@ -47,15 +47,19 @@ export const getClient = async (req, res) => {
   }
 }
 
-export const subscribreEmail = async (req, res) => {
+export const subscribeEmail = async (req, res) => {
   try {
-    const client = await Client.find({ email: req.params.id })
+    const client = await Client.findOne({ email: req.params.id })
     if (!client) {
       return undefined
     }
-    const tags = client.tags.concat(['Suscripcion'])
-    const updatedClient = await Client.findByIdAndUpdate(client._id, { tags: tags }, { new: true })
-    return res.send(updatedClient)
+    if (client.tags?.length) {
+      client.tags.push(['Suscripcion'])
+    } else {
+      client.tags = ['Suscripcion']
+    }
+    await client.save()
+    return res.send(client)
   } catch (error) {
     return res.status(500).json({message: error.message})
   }
