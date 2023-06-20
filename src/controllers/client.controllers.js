@@ -53,7 +53,8 @@ export const subscribreEmail = async (req, res) => {
     if (!client) {
       return undefined
     }
-    const updatedClient = await Client.findByIdAndUpdate(client._id, { tags: ['Suscripcion'] }, { new: true })
+    const tags = client.tags.concat(['Suscripcion'])
+    const updatedClient = await Client.findByIdAndUpdate(client._id, { tags: tags }, { new: true })
     return res.send(updatedClient)
   } catch (error) {
     return res.status(500).json({message: error.message})
