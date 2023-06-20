@@ -9,7 +9,8 @@ export const createCampaign = async (req, res) => {
         const { address, affair, summary, title, paragraph, buttonText, url, date } = req.body
         const newCampaign = new Email({ address, affair, summary, title, paragraph, buttonText, url, date })
         await newCampaign.save()
-        const format = formatDateToCron(date)
+        const dateFormat = new Date(date)
+        const format = formatDateToCron(dateFormat)
         let subscribers = []
         if (address === 'Todos los suscriptores') {
             subscribers = await Client.find().lean()
