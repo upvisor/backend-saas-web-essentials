@@ -17,7 +17,7 @@ export const createCampaign = async (req, res) => {
         if (date === undefined) {
             const storeData = await StoreData.find()
             subscribers.map(subscriber => {
-                sendEmail({ address: subscriber.email, name: subscriber.name, affair, title, paragraph, buttonText, url, storeData: storeData[0] }).catch(console.error)
+                sendEmail({ address: subscriber.email, name: subscriber.firstName, affair, title, paragraph, buttonText, url, storeData: storeData[0] }).catch(console.error)
             })
         } else {
             const storeData = await StoreData.find()
@@ -25,7 +25,7 @@ export const createCampaign = async (req, res) => {
             const format = formatDateToCron(dateFormat)
             cron.schedule(format, () => {
                 subscribers.map(subscriber => {
-                    sendEmail({ address: subscriber.email, name: subscriber.name, affair, title, paragraph, buttonText, url, storeData: storeData[0] }).catch(console.error)
+                    sendEmail({ address: subscriber.email, name: subscriber.firstName, affair, title, paragraph, buttonText, url, storeData: storeData[0] }).catch(console.error)
                 })
             })
         }

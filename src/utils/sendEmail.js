@@ -31,7 +31,7 @@ export const sendEmail = async ({ address, name, affair, title, paragraph, butto
                             <a style="margin: auto;" target="_blank" href="https://tienda-1.vercel.app/"><img style="width: 300px;" src="https://res.cloudinary.com/blasspod/image/upload/v1664841659/blaspod/ouxxwsmqodpemvffqs7b.png" /></a>
                         </div>
                         <h1 style="font-family: 'Montserrat', sans-serif; font-weight: 500; text-align: center; margin-bottom: 0px;">${title}</h1>
-                        <p style="font-family: 'poppins', sans-serif; text-align: center;">${paragraph.replace('${name}', name)}</p>
+                        <p style="font-family: 'poppins', sans-serif; text-align: center; font-size: 16px;">${paragraph.replace('${name}', name)}</p>
                         <div style="display: flex;">
                             <a href="${url}" target="_blank" style="padding: 8px 21px; font-family: 'poppins', sans-serif; border: none; text-decoration: none; color: white; font-size: 16px; margin: auto; width: fit-content; margin-bottom: 18px; cursor: pointer; background-color: #3478F5;">${buttonText}</a>
                         </div>
