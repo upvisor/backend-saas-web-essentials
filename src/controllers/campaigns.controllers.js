@@ -11,7 +11,7 @@ export const createCampaign = async (req, res) => {
         if (address === 'Todos los suscriptores') {
             subscribers = await Client.find().lean()
         }
-        const newCampaign = new Email({ address: subscribers, affair, summary, title, paragraph, buttonText, url, date })
+        const newCampaign = new Email({ address: subscribers, affair, summary, title, paragraph, buttonText, url, date: date === undefined ? new Date() : date })
         await newCampaign.save()
         if (date === undefined) {
             subscribers.map(subscriber => {
