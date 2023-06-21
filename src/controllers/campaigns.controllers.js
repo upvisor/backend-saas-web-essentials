@@ -14,16 +14,15 @@ export const createCampaign = async (req, res) => {
             subscribers = await Client.find().lean()
         }
         if (date === undefined) {
-            console.log('bien')
             subscribers.map(subscriber => {
-                sendEmail({ address: subscriber.email, affair, title, paragraph, buttonText, url })
+                sendEmail({ address: subscriber.email, affair, title, paragraph, buttonText, url }).catch(console.error)
             })
         } else {
             const dateFormat = new Date(date)
             const format = formatDateToCron(dateFormat)
             cron.schedule(format, () => {
                 subscribers.map(subscriber => {
-                    sendEmail({ address: subscriber.email, affair, title, paragraph, buttonText, url })
+                    sendEmail({ address: subscriber.email, affair, title, paragraph, buttonText, url }).catch(console.error)
                 })
             })
         }
