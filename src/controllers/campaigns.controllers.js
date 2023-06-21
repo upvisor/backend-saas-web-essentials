@@ -7,13 +7,14 @@ import Client from '../models/Client.js'
 export const createCampaign = async (req, res) => {
     try {
         const { address, affair, summary, title, paragraph, buttonText, url, date } = req.body
+        const newCampaign = new Email({ address, affair, summary, title, paragraph, buttonText, url, date: date === undefined ? new Date() : date })
+        await newCampaign.save()
         let subscribers = []
         if (address === 'Todos los suscriptores') {
             subscribers = await Client.find().lean()
         }
-        const newCampaign = new Email({ address: subscribers, affair, summary, title, paragraph, buttonText, url, date: date === undefined ? new Date() : date })
-        await newCampaign.save()
         if (date === undefined) {
+            console.log('bien')
             subscribers.map(subscriber => {
                 sendEmail({ address: subscriber.email, affair, title, paragraph, buttonText, url })
             })
