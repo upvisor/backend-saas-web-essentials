@@ -39,3 +39,12 @@ export const createCampaign = async (req, res) => {
         return res.status(500).json({message: error.message})
     }
 }
+
+export const getCampaigns = async (req, res) => {
+    try {
+        const campaigns = await Email.find().lean()
+        return res.send(campaigns)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
