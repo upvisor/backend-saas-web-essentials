@@ -30,7 +30,7 @@ export const createCampaign = async (req, res) => {
                 })
             }, {
                 scheduled: true,
-                timezone: "America/Sao_Paulo"
+                timezone: "America/New_York"
             })
         }
         return res.send(newCampaign)
