@@ -3,7 +3,6 @@ import mongoose from 'mongoose'
 const EmailSchema = new mongoose.Schema({
     address: { type: String, required: true },
     affair: { type: String, required: true },
-    summary: { type: String, required: true },
     title: { type: String },
     paragraph: { type: String },
     buttonText: { type: String },
