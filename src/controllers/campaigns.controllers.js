@@ -14,7 +14,7 @@ export const createCampaign = async (req, res) => {
         if (address === 'Todos los suscriptores') {
             subscribers = await Client.find().lean()
         } else {
-            subscribers = await Client.find({ tag: address }).lean()
+            subscribers = await Client.find({ tags: address }).lean()
         }
         if (date === undefined) {
             const storeData = await StoreData.find()
