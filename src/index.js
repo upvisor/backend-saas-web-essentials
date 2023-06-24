@@ -32,6 +32,7 @@ import messengerRoutes from './routes/messenger.routes.js'
 import instagramRoutes from './routes/instagram.routes.js'
 import notificationsRoutes from './routes/notifications.routes.js'
 import campaignRoutes from './routes/campaign.controllers.js'
+import automatizationsRoutes from './routes/automatizations.routes.js'
 
 connectDB()
 
@@ -77,6 +78,7 @@ app.use(messengerRoutes)
 app.use(instagramRoutes)
 app.use(notificationsRoutes)
 app.use(campaignRoutes)
+app.use(automatizationsRoutes)
 
 io.on('connection', async (socket) => {
     socket.on('message', async (message) => {
