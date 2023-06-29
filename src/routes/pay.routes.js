@@ -16,8 +16,6 @@ router.use(function (req, res, next) {
 
 router.post("/pay/create", create)
 
-router.get("/pay/commit", commit)
-
 router.post("/pay/commit", commit)
 
 router.post("/pay/status", status)
