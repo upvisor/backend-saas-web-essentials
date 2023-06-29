@@ -31,7 +31,6 @@ export const createAutomatization = async (req, res) => {
         } else {
             subscribers = await Client.find({ tags: address }).lean()
         }
-        console.log(subscribers)
         emails.map(async (email) => {
             const storeData = await StoreData.find()
             const dateFormat = new Date(email.date)
