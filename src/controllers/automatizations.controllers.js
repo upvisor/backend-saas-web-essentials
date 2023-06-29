@@ -36,8 +36,8 @@ export const createAutomatization = async (req, res) => {
             const storeData = await StoreData.find()
             const dateFormat = new Date(email.date)
             const format = formatDateToCron(dateFormat)
+            console.log(format)
             cron.schedule(format, () => {
-                console.log('cron pasado')
                 subscribers.map(subscriber => {
                     sendEmail({ address: subscriber.email, name: subscriber.firstName !== undefined ? subscriber.firstName : '', affair: email.affair, title: email.title, paragraph: email.paragraph, buttonText: email.buttonText, url: email.url, storeData: storeData[0] }).catch(console.error)
                 })
