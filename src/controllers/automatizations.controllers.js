@@ -32,7 +32,7 @@ export const createAutomatization = async (req, res) => {
             subscribers = await Client.find({ tags: address }).lean()
         }
         emails.map(async (email) => {
-            const storeData = await StoreData.find()
+            const storeData = await StoreData.find().lean()
             const dateFormat = new Date(email.date)
             const format = formatDateToCron(dateFormat)
             console.log(format)
