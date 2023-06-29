@@ -19,7 +19,6 @@ export const createAutomatization = async (req, res) => {
             } else if (email.time === 'Minutos') {
                 currentDate.setMinutes(currentDate.getMinutes() + Number(email.number))
             }
-            currentDate.setMinutes(currentDate.getMinutes() + 1)
             email.date = currentDate
             emails.push(email)
             previousDate = currentDate
@@ -32,11 +31,13 @@ export const createAutomatization = async (req, res) => {
         } else {
             subscribers = await Client.find({ tags: address }).lean()
         }
+        console.log(subscribers)
         emails.map(async (email) => {
             const storeData = await StoreData.find()
             const dateFormat = new Date(email.date)
             const format = formatDateToCron(dateFormat)
             cron.schedule(format, () => {
+                console.log('cron pasado')
                 subscribers.map(subscriber => {
                     sendEmail({ address: subscriber.email, name: subscriber.firstName !== undefined ? subscriber.firstName : '', affair: email.affair, title: email.title, paragraph: email.paragraph, buttonText: email.buttonText, url: email.url, storeData: storeData[0] }).catch(console.error)
                 })
