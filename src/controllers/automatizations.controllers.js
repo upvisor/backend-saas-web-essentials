@@ -9,9 +9,14 @@ export const createAutomatization = async (req, res) => {
     try {
         const { address, name, automatization } = req.body
         const emails = []
-        let previousDate = new Date()
+        let previousDate = undefined
         for (const email of automatization) {
-            const currentDate = previousDate
+            let currentDate
+            if (previousDate === undefined) {
+                currentDate = new Date()
+            } else {
+                currentDate = new Date(previousDate)
+            }
             if (email.time === 'Días') {
                 currentDate.setDate(currentDate.getDate() + Number(email.number))
             } else if (email.time === 'Horas') {
