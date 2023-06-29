@@ -16,6 +16,7 @@ export const createAutomatization = async (req, res) => {
             } else if (email.time === 'Minutos') {
                 currentDate.setMinutes(currentDate.getMinutes() + Number(email.number))
             }
+            currentDate.setMinutes(currentDate.getMinutes() + 1)
             email.date = currentDate
             emails.push(email)
             previousDate = currentDate
