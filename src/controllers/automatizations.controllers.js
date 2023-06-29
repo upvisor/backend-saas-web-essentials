@@ -1,4 +1,6 @@
 import Automatization from '../models/Automatization.js'
+import Client from '../models/Client.js'
+import StoreData from '../models/StoreData.js'
 
 export const createAutomatization = async (req, res) => {
     try {
@@ -20,6 +22,25 @@ export const createAutomatization = async (req, res) => {
         }
         const newAutomatization = new Automatization({ address, name, automatization: emails })
         await newAutomatization.save()
+        let subscribers = []
+        if (address === 'Todos los suscriptores') {
+            subscribers = await Client.find().lean()
+        } else {
+            subscribers = await Client.find({ tags: address }).lean()
+        }
+        emails.map(async (email) => {
+            const storeData = await StoreData.find()
+            const dateFormat = new Date(email.date)
+            const format = formatDateToCron(dateFormat)
+            cron.schedule(format, () => {
+                subscribers.map(subscriber => {
+                    sendEmail({ address: subscriber.email, name: subscriber.firstName !== undefined ? subscriber.firstName : '', affair: email.affair, title: email.title, paragraph: email.paragraph, buttonText: email.buttonText, url: email.url, storeData: storeData[0] }).catch(console.error)
+                })
+            }, {
+                scheduled: true,
+                timezone: "America/New_York"
+            })
+        })
         return res.send(newAutomatization)
     } catch (error) {
         return res.status(500).json({message: error.message})
