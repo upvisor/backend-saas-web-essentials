@@ -1,7 +1,9 @@
 import Automatization from '../models/Automatization.js'
 import Client from '../models/Client.js'
 import StoreData from '../models/StoreData.js'
+import { sendEmail } from '../utils/sendEmail.js'
 import { formatDateToCron } from '../utils/cronFormat.js'
+import cron from 'node-cron'
 
 export const createAutomatization = async (req, res) => {
     try {
