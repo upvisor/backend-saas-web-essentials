@@ -13,7 +13,7 @@ export const createDomain = async (req, res) => {
 
 export const getDomain = async (req, res) => {
     try {
-        const domain = await Domain.find().lean()
+        const domain = await Domain.findOne().lean()
         return res.send(domain)
     } catch (error) {
         return res.status(500).json({message: error.message})
