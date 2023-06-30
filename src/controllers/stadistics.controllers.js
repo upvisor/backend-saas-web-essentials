@@ -9,7 +9,7 @@ export const getStadistics = async (req, res) => {
     const addCarts = await AddCart.find().lean()
     const informations = await Information.find().lean()
     const sells = await Sell.find().lean()
-    return res.send([{ viewContents: viewContents }, { addCarts: addCarts }, { informations: informations }, { sells: sells }])
+    return res.send({ viewContents: viewContents, addCarts: addCarts, informations: informations, sells: sells })
   } catch (error) {
     return res.status(500).json({message: error.message})
   }
@@ -20,22 +20,22 @@ export const getStadisticsFiltered = async (req, res) => {
     const {dateInitial, dateLast} = req.body
     const dateInitialFormat = new Date(dateInitial)
     const dateLastFormat = new Date(dateLast)
-    let stadistics = []
+    let stadistics = { viewContents: [], addCarts: [], informations: [], sells: [] }
     const viewContents = await ViewContent.find({ createdAt: { $gte: dateInitialFormat, $lte: dateLastFormat } }).sort({ createdAt: 1 })
     if (viewContents) {
-      stadistics = stadistics.concat({ viewContents: viewContents })
+      stadistics.viewContents = viewContents
     }
     const addCarts = await AddCart.find({ createdAt: { $gte: dateInitialFormat, $lte: dateLastFormat } }).sort({ createdAt: 1 })
     if (addCarts) {
-      stadistics = stadistics.concat({ addCarts: addCarts })
+      stadistics.addCarts = addCarts
     }
     const informations = await Information.find({ createdAt: { $gte: dateInitialFormat, $lte: dateLastFormat } }).sort({ createdAt: 1 })
     if (informations) {
-      stadistics = stadistics.concat({ informations: informations })
+      stadistics.informations = informations
     }
     const sells = await Sell.find({ createdAt: { $gte: dateInitialFormat, $lte: dateLastFormat } }).sort({ createdAt: 1 })
     if (sells) {
-      stadistics = stadistics.concat({ sells: sells })
+      stadistics.sells = sells
     }
     return res.send(stadistics)
   } catch (error) {
