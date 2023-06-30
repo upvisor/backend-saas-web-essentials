@@ -7,9 +7,9 @@ import cron from 'node-cron'
 
 export const createAutomatization = async (req, res) => {
     try {
-        const { address, name, automatization } = req.body
+        const { address, name, date, automatization } = req.body
         const emails = []
-        let previousDate = new Date()
+        let previousDate = new Date(date)
         for (const email of automatization) {
             const currentDate = new Date(previousDate)
             if (email.time === 'Días') {
