@@ -18,20 +18,22 @@ export const getStadistics = async (req, res) => {
 export const getStadisticsFiltered = async (req, res) => {
   try {
     const {dateInitial, dateLast} = req.body
+    console.log(new Date(dateInitial))
+    console.log(new Date(dateLast))
     let stadistics = []
     const viewContents = await ViewContent.find({ createdAt: { $gte: dateInitial, $lte: dateLast } }).sort({ createdAt: 1 })
     if (viewContents) {
       stadistics = stadistics.concat({ viewContents: viewContents })
     }
-    const addCarts = await AddCart.find({ createdAt: { $gte: dateInitial, $lte: dateLast } }).sort({ createdAt: 1 })
+    const addCarts = await AddCart.find({ createdAt: { $gte: new Date(dateInitial), $lte: new Date(dateLast) } }).sort({ createdAt: 1 })
     if (addCarts) {
       stadistics = stadistics.concat({ addCarts: addCarts })
     }
-    const informations = await Information.find({ createdAt: { $gte: dateInitial, $lte: dateLast } }).sort({ createdAt: 1 })
+    const informations = await Information.find({ createdAt: { $gte: new Date(dateInitial), $lte: new Date(dateLast) } }).sort({ createdAt: 1 })
     if (informations) {
       stadistics = stadistics.concat({ informations: informations })
     }
-    const sells = await Sell.find({ createdAt: { $gte: dateInitial, $lte: dateLast } }).sort({ createdAt: 1 })
+    const sells = await Sell.find({ createdAt: { $gte: new Date(dateInitial), $lte: new Date(dateLast) } }).sort({ createdAt: 1 })
     if (sells) {
       stadistics = stadistics.concat({ sells: sells })
     }
