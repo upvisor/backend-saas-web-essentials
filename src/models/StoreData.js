@@ -8,7 +8,8 @@ const StoreDataSchema = mongoose.Schema({
   departament: { type: String },
   region: { type: String, required: true },
   city: { type: String, required: true },
-  logo: { type: String, required: true }
+  logo: { type: String, required: true },
+  logoWhite: { type: String, required: true }
 }, {
   timestamps: true
 })
