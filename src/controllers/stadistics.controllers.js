@@ -25,11 +25,24 @@ export const getStadisticsFiltered = async (req, res) => {
         $lte: new Date(dateLast)
       }
     }
+    let stadistics = []
     const viewContents = await ViewContent.find(filters).sort({ createdAt: 1 })
+    if (viewContents) {
+      stadistics = stadistics.concat(viewContents)
+    }
     const addCarts = await AddCart.find(filters).sort({ createdAt: 1 })
+    if (addCarts) {
+      stadistics = stadistics.concat(addCarts)
+    }
     const informations = await Information.find(filters).sort({ createdAt: 1 })
+    if (informations) {
+      stadistics = stadistics.concat(informations)
+    }
     const sells = await Sell.find(filters).sort({ createdAt: 1 })
-    return res.send([viewContents, addCarts, informations, sells])
+    if (sells) {
+      stadistics = stadistics.concat(sells)
+    }
+    return res.send(stadistics)
   } catch (error) {
     return res.status(500).json({message: error.message})
   }
