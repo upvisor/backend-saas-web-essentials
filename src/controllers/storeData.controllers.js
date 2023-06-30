@@ -21,7 +21,7 @@ export const editStoreData = async (req, res) => {
 
 export const getStoreData = async (req, res) => {
     try {
-        const storeData = await StoreData.find()
+        const storeData = await StoreData.find().lean()
         return res.json(storeData)
     } catch (error) {
         return res.status(500).json({message: error.message})
