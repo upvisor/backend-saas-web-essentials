@@ -7,10 +7,10 @@ import cron from 'node-cron'
 
 export const createAutomatization = async (req, res) => {
     try {
-        const { address, name, date, automatization } = req.body
-        console.log(req.body)
+        const { address, name, automatization } = req.body
+        const options = { timeZone: 'America/Santiago' }
         const emails = []
-        let previousDate = new Date(date)
+        let previousDate = new Date().toLocaleString('es-ES', options)
         previousDate.setMinutes(previousDate.getMinutes() + 1)
         for (const email of automatization) {
             const currentDate = new Date(previousDate)
