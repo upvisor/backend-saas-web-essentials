@@ -28,19 +28,19 @@ export const getStadisticsFiltered = async (req, res) => {
     let stadistics = []
     const viewContents = await ViewContent.find(filters).sort({ createdAt: 1 })
     if (viewContents) {
-      stadistics = stadistics.concat(viewContents)
+      stadistics = stadistics.concat({viewContents: viewContents})
     }
     const addCarts = await AddCart.find(filters).sort({ createdAt: 1 })
     if (addCarts) {
-      stadistics = stadistics.concat(addCarts)
+      stadistics = stadistics.concat({addCarts: addCarts})
     }
     const informations = await Information.find(filters).sort({ createdAt: 1 })
     if (informations) {
-      stadistics = stadistics.concat(informations)
+      stadistics = stadistics.concat({informations: informations})
     }
     const sells = await Sell.find(filters).sort({ createdAt: 1 })
     if (sells) {
-      stadistics = stadistics.concat(sells)
+      stadistics = stadistics.concat({sells: sells})
     }
     return res.send(stadistics)
   } catch (error) {
