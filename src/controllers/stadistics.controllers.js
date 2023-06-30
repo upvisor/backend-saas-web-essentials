@@ -25,10 +25,10 @@ export const getStadisticsFiltered = async (req, res) => {
         $lte: new Date(dateLast)
       }
     }
-    const viewContents = await ViewContent.find(filters).lean()
-    const addCarts = await AddCart.find(filters).lean()
-    const informations = await Information.find(filters).lean()
-    const sells = await Sell.find().lean(filters)
+    const viewContents = await ViewContent.find(filters).sort({ createdAt: 1 })
+    const addCarts = await AddCart.find(filters).sort({ createdAt: 1 })
+    const informations = await Information.find(filters).sort({ createdAt: 1 })
+    const sells = await Sell.find(filters).sort({ createdAt: 1 })
     return res.send([viewContents, addCarts, informations, sells])
   } catch (error) {
     return res.status(500).json({message: error.message})
