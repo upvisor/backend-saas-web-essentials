@@ -34,6 +34,7 @@ import notificationsRoutes from './routes/notifications.routes.js'
 import campaignRoutes from './routes/campaign.controllers.js'
 import automatizationsRoutes from './routes/automatizations.routes.js'
 import domainRoutes from './routes/domain.routes.js'
+import politicsRoutes from './routes/politics.routes.js'
 
 connectDB()
 
@@ -81,6 +82,7 @@ app.use(notificationsRoutes)
 app.use(campaignRoutes)
 app.use(automatizationsRoutes)
 app.use(domainRoutes)
+app.use(politicsRoutes)
 
 io.on('connection', async (socket) => {
     socket.on('message', async (message) => {
