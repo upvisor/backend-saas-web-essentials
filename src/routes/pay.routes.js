@@ -3,7 +3,7 @@ import {commit, create, refund, status} from '../controllers/pay.controllers.js'
 import pkg from 'transbank-sdk'
 const { WebpayPlus } = pkg
 
-const router = Router ()
+const router = Router()
 
 router.use(function (req, res, next) {
   if (process.env.WPP_CC && process.env.WPP_KEY) {
