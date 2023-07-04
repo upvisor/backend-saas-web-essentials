@@ -20,7 +20,7 @@ export const getStadisticsFiltered = async (req, res) => {
     const {dateInitial, dateLast} = req.body
     const dateInitialFormat = new Date(dateInitial)
     const dateLastFormat = new Date(dateLast)
-    let stadistics = { viewContents: [], addCarts: [], informations: [], sells: [] }
+    let stadistics = { viewContents: 0, addCarts: 0, informations: 0, sells: 0 }
     const viewContents = await ViewContent.countDocuments({ createdAt: { $gte: dateInitialFormat, $lte: dateLastFormat } })
     if (viewContents) {
       stadistics.viewContents = viewContents
