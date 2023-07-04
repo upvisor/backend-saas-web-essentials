@@ -82,4 +82,13 @@ export const getProductBySlug = async (req, res) => {
     })
   
     return res.send(product)
-  }
+}
+
+export const getProductByCategory = async (req, res) => {
+    try {
+        const products = await Product.find({ category: req.params.id }).lean()
+        res.send(products)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
