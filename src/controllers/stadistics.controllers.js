@@ -5,11 +5,12 @@ import Sell from '../models/Sell.js'
 
 export const getStadistics = async (req, res) => {
   try {
+    const totalSell = await Sell.find().select('total -_id').lean()
     const viewContents = await ViewContent.countDocuments()
     const addCarts = await AddCart.countDocuments()
     const informations = await Information.countDocuments()
     const sells = await Sell.countDocuments()
-    return res.send({ viewContents: viewContents, addCarts: addCarts, informations: informations, sells: sells })
+    return res.send({ totalSell: totalSell, viewContents: viewContents, addCarts: addCarts, informations: informations, sells: sells })
   } catch (error) {
     return res.status(500).json({message: error.message})
   }
@@ -20,7 +21,11 @@ export const getStadisticsFiltered = async (req, res) => {
     const {dateInitial, dateLast} = req.body
     const dateInitialFormat = new Date(dateInitial)
     const dateLastFormat = new Date(dateLast)
-    let stadistics = { viewContents: 0, addCarts: 0, informations: 0, sells: 0 }
+    let stadistics = { totalSell: 0, viewContents: 0, addCarts: 0, informations: 0, sells: 0 }
+    const totalSell = await Sell.find({ createdAt: { $gte: dateInitialFormat, $lte: dateLastFormat } }).select('total -_id').lean()
+    if (totalSell) {
+      stadistics.totalSell = totalSell
+    }
     const viewContents = await ViewContent.countDocuments({ createdAt: { $gte: dateInitialFormat, $lte: dateLastFormat } })
     if (viewContents) {
       stadistics.viewContents = viewContents
