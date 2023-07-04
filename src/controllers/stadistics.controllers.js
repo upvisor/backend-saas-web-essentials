@@ -5,7 +5,8 @@ import Sell from '../models/Sell.js'
 
 export const getStadistics = async (req, res) => {
   try {
-    const totalSell = await Sell.find().select('total -_id').lean()
+    const sell = await Sell.find().select('total -_id').lean()
+    const totalSell = sell.reduce((prev, curr) => prev + curr.total, 0)
     const viewContents = await ViewContent.countDocuments()
     const addCarts = await AddCart.countDocuments()
     const informations = await Information.countDocuments()
@@ -22,7 +23,8 @@ export const getStadisticsFiltered = async (req, res) => {
     const dateInitialFormat = new Date(dateInitial)
     const dateLastFormat = new Date(dateLast)
     let stadistics = { totalSell: 0, viewContents: 0, addCarts: 0, informations: 0, sells: 0 }
-    const totalSell = await Sell.find({ createdAt: { $gte: dateInitialFormat, $lte: dateLastFormat } }).select('total -_id').lean()
+    const sell = await Sell.find({ createdAt: { $gte: dateInitialFormat, $lte: dateLastFormat } }).select('total -_id').lean()
+    const totalSell = sell.reduce((prev, curr) => prev + curr.total, 0)
     if (totalSell) {
       stadistics.totalSell = totalSell
     }
