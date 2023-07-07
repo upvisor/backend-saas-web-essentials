@@ -11,8 +11,7 @@ export const getCategories = async (req, res) => {
 
 export const createCategory = async (req, res) => {
   try {
-    const { category, slug, titleSeo, descriptionSeo, image, description } = req.body
-    const newCategory = new Category({category, slug, titleSeo, descriptionSeo, image, description})
+    const newCategory = new Category(req.body)
     await newCategory.save()
     res.send(newCategory)
   } catch (error) {
