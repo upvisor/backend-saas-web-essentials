@@ -6,6 +6,7 @@ export const createDesign = async (req, res) => {
         if (design) {
             await Design.findByIdAndDelete(design._id)
         }
+        console.log(req.body)
         const newDesign = new Design(req.body)
         await newDesign.save()
         return res.send(newDesign)
