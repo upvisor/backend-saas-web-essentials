@@ -31,7 +31,8 @@ const DesignSchema = new mongoose.Schema({
     },
     shop: {
         title: { type: String },
-        description: { type: String }
+        description: { type: String },
+        banner: { type: String }
     },
     subscription: {
         title: { type: String }
