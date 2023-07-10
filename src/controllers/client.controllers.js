@@ -1,4 +1,6 @@
 import Client from '../models/Client.js'
+import StoreData from '../models/StoreData.js'
+import { sendEmail } from '../utils/sendEmail.js'
 
 export const createClient = async (req, res) => {
   try {
@@ -50,13 +52,16 @@ export const getClient = async (req, res) => {
 export const subscribeEmail = async (req, res) => {
   try {
     const client = await Client.findOne({ email: req.params.id })
-    if (!client) {
-      return undefined
-    }
     if (client.tags?.length) {
-      client.tags.push(['Suscripcion'])
+      if (client.tags.find(tag => tag === 'Suscripcion')) {
+        client.tags.push(['Suscripcion'])
+        const storeData = await StoreData.findOne().lean()
+        sendEmail({ address: req.params.id, affair: '¡Te damos la bienvenida a Blaspod Store!', name: '', storeData: storeData, buttonText: 'Visitar tienda', title: 'Nos hace muy felices tenerte con nosotros', paragraph: '¡Hola! Te damos las gracias por suscribirte a nuestra lista, nos hace muy felices tenerte con nosotros.', url: 'https://tienda-1.vercel.app/tienda' })
+      }
     } else {
       client.tags = ['Suscripcion']
+      const storeData = await StoreData.findOne().lean()
+      sendEmail({ address: req.params.id, affair: '¡Te damos la bienvenida a Blaspod Store!', name: '', storeData: storeData, buttonText: 'Visitar tienda', title: 'Nos hace muy felices tenerte con nosotros', paragraph: '¡Hola! Te damos las gracias por suscribirte a nuestra lista, nos hace muy felices tenerte con nosotros.', url: 'https://tienda-1.vercel.app/tienda' })
     }
     await client.save()
     return res.send(client)
