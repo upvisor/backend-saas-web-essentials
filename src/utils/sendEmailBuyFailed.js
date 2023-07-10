@@ -44,14 +44,8 @@ export const sendEmailBuyFailed = async ({ sell, storeData }) => {
                                     </div>
                                 `
                             })}
-                            <div style="display: flex;">
-                                <p>Envío:</p>
-                                <p>$${NumberFormat(sell.shipping)}</p>
-                            </div>
-                            <div style="display: flex;">
-                                <p>Total:</p>
-                                <p>$${NumberFormat(sell.cart.reduce((prev, curr) => curr.price * curr.quantity + prev, 0) + sell.shipping)}</p>
-                            </div>
+                            <p>Envío: $${NumberFormat(sell.shipping)}</p>
+                            <p>Total: $${NumberFormat(sell.cart.reduce((prev, curr) => curr.price * curr.quantity + prev, 0) + Number(sell.shipping))}</p>
                         </div>
                         <div style="display: flex;">
                             <a href="https://tienda-1.vercel.app/finalizar-compra/" target="_blank" style="padding: 8px 21px; font-family: 'poppins', sans-serif; border: none; text-decoration: none; color: white; font-size: 16px; margin: auto; width: fit-content; margin-bottom: 18px; cursor: pointer; background-color: #3478F5;">Volver a intentarlo</a>

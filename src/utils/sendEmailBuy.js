@@ -40,18 +40,12 @@ export const sendEmailBuy = async ({ sell, storeData }) => {
                                         <img src=${product.image} style="width: 50px; margin-right: 6px;" />
                                         <p style="margin-right: 6px;">${product.name}</p>
                                         <p style="margin-right: 6px;">${product.quantity}</p>
-                                        <p>${NumberFormat(product.price)}</p>
+                                        <p>$${NumberFormat(product.price)}</p>
                                     </div>
                                 `
                             })}
-                            <div style="display: flex;">
-                                <p>Envío:</p>
-                                <p>$${NumberFormat(sell.shipping)}</p>
-                            </div>
-                            <div style="display: flex;">
-                                <p>Total:</p>
-                                <p>$${NumberFormat(sell.cart.reduce((prev, curr) => curr.price * curr.quantity + prev, 0) + sell.shipping)}</p>
-                            </div>
+                            <p>Envío: $${NumberFormat(sell.shipping)}</p>
+                            <p>Total: $${NumberFormat(sell.cart.reduce((prev, curr) => curr.price * curr.quantity + prev, 0) + Number(sell.shipping))}</p>
                         </div>
                         <div style="border-top: 1px solid #CACACA; padding: 12px; display: flex;">
                             <div style="margin-right: 10px">
