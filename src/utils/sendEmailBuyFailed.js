@@ -45,8 +45,12 @@ export const sendEmailBuyFailed = async ({ sell, storeData }) => {
                                 `
                             })}
                             <div style="display: flex;">
+                                <p>Envío:</p>
+                                <p>$${NumberFormat(sell.shipping)}</p>
+                            </div>
+                            <div style="display: flex;">
                                 <p>Total:</p>
-                                <p>$${NumberFormat(sell.cart.reduce((prev, curr) => curr.price * curr.quantity + prev, 0))}</p>
+                                <p>$${NumberFormat(sell.cart.reduce((prev, curr) => curr.price * curr.quantity + prev, 0) + sell.shipping)}</p>
                             </div>
                         </div>
                         <div style="display: flex;">
