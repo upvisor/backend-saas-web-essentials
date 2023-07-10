@@ -1,15 +1,13 @@
 import Client from '../models/Client.js'
-import StoreData from '../models/StoreData.js'
-import { sendEmail } from '../utils/sendEmail.js'
 
 export const createClient = async (req, res) => {
   try {
-    const client = await Client.find(req.body.email).lean()
+    const client = await Client.findOne({email: req.body.email}).lean()
     if (client) {
-      if (client.tags.find(tag => tag === req.body.tags)) {
-        return undefined
+      if (client.tags.find(tag => tag === req.body.tags[0])) {
+        return res.sendStatus(404)
       } else {
-        client.tags.push(req.body.tags)
+        client.tags.push(req.body.tags[0])
         const editClien = await Client.findByIdAndUpdate(client._id, client, { new: true })
         return res.send(editClien)
       }
