@@ -1,6 +1,7 @@
 import pkg from 'transbank-sdk'
 import {asyncHandler} from '../utils/async_handler.js'
 const { WebpayPlus, Environment, Options } = pkg
+import { sendEmailBuy } from '../utils/sendEmailBuy.js'
 
 export const create = asyncHandler(async function (req, res) {
   const { buyOrder, sessionId, amount, returnUrl } = req.body
@@ -15,8 +16,14 @@ export const create = asyncHandler(async function (req, res) {
 
 export const commit = asyncHandler(async function (req, res) {
   try {
-    let { token } = req.body
+    let { token, sell } = req.body
     const commitResponse = await (new WebpayPlus.Transaction(new Options(597055555532, '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C', Environment.Integration))).commit(token)
+    if (commitResponse.status === 'AUTHORIZED') {
+      sendEmailBuy({ sell: sell })
+    }
+    if (commitResponse.status === 'FAILED') {
+      sendEmailBuyFailed({ sell: sell })
+    }
     res.send(commitResponse)
   } catch (error) {
     return res.status(204).json({message: 'Pago no realizado'})
