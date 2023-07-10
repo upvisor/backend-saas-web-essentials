@@ -32,7 +32,7 @@ export const sendEmailBuyFailed = async ({ sell, storeData }) => {
                             <a style="margin: auto;" target="_blank" href="https://tienda-1.vercel.app/"><img style="width: 300px;" src="https://res.cloudinary.com/blasspod/image/upload/v1664841659/blaspod/ouxxwsmqodpemvffqs7b.png" /></a>
                         </div>
                         <h1 style="font-family: 'Montserrat', sans-serif; font-weight: 500; text-align: center; margin-bottom: 0px;">Tu compra no ha sido realizada</h1>
-                        <p style="font-family: 'poppins', sans-serif; text-align: center; font-size: 16px;">Hola ${sell.name}, tu compra no ha podido ser realizada con exito, puedes hacer click en el boton de abajo para volver a intentarlo.</p>
+                        <p style="font-family: 'poppins', sans-serif; text-align: center; font-size: 16px;">Hola ${sell.firstName}, tu compra no ha podido ser realizada con exito, puedes hacer click en el boton de abajo para volver a intentarlo.</p>
                         <div>
                             ${sell.cart.map(product => {
                                 return `
