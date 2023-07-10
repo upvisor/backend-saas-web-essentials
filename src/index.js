@@ -37,6 +37,7 @@ import domainRoutes from './routes/domain.routes.js'
 import politicsRoutes from './routes/politics.routes.js'
 import paymentGatewayRoutes from './routes/paymentGateway.routes.js'
 import designRoutes from './routes/design.routes.js'
+import subscriptionRoutes from './routes/subscription.routes.js'
 
 connectDB()
 
@@ -87,6 +88,7 @@ app.use(domainRoutes)
 app.use(politicsRoutes)
 app.use(paymentGatewayRoutes)
 app.use(designRoutes)
+app.use(subscriptionRoutes)
 
 io.on('connection', async (socket) => {
     socket.on('message', async (message) => {
