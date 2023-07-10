@@ -53,13 +53,13 @@ export const subscribeEmail = async (req, res) => {
   try {
     const client = await Client.findOne({ email: req.params.id })
     if (client.tags?.length) {
-      if (client.tags.find(tag => tag === 'Suscripcion')) {
-        client.tags.push(['Suscripcion'])
+      if (client.tags.find(tag => tag === 'Suscriptores')) {
+        client.tags.push(['Suscriptores'])
         const storeData = await StoreData.findOne().lean()
         sendEmail({ address: req.params.id, affair: '¡Te damos la bienvenida a Blaspod Store!', name: '', storeData: storeData, buttonText: 'Visitar tienda', title: 'Nos hace muy felices tenerte con nosotros', paragraph: '¡Hola! Te damos las gracias por suscribirte a nuestra lista, nos hace muy felices tenerte con nosotros.', url: 'https://tienda-1.vercel.app/tienda' })
       }
     } else {
-      client.tags = ['Suscripcion']
+      client.tags = ['Suscriptores']
       const storeData = await StoreData.findOne().lean()
       sendEmail({ address: req.params.id, affair: '¡Te damos la bienvenida a Blaspod Store!', name: '', storeData: storeData, buttonText: 'Visitar tienda', title: 'Nos hace muy felices tenerte con nosotros', paragraph: '¡Hola! Te damos las gracias por suscribirte a nuestra lista, nos hace muy felices tenerte con nosotros.', url: 'https://tienda-1.vercel.app/tienda' })
     }
