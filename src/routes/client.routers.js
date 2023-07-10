@@ -11,6 +11,4 @@ router.put('/clients/:id', updateClient)
 
 router.get('/clients/:id', getClient)
 
-router.put('/clients-subscribe/:id', subscribeEmail)
-
 export default router

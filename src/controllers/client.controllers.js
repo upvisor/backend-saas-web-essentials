@@ -4,9 +4,20 @@ import { sendEmail } from '../utils/sendEmail.js'
 
 export const createClient = async (req, res) => {
   try {
-    const newClient = new Client(req.body)
-    await newClient.save()
-    return res.json(newClient)
+    const client = await Client.find(req.body.email).lean()
+    if (client) {
+      if (client.tags.find(tag => tag === req.body.tags)) {
+        return undefined
+      } else {
+        client.tags.push(req.body.tags)
+        const editClien = await Client.findByIdAndUpdate(client._id, client, { new: true })
+        return res.send(editClien)
+      }
+    } else {
+      const newClient = new Client(req.body)
+      await newClient.save()
+      return res.json(newClient)
+    }
   } catch (error) {
     return res.status(500).json({message: error.message})
   }
@@ -43,27 +54,6 @@ export const getClient = async (req, res) => {
       return undefined
     }
 
-    return res.send(client)
-  } catch (error) {
-    return res.status(500).json({message: error.message})
-  }
-}
-
-export const subscribeEmail = async (req, res) => {
-  try {
-    const client = await Client.findOne({ email: req.params.id })
-    if (client.tags?.length) {
-      if (client.tags.find(tag => tag === 'Suscriptores')) {
-        client.tags.push(['Suscriptores'])
-        const storeData = await StoreData.findOne().lean()
-        sendEmail({ address: req.params.id, affair: '¡Te damos la bienvenida a Blaspod Store!', name: '', storeData: storeData, buttonText: 'Visitar tienda', title: 'Nos hace muy felices tenerte con nosotros', paragraph: '¡Hola! Te damos las gracias por suscribirte a nuestra lista, nos hace muy felices tenerte con nosotros.', url: 'https://tienda-1.vercel.app/tienda' })
-      }
-    } else {
-      client.tags = ['Suscriptores']
-      const storeData = await StoreData.findOne().lean()
-      sendEmail({ address: req.params.id, affair: '¡Te damos la bienvenida a Blaspod Store!', name: '', storeData: storeData, buttonText: 'Visitar tienda', title: 'Nos hace muy felices tenerte con nosotros', paragraph: '¡Hola! Te damos las gracias por suscribirte a nuestra lista, nos hace muy felices tenerte con nosotros.', url: 'https://tienda-1.vercel.app/tienda' })
-    }
-    await client.save()
     return res.send(client)
   } catch (error) {
     return res.status(500).json({message: error.message})
