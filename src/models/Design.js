@@ -38,7 +38,12 @@ const DesignSchema = new mongoose.Schema({
         banner: { type: String }
     },
     subscription: {
-        title: { type: String }
+        title: { type: String },
+        affair: { type: String },
+        titleEmail: { type: String },
+        textEmail: { type: String },
+        textButton: { type: String },
+        linikButton: { type: String }
     },
     cart: {
         title: { type: String },
