@@ -18,11 +18,14 @@ const DesignSchema = new mongoose.Schema({
         },
         products: {
             title: { type: String },
-            sectionProducts: { type: String }
+            sectionProducts: { type: String },
+            category: { type: String }
         }
     },
     product: {
-        sectionProducts: { type: String }
+        title: { type: String },
+        sectionProducts: { type: String },
+        category: { type: String }
     },
     contact: {
         title: { type: String },
