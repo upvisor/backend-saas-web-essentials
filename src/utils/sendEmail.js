@@ -35,8 +35,8 @@ export const sendEmail = async ({ address, name, affair, title, paragraph, butto
                         <div style="display: flex;">
                             <a href="${url}" target="_blank" style="padding: 8px 21px; font-family: 'poppins', sans-serif; border: none; text-decoration: none; color: white; font-size: 16px; margin: auto; width: fit-content; margin-bottom: 18px; cursor: pointer; background-color: #3478F5;">${buttonText}</a>
                         </div>
-                        <div style="border-top: 1px solid #CACACA; padding: 12px; display: flex; gap: 8px;">
-                            <div>
+                        <div style="border-top: 1px solid #CACACA; padding: 12px; display: flex;">
+                            <div style="margin-right: 10px">
                                 <a target="_blank" href="https://tienda-1.vercel.app/" style="font-family: 'poppins', sans-serif; display: block;">${storeData.name}</a>
                                 <a target="_blank" href="https://tienda-1.vercel.app/" style="font-family: 'poppins', sans-serif; display: block;">${storeData.email}</a>
                                 <a target="_blank" href="https://tienda-1.vercel.app/" style="font-family: 'poppins', sans-serif; display: block;">${storeData.phone}</a>
