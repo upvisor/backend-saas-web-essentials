@@ -39,6 +39,11 @@ const DesignSchema = new mongoose.Schema({
     },
     subscription: {
         title: { type: String }
+    },
+    cart: {
+        title: { type: String },
+        sectionProducts: { type: String },
+        category: { type: String }
     }
 }, {
     timestamps: true
