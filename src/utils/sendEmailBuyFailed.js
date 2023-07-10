@@ -37,9 +37,9 @@ export const sendEmailBuyFailed = async ({ sell, storeData }) => {
                             ${sell.cart.map(product => {
                                 return `
                                     <div key={product._id} style="display: flex;">
-                                        <img src={product.image} style="width: 50px;" />
-                                        <p>{product.name}</p>
-                                        <p>{product.quantity}</p>
+                                        <img src="${product.image}" style="width: 50px; margin-right: 6px;" />
+                                        <p style="margin-right: 6px;">${product.name}</p>
+                                        <p style="margin-right: 6px;">${product.quantity}</p>
                                         <p>${NumberFormat(product.price)}</p>
                                     </div>
                                 `
