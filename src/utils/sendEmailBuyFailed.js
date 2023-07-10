@@ -34,14 +34,16 @@ export const sendEmailBuyFailed = async ({ sell }) => {
                         <h1 style="font-family: 'Montserrat', sans-serif; font-weight: 500; text-align: center; margin-bottom: 0px;">Tu compra no ha sido realizada</h1>
                         <p style="font-family: 'poppins', sans-serif; text-align: center; font-size: 16px;">Hola ${sell.name}, tu compra no ha podido ser realizada con exito, puedes hacer click en el boton de abajo para volver a intentarlo.</p>
                         <div>
-                            ${sell.cart.map(product => (
-                                <div key={product._id} style="display: flex;">
-                                    <img src={product.image} style="width: 50px;" />
-                                    <p>{product.name}</p>
-                                    <p>{product.quantity}</p>
-                                    <p>${NumberFormat(product.price)}</p>
-                                </div>
-                            ))}
+                            ${sell.cart.map(product => {
+                                return `
+                                    <div key={product._id} style="display: flex;">
+                                        <img src={product.image} style="width: 50px;" />
+                                        <p>{product.name}</p>
+                                        <p>{product.quantity}</p>
+                                        <p>${NumberFormat(product.price)}</p>
+                                    </div>
+                                `
+                            })}
                             <div style="display: flex;">
                                 <p>Total:</p>
                                 <p>$${NumberFormat(sell.cart.reduce((prev, curr) => curr.price * curr.quantity + prev, 0))}</p>

@@ -34,14 +34,16 @@ export const sendEmailBuy = async ({ sell }) => {
                         <h1 style="font-family: 'Montserrat', sans-serif; font-weight: 500; text-align: center; margin-bottom: 0px;">Aqui tienes todos los detalles de tu compra</h1>
                         <p style="font-family: 'poppins', sans-serif; text-align: center; font-size: 16px;">Hola ${sell.name}, tu compra ha sido realizada con exito, aqui te dejamos todos los detalles.</p>
                         <div>
-                            ${sell.cart.map(product => (
-                                <div key={product._id} style="display: flex;">
-                                    <img src={product.image} style="width: 50px;" />
-                                    <p>{product.name}</p>
-                                    <p>{product.quantity}</p>
-                                    <p>${NumberFormat(product.price)}</p>
-                                </div>
-                            ))}
+                            ${sell.cart.map(product => {
+                                return `
+                                    <div key={product._id} style="display: flex;">
+                                        <img src={product.image} style="width: 50px;" />
+                                        <p>{product.name}</p>
+                                        <p>{product.quantity}</p>
+                                        <p>${NumberFormat(product.price)}</p>
+                                    </div>
+                                `
+                            })}
                             <div style="display: flex;">
                                 <p>Total:</p>
                                 <p>$${NumberFormat(sell.cart.reduce((prev, curr) => curr.price * curr.quantity + prev, 0))}</p>
