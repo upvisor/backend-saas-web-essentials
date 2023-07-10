@@ -26,7 +26,7 @@ export const sendEmail = async ({ address, name, affair, title, paragraph, butto
             </head>
             <body>
                 <main style="display: flex;">
-                    <div style="margin: auto; width: 600px; padding: 12px;">
+                    <div style="margin: auto; width: 100%; padding: 12px; max-width: 600px;">
                         <div style="display: flex;">
                             <a style="margin: auto;" target="_blank" href="https://tienda-1.vercel.app/"><img style="width: 300px;" src="https://res.cloudinary.com/blasspod/image/upload/v1664841659/blaspod/ouxxwsmqodpemvffqs7b.png" /></a>
                         </div>
