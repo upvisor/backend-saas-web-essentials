@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer'
 import { NumberFormat } from '../utils/NumberFormat.js'
 
-export const sendEmailBuy = async ({ sell }) => {
+export const sendEmailBuy = async ({ sell, storeData }) => {
     let transporter = nodemailer.createTransport({
         host: "smtp.hostinger.com",
         post: 465,
