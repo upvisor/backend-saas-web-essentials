@@ -4,13 +4,13 @@ export const createClient = async (req, res) => {
   try {
     const client = await Client.findOne({email: req.body.email}).lean()
     if (client) {
-      if (client.tags.find(tag => tag === req.body.tags[0])) {
-        return res.sendStatus(404)
-      } else {
-        client.tags.push(req.body.tags[0])
-        const editClien = await Client.findByIdAndUpdate(client._id, client, { new: true })
-        return res.send(editClien)
-      }
+      const clientTagsSet = new Set(client.tags)
+      const reqBodyTagsSet = new Set(req.body.tags)
+      reqBodyTagsSet.forEach(tag => clientTagsSet.add(tag))
+      const updatedTags = Array.from(clientTagsSet)
+      client.tags = updatedTags
+      const editClien = await Client.findByIdAndUpdate(client._id, client, { new: true })
+      return res.send(editClien)
     } else {
       const newClient = new Client(req.body)
       await newClient.save()
