@@ -7,6 +7,6 @@ router.post('/new-campaign', createCampaign)
 
 router.get('/campaigns', getCampaigns)
 
-router.get('/campaign', getCampaign)
+router.get('/campaign/:id', getCampaign)
 
 export default router
