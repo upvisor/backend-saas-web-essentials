@@ -60,3 +60,15 @@ export const getAutomatizations = async (req, res) => {
         return res.status(500).json({message: error.message})
     }
 }
+
+export const getAutomatization = async (req, res) => {
+    try {
+        const automatization = await Automatization.findById(req.params.id).lean()
+        if (!automatization) {
+            return res.sendStatus(404)
+        }
+        return res.send(automatization)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
