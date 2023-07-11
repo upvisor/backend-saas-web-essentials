@@ -51,7 +51,7 @@ export const getCampaigns = async (req, res) => {
 
 export const getCampaign = async (req, res) => {
     try {
-        const campaign = await Email.findOne(req.params.id)
+        const campaign = await Email.findById(req.params.id)
         if (!campaign) {
             return res.sendStatus(404)
         }
