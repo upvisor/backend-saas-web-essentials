@@ -48,3 +48,15 @@ export const getCampaigns = async (req, res) => {
         return res.status(500).json({message: error.message})
     }
 }
+
+export const getCampaign = async (req, res) => {
+    try {
+        const campaign = await Email.findOne(req.params.id)
+        if (!campaign) {
+            return res.sendStatus(404)
+        }
+        return res.send(campaign)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
