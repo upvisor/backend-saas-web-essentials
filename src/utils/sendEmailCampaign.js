@@ -10,6 +10,7 @@ export const sendEmailCampaign = async ({ address, name, affair, title, paragrap
             pass: process.env.EMAIL_PASSWORD,
         }
     })
+    const trackingPixelUrl = `https://server-production-e234.up.railway.app/campaign/track/${encodeURIComponent(address)}?campaign=${encodeURIComponent(affair)}`
     await transporter.sendMail({
         from: 'ayuda@maaide.com',
         to: address,
@@ -49,7 +50,7 @@ export const sendEmailCampaign = async ({ address, name, affair, title, paragrap
                             </div>
                         </div>
                     </div>
-                    <img src="https://server-production-e234.up.railway.app/campaign/track/${address}?campaign=${affair}" alt="Pixel de seguimiento" width="1" height="1">
+                    <img src="${trackingPixelUrl}" alt="Pixel de seguimiento" width="1" height="1">
                 </main>
             </body>
         </html>
