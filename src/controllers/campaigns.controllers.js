@@ -65,7 +65,8 @@ export const getCampaign = async (req, res) => {
 export const trackCampaign = async (req, res) => {
     try {
         const campaign = req.query.campaign
-        const trackCampaign = new CampaignTrack({ campaign, email: req.params.id })
+        console.log(campaign)
+        const trackCampaign = new CampaignTrack({ campaign: campaign, email: req.params.id })
         await trackCampaign.save()
         return res.send(trackCampaign)
     } catch (error) {
