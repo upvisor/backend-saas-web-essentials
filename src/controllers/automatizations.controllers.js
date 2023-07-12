@@ -1,7 +1,7 @@
 import Automatization from '../models/Automatization.js'
 import Client from '../models/Client.js'
 import StoreData from '../models/StoreData.js'
-import { sendEmail } from '../utils/sendEmail.js'
+import { sendEmailAutomatization } from '../utils/sendEmailAutomatization.js'
 import { formatDateToCron } from '../utils/cronFormat.js'
 import cron from 'node-cron'
 
@@ -33,13 +33,13 @@ export const createAutomatization = async (req, res) => {
         } else {
             subscribers = await Client.find({ tags: address }).lean()
         }
-        emails.map(async (email) => {
+        emails.map(async (email, index) => {
             const storeData = await StoreData.find().lean()
             const dateFormat = new Date(email.date)
             const format = formatDateToCron(dateFormat)
             cron.schedule(format, () => {
                 subscribers.map(subscriber => {
-                    sendEmail({ address: subscriber.email, name: subscriber.firstName !== undefined ? subscriber.firstName : '', affair: email.affair, title: email.title, paragraph: email.paragraph, buttonText: email.buttonText, url: email.url, storeData: storeData[0] }).catch(console.error)
+                    sendEmailAutomatization({ address: subscriber.email, name: subscriber.firstName !== undefined ? subscriber.firstName : '', affair: email.affair, title: email.title, paragraph: email.paragraph, buttonText: email.buttonText, url: email.url, storeData: storeData[0], automatization: name, step: index + 1 }).catch(console.error)
                 })
             }, {
                 scheduled: true,

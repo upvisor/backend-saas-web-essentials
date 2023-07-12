@@ -1,9 +1,10 @@
 import Email from '../models/Email.js'
 import cron from 'node-cron'
-import { sendEmail } from '../utils/sendEmail.js'
+import { sendEmailCampaign } from '../utils/sendEmailCampaign.js'
 import { formatDateToCron } from '../utils/cronFormat.js'
 import Client from '../models/Client.js'
 import StoreData from '../models/StoreData.js'
+import CampaignTrack from '../models/CampaignTrack.js'
 
 export const createCampaign = async (req, res) => {
     try {
@@ -27,7 +28,7 @@ export const createCampaign = async (req, res) => {
             const format = formatDateToCron(dateFormat)
             cron.schedule(format, () => {
                 subscribers.map(subscriber => {
-                    sendEmail({ address: subscriber.email, name: subscriber.firstName !== undefined ? subscriber.firstName : '', affair, title, paragraph, buttonText, url, storeData: storeData[0] }).catch(console.error)
+                    sendEmailCampaign({ address: subscriber.email, name: subscriber.firstName !== undefined ? subscriber.firstName : '', affair, title, paragraph, buttonText, url, storeData: storeData[0] }).catch(console.error)
                 })
             }, {
                 scheduled: true,
@@ -56,6 +57,17 @@ export const getCampaign = async (req, res) => {
             return res.sendStatus(404)
         }
         return res.send(campaign)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
+
+export const trackCampaign = async (req, res) => {
+    try {
+        const campaign = req.query.campaign
+        const trackCampaign = new CampaignTrack({ campaign, email: req.params.id })
+        await trackCampaign.save()
+        return res.send(trackCampaign)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
