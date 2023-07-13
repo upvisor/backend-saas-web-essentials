@@ -4,7 +4,6 @@ import { sendEmailCampaign } from '../utils/sendEmailCampaign.js'
 import { formatDateToCron } from '../utils/cronFormat.js'
 import Client from '../models/Client.js'
 import StoreData from '../models/StoreData.js'
-import CampaignTrack from '../models/CampaignTrack.js'
 
 export const createCampaign = async (req, res) => {
     try {
@@ -57,17 +56,6 @@ export const getCampaign = async (req, res) => {
             return res.sendStatus(404)
         }
         return res.send(campaign)
-    } catch (error) {
-        return res.status(500).json({message: error.message})
-    }
-}
-
-export const trackCampaign = async (req, res) => {
-    try {
-        const campaign = req.query.campaign
-        const trackCampaign = new CampaignTrack({ campaign, email: req.params.id })
-        await trackCampaign.save()
-        return res.send(trackCampaign)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }

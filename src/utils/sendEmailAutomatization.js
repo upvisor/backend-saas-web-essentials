@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer'
 
-export const sendEmailAutomatization = async ({ address, name, affair, title, paragraph, buttonText, url, storeData, automatization, step }) => {
+export const sendEmailAutomatization = async ({ address, name, affair, title, paragraph, buttonText, url, storeData }) => {
     let transporter = nodemailer.createTransport({
         host: "smtp.hostinger.com",
         post: 465,
@@ -49,7 +49,6 @@ export const sendEmailAutomatization = async ({ address, name, affair, title, pa
                             </div>
                         </div>
                     </div>
-                    <img src="https://server-production-e234.up.railway.app/track/open?email=${address}&campaign=${automatization}&step=${step}" alt="Pixel de seguimiento" width="1" height="1">
                 </main>
             </body>
         </html>
