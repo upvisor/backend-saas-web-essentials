@@ -16,7 +16,7 @@ export const createClient = async (req, res) => {
       client.tags = updatedTags
       const editClien = await Client.findByIdAndUpdate(client._id, client, { new: true })
       const automatizations = await Automatization.find().lean()
-      const automatizationsClient = automatizations.filter(automatization => automatization.address === client.tags)
+      const automatizationsClient = automatizations.filter(automatization => automatization.address === client.tags || automatization.address === 'Todos los suscriptores')
       let emails = []
       automatizationsClient.map(async (automatization) => {
           let previousDate = new Date()
@@ -54,7 +54,7 @@ export const createClient = async (req, res) => {
       const newClient = new Client(req.body)
       await newClient.save()
       const automatizations = await Automatization.find().lean()
-      const automatizationsClient = automatizations.filter(automatization => automatization.address === newClient.tags)
+      const automatizationsClient = automatizations.filter(automatization => automatization.address === newClient.tags || automatization.address === 'Todos los suscriptores')
       let emails = []
       automatizationsClient.map(async (automatization) => {
           let previousDate = new Date()
