@@ -11,7 +11,6 @@ export const createAutomatization = async (req, res) => {
         const emails = []
         let previousDate = new Date()
         previousDate.setMinutes(previousDate.getMinutes() + 1)
-        previousDate.setHours(previousDate.getHours() - 4)
         for (const email of automatization) {
             const currentDate = new Date(previousDate)
             if (email.time === 'Días') {
@@ -41,9 +40,6 @@ export const createAutomatization = async (req, res) => {
                 subscribers.map(subscriber => {
                     sendEmailAutomatization({ address: subscriber.email, name: subscriber.firstName !== undefined ? subscriber.firstName : '', affair: email.affair, title: email.title, paragraph: email.paragraph, buttonText: email.buttonText, url: email.url, storeData: storeData[0] }).catch(console.error)
                 })
-            }, {
-                scheduled: true,
-                timezone: "America/New_York"
             })
         })
         return res.send(newAutomatization)

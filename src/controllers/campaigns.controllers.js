@@ -29,9 +29,6 @@ export const createCampaign = async (req, res) => {
                 subscribers.map(subscriber => {
                     sendEmailCampaign({ address: subscriber.email, name: subscriber.firstName !== undefined ? subscriber.firstName : '', affair, title, paragraph, buttonText, url, storeData: storeData[0] }).catch(console.error)
                 })
-            }, {
-                scheduled: true,
-                timezone: "America/New_York"
             })
         }
         return res.send(newCampaign)

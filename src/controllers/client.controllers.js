@@ -21,7 +21,6 @@ export const createClient = async (req, res) => {
       automatizationsClient.map(async (automatization) => {
           let previousDate = new Date()
           previousDate.setMinutes(previousDate.getMinutes() + 1)
-          previousDate.setHours(previousDate.getHours() - 4)
           for (const email of automatization.automatization) {
               const currentDate = new Date(previousDate)
               if (email.time === 'Días') {
@@ -35,17 +34,12 @@ export const createClient = async (req, res) => {
               emails.push(email)
               previousDate = currentDate
           }
-          const newAutomatization = new Automatization({ address, name, automatization: emails })
-          await newAutomatization.save()
           emails.map(async (email) => {
               const storeData = await StoreData.find().lean()
               const dateFormat = new Date(email.date)
               const format = formatDateToCron(dateFormat)
               cron.schedule(format, () => {
                   sendEmailAutomatization({ address: client.email, name: client.firstName !== undefined ? client.firstName : '', affair: email.affair, title: email.title, paragraph: email.paragraph, buttonText: email.buttonText, url: email.url, storeData: storeData[0] }).catch(console.error)
-              }, {
-                  scheduled: true,
-                  timezone: "America/New_York"
               })
           })
       })
@@ -59,7 +53,6 @@ export const createClient = async (req, res) => {
       automatizationsClient.map(async (automatization) => {
           let previousDate = new Date()
           previousDate.setMinutes(previousDate.getMinutes() + 1)
-          previousDate.setHours(previousDate.getHours() - 4)
           for (const email of automatization.automatization) {
               const currentDate = new Date(previousDate)
               if (email.time === 'Días') {
@@ -73,17 +66,13 @@ export const createClient = async (req, res) => {
               emails.push(email)
               previousDate = currentDate
           }
-          const newAutomatization = new Automatization({ address, name, automatization: emails })
-          await newAutomatization.save()
           emails.map(async (email) => {
               const storeData = await StoreData.find().lean()
               const dateFormat = new Date(email.date)
               const format = formatDateToCron(dateFormat)
+              console.log(format)
               cron.schedule(format, () => {
-                  sendEmailAutomatization({ address: client.email, name: client.firstName !== undefined ? client.firstName : '', affair: email.affair, title: email.title, paragraph: email.paragraph, buttonText: email.buttonText, url: email.url, storeData: storeData[0] }).catch(console.error)
-              }, {
-                  scheduled: true,
-                  timezone: "America/New_York"
+                  sendEmailAutomatization({ address: req.body.email, name: req.body.firstName !== undefined ? req.body.firstName : '', affair: email.affair, title: email.title, paragraph: email.paragraph, buttonText: email.buttonText, url: email.url, storeData: storeData[0] }).catch(console.error)
               })
           })
       })

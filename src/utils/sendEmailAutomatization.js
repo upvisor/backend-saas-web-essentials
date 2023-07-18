@@ -37,15 +37,15 @@ export const sendEmailAutomatization = async ({ address, name, affair, title, pa
                         </div>
                         <div style="border-top: 1px solid #CACACA; padding: 12px; display: flex;">
                             <div style="margin-right: 10px">
-                                <a target="_blank" href="https://tienda-1.vercel.app/" style="font-family: 'poppins', sans-serif; display: block;">${storeData.name}</a>
-                                <a target="_blank" href="https://tienda-1.vercel.app/" style="font-family: 'poppins', sans-serif; display: block;">${storeData.email}</a>
-                                <a target="_blank" href="https://tienda-1.vercel.app/" style="font-family: 'poppins', sans-serif; display: block;">${storeData.phone}</a>
+                                <a target="_blank" href="https://tienda-1.vercel.app/" style="font-family: 'poppins', sans-serif; display: block;">${storeData.name ? storeData.name : ''}</a>
+                                <a target="_blank" href="https://tienda-1.vercel.app/" style="font-family: 'poppins', sans-serif; display: block;">${storeData.email ? storeData.email : ''}</a>
+                                <a target="_blank" href="https://tienda-1.vercel.app/" style="font-family: 'poppins', sans-serif; display: block;">${storeData.phone ? storeData.phone : ''}</a>
                             </div>
                             <div style="margin-left: auto;">
                                 <div style="display: flex;">
-                                    <a style="font-family: 'poppins', sans-serif; margin-left: auto;">${storeData.address}</a>
+                                    <a style="font-family: 'poppins', sans-serif; margin-left: auto;">${storeData.address ? storeData.address : ''}</a>
                                 </div>
-                                <a style="font-family: 'poppins', sans-serif; display: block;">${storeData.city}, ${storeData.region}</a>
+                                <a style="font-family: 'poppins', sans-serif; display: block;">${storeData.city ? storeData.city : ''}, ${storeData.region ? storeData.region : ''}</a>
                             </div>
                         </div>
                     </div>
