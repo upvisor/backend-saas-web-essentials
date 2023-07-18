@@ -17,17 +17,17 @@ export const createCampaign = async (req, res) => {
             subscribers = await Client.find({ tags: address }).lean()
         }
         if (date === undefined) {
-            const storeData = await StoreData.find()
+            const storeData = await StoreData.findOne().lean()
             subscribers.map(subscriber => {
-                sendEmailCampaign({ address: subscriber.email, name: subscriber.firstName !== undefined ? subscriber.firstName : '', affair, title, paragraph, buttonText, url, storeData: storeData[0] }).catch(console.error)
+                sendEmailCampaign({ address: subscriber.email, name: subscriber.firstName !== undefined ? subscriber.firstName : '', affair, title, paragraph, buttonText, url, storeData: storeData === null ? { name: '', email: '', phone: '', address: '', city: '', region: '' } : storeData }).catch(console.error)
             })
         } else {
-            const storeData = await StoreData.find()
+            const storeData = await StoreData.findOne().lean()
             const dateFormat = new Date(date)
             const format = formatDateToCron(dateFormat)
             cron.schedule(format, () => {
                 subscribers.map(subscriber => {
-                    sendEmailCampaign({ address: subscriber.email, name: subscriber.firstName !== undefined ? subscriber.firstName : '', affair, title, paragraph, buttonText, url, storeData: storeData[0] }).catch(console.error)
+                    sendEmailCampaign({ address: subscriber.email, name: subscriber.firstName !== undefined ? subscriber.firstName : '', affair, title, paragraph, buttonText, url, storeData: storeData === null ? { name: '', email: '', phone: '', address: '', city: '', region: '' } : storeData }).catch(console.error)
                 })
             })
         }

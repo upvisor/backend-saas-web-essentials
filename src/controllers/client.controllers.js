@@ -67,12 +67,12 @@ export const createClient = async (req, res) => {
               previousDate = currentDate
           }
           emails.map(async (email) => {
-              const storeData = await StoreData.find().lean()
+              const storeData = await StoreData.findOne().lean()
               const dateFormat = new Date(email.date)
               const format = formatDateToCron(dateFormat)
               console.log(format)
               cron.schedule(format, () => {
-                  sendEmailAutomatization({ address: req.body.email, name: req.body.firstName !== undefined ? req.body.firstName : '', affair: email.affair, title: email.title, paragraph: email.paragraph, buttonText: email.buttonText, url: email.url, storeData: storeData[0] }).catch(console.error)
+                  sendEmailAutomatization({ address: req.body.email, name: req.body.firstName !== undefined ? req.body.firstName : '', affair: email.affair, title: email.title, paragraph: email.paragraph, buttonText: email.buttonText, url: email.url, storeData: storeData === null ? { name: '', email: '', phone: '', address: '', city: '', region: '' } : storeData }).catch(console.error)
               })
           })
       })

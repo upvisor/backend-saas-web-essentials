@@ -12,7 +12,7 @@ export const sendEmailBuy = async ({ sell, storeData }) => {
         }
     })
     await transporter.sendMail({
-        from: 'ayuda@maaide.com',
+        from: 'contacto@maaide.com',
         to: sell.email,
         subject: '¡Tu compra ha sido realizada con exito!',
         html: `

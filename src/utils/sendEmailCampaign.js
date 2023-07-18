@@ -11,7 +11,7 @@ export const sendEmailCampaign = async ({ address, name, affair, title, paragrap
         }
     })
     await transporter.sendMail({
-        from: 'ayuda@maaide.com',
+        from: 'contacto@maaide.com',
         to: address,
         subject: affair,
         html: `

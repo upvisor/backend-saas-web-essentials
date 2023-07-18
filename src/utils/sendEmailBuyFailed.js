@@ -12,7 +12,7 @@ export const sendEmailBuyFailed = async ({ sell, storeData }) => {
         }
     })
     await transporter.sendMail({
-        from: 'ayuda@maaide.com',
+        from: 'contacto@maaide.com',
         to: sell.email,
         subject: '¡Ups! Tu compra no ha podido ser realizada con exito',
         html: `
