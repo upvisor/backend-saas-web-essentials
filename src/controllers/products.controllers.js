@@ -77,10 +77,6 @@ export const getProductBySlug = async (req, res) => {
       return null
     }
   
-    product.images = product.images.map( image => {
-      return image.includes('http') ? image : `${ process.env.HOST_NAME}products/${ image }`
-    })
-  
     return res.send(product)
 }
 
