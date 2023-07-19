@@ -1,4 +1,5 @@
 import Design from '../models/Design.js'
+import {uploadImage, deleteImage} from '../libs/cloudinary.js'
 
 export const createDesign = async (req, res) => {
     try {

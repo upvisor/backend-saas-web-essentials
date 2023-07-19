@@ -1,4 +1,5 @@
 import Category from "../models/Category.js"
+import {uploadImage, deleteImage} from '../libs/cloudinary.js'
 
 export const getCategories = async (req, res) => {
   try {

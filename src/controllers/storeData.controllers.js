@@ -1,4 +1,5 @@
 import StoreData from '../models/StoreData.js'
+import {uploadImage, deleteImage} from '../libs/cloudinary.js'
 
 export const createStoreData = async (req, res) => {
     try {
