@@ -6,7 +6,7 @@ const DesignSchema = new mongoose.Schema({
     },
     home: {
         banner: [{
-            image: { type: String },
+            image: { public_id: { type: String }, url: { type: String } },
             title: { type: String },
             text: { type: String },
             textButton: { type: String },
@@ -35,7 +35,7 @@ const DesignSchema = new mongoose.Schema({
     shop: {
         title: { type: String },
         description: { type: String },
-        banner: { type: String }
+        banner: { public_id: { type: String }, url: { type: String } }
     },
     subscription: {
         title: { type: String },

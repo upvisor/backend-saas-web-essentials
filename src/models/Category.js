@@ -4,8 +4,8 @@ const categorySchema = new mongoose.Schema({
   category: { type: String, required: true },
   description: { type: String },
   slug: { type: String, required: true, unique: true },
-  image: { type: String },
-  banner: { type: String },
+  image: { public_id: { type: String }, url: { type: String } },
+  banner: { public_id: { type: String }, url: { type: String } },
   titleSeo: { type: String },
   descriptionSeo: { type: String }
 }, {
