@@ -4,7 +4,13 @@ export const createDesign = async (req, res) => {
     try {
         const design = await Design.findOne().lean()
         if (design) {
-            await Design.findByIdAndDelete(design._id)
+            const deleteDesign = await Design.findByIdAndDelete(design._id)
+            if (deleteDesign.home.banner.length) {
+                deleteDesign.home.banner.map(async (banner) => await deleteImage(banner.public_id))
+            }
+            if (deleteDesign.shop.banner.url) {
+                await deleteImage(deleteDesign.shop.banner.public_id)
+            }
         }
         const newDesign = new Design(req.body)
         await newDesign.save()

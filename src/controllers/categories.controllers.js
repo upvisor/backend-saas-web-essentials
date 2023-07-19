@@ -35,6 +35,12 @@ export const deleteCategory = async (req, res) => {
   try {
     const categoryRemove = await Category.findByIdAndDelete(req.params.id)
     if (!categoryRemove) return res.sendStatus(404)
+    if (categoryRemove.image.url) {
+      await deleteImage(categoryRemove.image.public_id)
+    }
+    if (categoryRemove.banner.url) {
+      await deleteImage(categoryRemove.banner.public_id)
+    }
     return res.sendStatus(204)
   } catch (error) {
     return res.status(500).json({message: error.message})

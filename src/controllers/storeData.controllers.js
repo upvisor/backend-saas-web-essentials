@@ -4,7 +4,13 @@ export const createStoreData = async (req, res) => {
     try {
         const data = await StoreData.findOne().lean()
         if (data) {
-            await StoreData.findOneAndDelete(data._id)
+            const deleteStoreData = await StoreData.findOneAndDelete(data._id)
+            if (deleteStoreData.logo.url) {
+                await deleteImage(deleteStoreData.logo.public_id)
+            }
+            if (deleteStoreData.logoWhite.url) {
+                await deleteImage(deleteStoreData.logoWhite.public_id)
+            }
         }
         const storeData = new StoreData(req.body)
         await storeData.save()

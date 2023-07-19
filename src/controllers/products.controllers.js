@@ -40,10 +40,17 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
     try {
-        const productoRemoved = await Product.findByIdAndDelete(req.params.id)
-        if (!productoRemoved) return res.sendStatus(404)
-        if (productoRemoved.imagen.public_id) {
-            await deleteImage(productoRemoved.imagen.public_id)
+        const productRemoved = await Product.findByIdAndDelete(req.params.id)
+        if (!productRemoved) return res.sendStatus(404)
+        if (productRemoved.images.length) {
+            productRemoved.images.map(async (image) => await deleteImage(image.public_id))
+        }
+        if (productRemoved.variations.length) {
+            productRemoved.variations.map(async (variation) => {
+                if (variation.image.url) {
+                    await deleteImage(variation.image.public_id)
+                }
+            })
         }
         return res.sendStatus(204)
     } catch (error) {
