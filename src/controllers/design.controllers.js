@@ -7,10 +7,18 @@ export const createDesign = async (req, res) => {
         if (design) {
             const deleteDesign = await Design.findByIdAndDelete(design._id)
             if (deleteDesign.home.banner.length) {
-                deleteDesign.home.banner.map(async (banner) => await deleteImage(banner.public_id))
+                deleteDesign.home.banner.map(async (banner) => {
+                    req.body.home.banner.map(async (ban) => {
+                        if (ban.url !== banner.url) {
+                            await deleteImage(banner.public_id)
+                        }
+                    })
+                })
             }
             if (deleteDesign.shop.banner.url) {
-                await deleteImage(deleteDesign.shop.banner.public_id)
+                if (deleteDesign.shop.banner.url !== req.body.shop.banner.url) {
+                    await deleteImage(deleteDesign.shop.banner.public_id)
+                }
             }
         }
         const newDesign = new Design(req.body)
