@@ -9,7 +9,7 @@ export const createDesign = async (req, res) => {
             if (deleteDesign.home.banner.length) {
                 deleteDesign.home.banner.map(async (banner) => {
                     req.body.home.banner.map(async (ban) => {
-                        if (ban.url !== banner.url) {
+                        if (ban.image.url !== banner.image.url) {
                             await deleteImage(banner.public_id)
                         }
                     })
