@@ -16,7 +16,7 @@ export const createClient = async (req, res) => {
       client.tags = updatedTags
       const editClien = await Client.findByIdAndUpdate(client._id, client, { new: true })
       const automatizations = await Automatization.find().lean()
-      const automatizationsClient = automatizations.filter(automatization => automatization.address === client.tags || automatization.address === 'Todos los suscriptores')
+      const automatizationsClient = automatizations.filter(automatization => req.body.tags.includes(automatization.address) || automatization.address === 'Todos los suscriptores')
       let emails = []
       automatizationsClient.map(async (automatization) => {
           let previousDate = new Date()
@@ -48,7 +48,7 @@ export const createClient = async (req, res) => {
       const newClient = new Client(req.body)
       await newClient.save()
       const automatizations = await Automatization.find().lean()
-      const automatizationsClient = automatizations.filter(automatization => automatization.address === newClient.tags || automatization.address === 'Todos los suscriptores')
+      const automatizationsClient = automatizations.filter(automatization => req.body.tags.includes(automatization.address) || automatization.address === 'Todos los suscriptores')
       let emails = []
       automatizationsClient.map(async (automatization) => {
           let previousDate = new Date()
@@ -70,7 +70,6 @@ export const createClient = async (req, res) => {
               const storeData = await StoreData.findOne().lean()
               const dateFormat = new Date(email.date)
               const format = formatDateToCron(dateFormat)
-              console.log(format)
               cron.schedule(format, () => {
                   sendEmailAutomatization({ address: req.body.email, name: req.body.firstName !== undefined ? req.body.firstName : '', affair: email.affair, title: email.title, paragraph: email.paragraph, buttonText: email.buttonText, url: email.url, storeData: storeData === null ? { name: '', email: '', phone: '', address: '', city: '', region: '' } : storeData }).catch(console.error)
               })
