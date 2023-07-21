@@ -138,9 +138,11 @@ export const createAccount = async (req, res) => {
   }
 }
 
-export const login = async (req, res) => {
+export const getAccountData = async (req, res) => {
   try {
-
+    const accountData = await Account.findById(req.params.id).lean()
+    if (!accountData) return res.sendStatus(404)
+    return res.send(accountData)
   } catch (error) {
     return res.status(500).json({message: error.message})
   }
