@@ -13,6 +13,6 @@ router.get('/clients/:id', getClient)
 
 router.post('/register', createAccount)
 
-router.post('/account/:id', getAccountData)
+router.get('/account/:id', getAccountData)
 
 export default router
