@@ -18,12 +18,20 @@ export const responseMessage = async (req, res) => {
                 apiKey: process.env.OPENAI_API_KEY,
             })
             const openai = new OpenAIApi(configuration)
-            const responseCategorie = await openai.createCompletion({
-                model: "text-davinci-003",
-                prompt: `Con las siguientes categorias: saludo, productos, envios, horarios, seguridad, garantia, promociones y devoluciones. Cuales encajan mejor con la siguiente pregunta: ${message}`,
-                temperature: 0
+            const responseCategorie = await openai.createChatCompletion({
+                model: "gpt-3.5-turbo",
+                temperature: 0,
+                messages: [
+                    {"role": "system", "content": 'Con las siguientes categorias: saludo, productos, envios, horarios, seguridad, garantia, promociones y devoluciones. Cuales encajan mejor con la siguiente pregunta'},
+                    {"role": "user", "content": message}
+                ]
             })
-            const categories = responseCategorie.data.choices[0].text.toLowerCase()
+            const categories = responseCategorie.data.choices[0].message.content.toLowerCase()
+            if (categories.includes('saludo')) {
+                const newMessage = new ChatMessage({senderId: senderId, message: message, response: '¡Hola! En que te puedo ayudar?', agent: false, adminView: false, userView: true})
+                await newMessage.save()
+                return res.send(newMessage)
+            }
             let information = ''
             if (categories.includes('productos')) {
                 const products = await Product.find().select('name description stock price beforePrice variations -_id').lean()
@@ -37,24 +45,11 @@ export const responseMessage = async (req, res) => {
                 await newMessage.save()
                 return res.send(newMessage)
             } else if (information === '') {
-                if (ultimateMessage.length) {
-                    agent = false
-                    const newMessage = new ChatMessage({senderId: senderId, message: message, response: 'Lo siento, no tengo la información necesaria para responder tu pregunta, puedes ingresar "agente" en el chat para comunicarte con un operador', agent: agent, adminView: false, userView: true})
-                    await newMessage.save()
-                    return res.send(newMessage)
-                } else {
-                    agent = false
-                    if (message.toLowerCase().includes('hola') || message.toLowerCase().includes('buenas') || message.toLowerCase().includes('buenos') || message.toLowerCase().includes('que tal')) {
-                        const newMessage = new ChatMessage({senderId: senderId, message: message, response: '¡Hola! Mi nombre es Maaibot, el asistente virtual de la tienda Maaide, ¿En que te puedo ayudar?', agent: agent, adminView: false, userView: true})
-                        await newMessage.save()
-                        return res.send(newMessage)
-                    } else {
-                        const newMessage = new ChatMessage({senderId: senderId, message: message, response: 'Lo siento, no tengo la información necesaria para responder tu pregunta, puedes ingresar "agente" en el chat para comunicarte con un operador', agent: agent, adminView: false, userView: true})
-                        await newMessage.save()
-                        return res.send(newMessage)
-                    }
-                }
-            } else if (ultimateMessage.length) {
+                agent = false
+                const newMessage = new ChatMessage({senderId: senderId, message: message, response: 'Lo siento, no tengo la información necesaria para responder tu pregunta, puedes ingresar "agente" en el chat para comunicarte con un operador', agent: agent, adminView: false, userView: true})
+                await newMessage.save()
+                return res.send(newMessage)
+            } else if (ultimateMessage.length > 1) {
                 structure = [
                     {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                     {"role": "user", "content": ultimateMessage[0].message},
@@ -73,7 +68,7 @@ export const responseMessage = async (req, res) => {
                 model: "gpt-3.5-turbo",
                 temperature: 0,
                 messages: structure
-            })
+            }).catch(error => console.log(error))
             const responseMessage = responseChat.data.choices[0].message.content
             const newMessage = new ChatMessage({senderId: senderId, message: message, response: responseMessage, agent: agent, adminView: false, userView: true})
             await newMessage.save()
