@@ -157,3 +157,12 @@ export const getAccountData = async (req, res) => {
     return res.status(500).json({message: error.message})
   }
 }
+
+export const editAccountData = async (req, res) => {
+  try {
+    const editAccountData = await Account.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    return res.send(editAccountData)
+  } catch (error) {
+    return res.status(500).json({message: error.message})
+  }
+}
