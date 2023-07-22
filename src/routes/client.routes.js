@@ -11,7 +11,7 @@ router.put('/clients/:id', updateClient)
 
 router.get('/clients/:id', getClient)
 
-router.get('/client-email', getClientByEmail)
+router.get('/client-email/:id', getClientByEmail)
 
 router.post('/register', createAccount)
 

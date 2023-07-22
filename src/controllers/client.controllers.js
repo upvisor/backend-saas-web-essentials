@@ -123,7 +123,7 @@ export const getClient = async (req, res) => {
 
 export const getClientByEmail = async (req, res) => {
   try {
-    const client = await Client.findOne({ email: req.params.id })
+    const client = await Client.findOne({ email: req.params.id }).lean()
     if (!client) return res.sendStatus(404)
     return res.send(client)
   } catch (error) {
