@@ -10,7 +10,7 @@ const StoreDataSchema = mongoose.Schema({
   city: { type: String },
   schedule: {
     monday: { state: { type: Boolean, required: true }, open: { type: String }, close: { type: String } },
-    thesday: { state: { type: Boolean, required: true }, open: { type: String }, close: { type: String } },
+    tuesday: { state: { type: Boolean, required: true }, open: { type: String }, close: { type: String } },
     wednesday: { state: { type: Boolean, required: true }, open: { type: String }, close: { type: String } },
     thursday: { state: { type: Boolean, required: true }, open: { type: String }, close: { type: String } },
     friday: { state: { type: Boolean, required: true }, open: { type: String }, close: { type: String } },
