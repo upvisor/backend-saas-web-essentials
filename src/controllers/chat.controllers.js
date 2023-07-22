@@ -35,7 +35,9 @@ export const responseMessage = async (req, res) => {
             let information = ''
             if (categories.includes('productos')) {
                 const products = await Product.find().select('name description stock price beforePrice variations -_id').lean()
-                information = `${information}. ${JSON.stringify(products)}`
+                if (products.length) {
+                    information = `${information}. ${JSON.stringify(products)}`
+                }
             }
             let structure
             let agent
