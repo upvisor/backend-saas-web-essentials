@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import { createClient, getClients, updateClient, getClient, createAccount, getAccountData } from '../controllers/client.controllers.js'
+import { createClient, getClients, updateClient, getClient, getClientByEmail, createAccount, getAccountData } from '../controllers/client.controllers.js'
 
 const router = Router()
 
@@ -10,6 +10,8 @@ router.get('/clients', getClients)
 router.put('/clients/:id', updateClient)
 
 router.get('/clients/:id', getClient)
+
+router.get('/client-email', getClientByEmail)
 
 router.post('/register', createAccount)
 

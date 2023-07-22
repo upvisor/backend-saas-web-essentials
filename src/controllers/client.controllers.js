@@ -121,6 +121,16 @@ export const getClient = async (req, res) => {
   }
 }
 
+export const getClientByEmail = async (req, res) => {
+  try {
+    const client = await Client.findOne({ email: req.params.id })
+    if (!client) return res.sendStatus(404)
+    return res.send(client)
+  } catch (error) {
+    return res.status(500).json({message: error.message})
+  }
+}
+
 export const createAccount = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body
