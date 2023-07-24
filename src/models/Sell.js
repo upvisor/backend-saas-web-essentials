@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const SellSchema = mongoose.Schema({
-  buyOder: { type: String, unique: true },
+  buyOrder: { type: String, required: true, unique: true },
   email: { type: String, required: true, trim: true },
   region: { type: String, required: true, trim: true },
   city: { type: String, required: true, trim: true },
@@ -9,7 +9,7 @@ const SellSchema = mongoose.Schema({
   lastName: { type: String, required: true, trim: true },
   address: { type: String, required: true, trim: true },
   departament: { type: String, trim: true },
-  phone: { type: Number, required: true, trim: true },
+  phone: { type: Number, trim: true },
   coupon: { type: String, trim: true },
   cart: { type: Array, required: true },
   shipping: { type: Number, required: true, trim: true, },
