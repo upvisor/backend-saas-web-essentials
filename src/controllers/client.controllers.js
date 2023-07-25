@@ -131,6 +131,15 @@ export const getClientByEmail = async (req, res) => {
   }
 }
 
+export const deleteClient = async (req, res) => {
+  try {
+    await Client.findByIdAndDelete(req.params.id)
+    return res.sendStatus(204)
+  } catch (error) {
+    return res.status(500).json({message: error.message})
+  }
+}
+
 export const createAccount = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body
