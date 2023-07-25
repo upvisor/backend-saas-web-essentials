@@ -41,3 +41,12 @@ export const updatePromotionalCode = async (req, res) => {
     return res.status(500).json({message: error.message})
   }
 }
+
+export const deletePromotionalCode = async (req, res) => {
+  try {
+    await PromotionalCode.findByIdAndDelete(req.params.id)
+    return res.sendStatus(204)
+  } catch (error) {
+    return res.status(500).json({message: error.message})
+  }
+}
