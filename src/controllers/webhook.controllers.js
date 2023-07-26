@@ -60,9 +60,12 @@ export const getMessage = async (req, res) => {
                 }
                 let information = ''
                 if (categories.includes('productos')) {
-                    const products = await Product.find().select('name description stock price beforePrice variations -_id').lean()
+                    const products = await Product.find().select('name stock price beforePrice variations.variation variations.stock category tags -_id').lean()
+                    const productsString = JSON.stringify(products)
+                    const regex = new RegExp('"', 'g')
+                    const filter = productsString.replace(regex, '')
                     if (products.length) {
-                        information = `${information}. ${JSON.stringify(products)}`
+                        information = `${information}. ${filter}`
                     }
                 }
                 let structure
@@ -205,9 +208,12 @@ export const getMessage = async (req, res) => {
                 }
                 let information = ''
                 if (categories.includes('productos')) {
-                    const products = await Product.find().select('name description stock price beforePrice variations -_id').lean()
+                    const products = await Product.find().select('name stock price beforePrice variations.variation variations.stock category tags -_id').lean()
+                    const productsString = JSON.stringify(products)
+                    const regex = new RegExp('"', 'g')
+                    const filter = productsString.replace(regex, '')
                     if (products.length) {
-                        information = `${information}. ${JSON.stringify(products)}`
+                        information = `${information}. ${filter}`
                     }
                 }
                 let structure
@@ -356,9 +362,12 @@ export const getMessage = async (req, res) => {
                 }
                 let information = ''
                 if (categories.includes('productos')) {
-                    const products = await Product.find().select('name description stock price beforePrice variations -_id').lean()
+                    const products = await Product.find().select('name stock price beforePrice variations.variation variations.stock category tags -_id').lean()
+                    const productsString = JSON.stringify(products)
+                    const regex = new RegExp('"', 'g')
+                    const filter = productsString.replace(regex, '')
                     if (products.length) {
-                        information = `${information}. ${JSON.stringify(products)}`
+                        information = `${information}. ${filter}`
                     }
                 }
                 let structure
