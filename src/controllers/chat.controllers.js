@@ -1,6 +1,8 @@
 import { Configuration, OpenAIApi } from "openai"
 import Product from '../models/Product.js'
 import ChatMessage from '../models/Chat.js'
+import Politics from '../models/Politics.js'
+import StoreData from '../models/StoreData.js'
 
 export const responseMessage = async (req, res) => {
     try {
@@ -22,7 +24,7 @@ export const responseMessage = async (req, res) => {
                 model: "gpt-3.5-turbo",
                 temperature: 0,
                 messages: [
-                    {"role": "system", "content": 'Con las siguientes categorias: saludo, productos, envios, horarios, seguridad, garantia, promociones, devoluciones, agradecimientos y despidos. Cuales encajan mejor con la siguiente pregunta'},
+                    {"role": "system", "content": 'Con las siguientes categorias: saludo, productos, envios, horarios, ubicacion, seguridad, garantia, devoluciones, agradecimientos y despidos. Cuales encajan mejor con la siguiente pregunta'},
                     {"role": "user", "content": message}
                 ]
             })
@@ -40,6 +42,24 @@ export const responseMessage = async (req, res) => {
                 const filter = productsString.replace(regex, '')
                 if (products.length) {
                     information = `${information}. ${filter}`
+                }
+            }
+            if (categories.includes('garantia') || categories.includes('devoluciones')) {
+                const devolution = await Politics.findOne().select('devolution -_id').lean()
+                if (devolution.length) {
+                    information = `${information}. ${devolution}`
+                }
+            }
+            if (categories.includes('envios')) {
+                const shipping = await Politics.findOne().select('shipping -_id').lean()
+                if (shipping.length) {
+                    information = `${information}. ${shipping}`
+                }
+            }
+            if (categories.includes('horarios') || categories.includes('ubicacion')) {
+                const storeData = await StoreData.findOne().select('address departament region city schedule -_id').lean()
+                if (storeData.length) {
+                    information = `${information}. ${shipping}`
                 }
             }
             let structure
