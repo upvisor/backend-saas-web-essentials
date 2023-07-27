@@ -20,10 +20,16 @@ export const getMessage = async (req, res) => {
     try {
         if (req.body?.entry && req.body.entry[0]?.changes && req.body.entry[0].changes[0]?.value?.messages && 
             req.body.entry[0].changes[0].value.messages[0]?.text && req.body.entry[0].changes[0].value.messages[0].text.body) {  
+            let ultimateMessages
             const message = req.body.entry[0].changes[0].value.messages[0].text.body
             const number = req.body.entry[0].changes[0].value.messages[0].from
             const messages = await WhatsappMessage.find({phone: number}).select('-phone -_id').lean()
             const ultimateMessage = messages.reverse()
+            if (ultimateMessage && ultimateMessage.length) {
+                ultimateMessages = `${ultimateMessage[0].response}. ${message}`
+            } else {
+                ultimateMessages = message
+            }
             if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].agent) {
                 const newMessage = new WhatsappMessage({phone: number, message: message, agent: true, view: false})
                 await newMessage.save()
@@ -39,8 +45,8 @@ export const getMessage = async (req, res) => {
                     model: "gpt-3.5-turbo",
                     temperature: 0,
                     messages: [
-                        {"role": "system", "content": 'Con las siguientes categorias: saludo, productos, envios, horarios, ubicacion, seguridad, garantia, devoluciones, agradecimientos y despidos. Cuales encajan mejor con la siguiente pregunta'},
-                        {"role": "user", "content": message}
+                        {"role": "system", "content": 'Con las siguientes categorias: saludo, productos, envíos, horarios, ubicación, seguridad, garantía, devoluciones, agradecimientos y despidos. Cuales encajan mejor con la siguiente pregunta'},
+                        {"role": "user", "content": ultimateMessages}
                     ]
                 })
                 const categories = responseCategorie.data.choices[0].message.content.toLowerCase()
@@ -70,22 +76,22 @@ export const getMessage = async (req, res) => {
                         information = `${information}. ${filter}`
                     }
                 }
-                if (categories.includes('garantia') || categories.includes('devoluciones')) {
-                    const devolution = await Politics.findOne().select('devolution -_id').lean()
-                    if (devolution.length) {
-                        information = `${information}. ${devolution}`
+                if (categories.includes('garantía') || categories.includes('devoluciones')) {
+                    const politics = await Politics.findOne().select('devolutions -_id').lean()
+                    if (politics.devolutions) {
+                        information = `${information}. ${politics.devolutions}`
                     }
                 }
-                if (categories.includes('envios')) {
-                    const shipping = await Politics.findOne().select('shipping -_id').lean()
-                    if (shipping.length) {
-                        information = `${information}. ${shipping}`
+                if (categories.includes('envíos')) {
+                    const politics = await Politics.findOne().select('shipping -_id').lean()
+                    if (politics.shipping) {
+                        information = `${information}. ${politics.shipping}`
                     }
                 }
-                if (categories.includes('horarios') || categories.includes('ubicacion')) {
+                if (categories.includes('horarios') || categories.includes('ubicación')) {
                     const storeData = await StoreData.findOne().select('address departament region city schedule -_id').lean()
-                    if (storeData.length) {
-                        information = `${information}. ${shipping}`
+                    if (storeData) {
+                        information = `${information}. ${JSON.stringify(storeData)}`
                     }
                 }
                 let structure
@@ -112,7 +118,7 @@ export const getMessage = async (req, res) => {
                 } else if (categories.includes('agradecimientos') || categories.includes('despidos')) {
                     if (ultimateMessage.length) {
                         structure = [
-                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                             {"role": "user", "content": ultimateMessage[0].message},
                             {"role": "assistant", "content": ultimateMessage[0].response},
                             {"role": "user", "content": message}
@@ -120,7 +126,7 @@ export const getMessage = async (req, res) => {
                         agent = false
                     } else {
                         structure = [
-                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                             {"role": "user", "content": message}
                         ]
                         agent = false
@@ -146,7 +152,7 @@ export const getMessage = async (req, res) => {
                     return res.sendStatus(200)
                 } else if (ultimateMessage.length) {
                     structure = [
-                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                         {"role": "user", "content": ultimateMessage[0].message},
                         {"role": "assistant", "content": ultimateMessage[0].response},
                         {"role": "user", "content": message}
@@ -154,7 +160,7 @@ export const getMessage = async (req, res) => {
                     agent = false
                 } else {
                     structure = [
-                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                         {"role": "user", "content": message}
                     ]
                     agent = false
@@ -184,10 +190,16 @@ export const getMessage = async (req, res) => {
                 return res.sendStatus(200)
             }
         } else if (req.body?.entry && req.body.entry[0]?.messaging && req.body.entry[0].messaging[0]?.message?.text && req.body.entry[0].id === '106714702292810') {
+            let ultimateMessages
             const message = req.body.entry[0].messaging[0].message.text
             const sender = req.body.entry[0].messaging[0].sender.id
             const messages = await MessengerMessage.find({messengerId: sender}).select('-messengerId -_id').lean()
             const ultimateMessage = messages.reverse()
+            if (ultimateMessage && ultimateMessage.length) {
+                ultimateMessages = `${ultimateMessage[0].response}. ${message}`
+            } else {
+                ultimateMessages = message
+            }
             if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].agent) {
                 const newMessage = new MessengerMessage({messengerId: sender, message: message, agent: true, view: false})
                 await newMessage.save()
@@ -203,8 +215,8 @@ export const getMessage = async (req, res) => {
                     model: "gpt-3.5-turbo",
                     temperature: 0,
                     messages: [
-                        {"role": "system", "content": 'Con las siguientes categorias: saludo, productos, envios, horarios, ubicacion, seguridad, garantia, devoluciones, agradecimientos y despidos. Cuales encajan mejor con la siguiente pregunta'},
-                        {"role": "user", "content": message}
+                        {"role": "system", "content": 'Con las siguientes categorias: saludo, productos, envíos, horarios, ubicación, seguridad, garantía, devoluciones, agradecimientos y despidos. Cuales encajan mejor con la siguiente pregunta'},
+                        {"role": "user", "content": ultimateMessages}
                     ]
                 })
                 const categories = responseCategorie.data.choices[0].message.content.toLowerCase()
@@ -236,22 +248,22 @@ export const getMessage = async (req, res) => {
                         information = `${information}. ${filter}`
                     }
                 }
-                if (categories.includes('garantia') || categories.includes('devoluciones')) {
-                    const devolution = await Politics.findOne().select('devolution -_id').lean()
-                    if (devolution.length) {
-                        information = `${information}. ${devolution}`
+                if (categories.includes('garantía') || categories.includes('devoluciones')) {
+                    const politics = await Politics.findOne().select('devolutions -_id').lean()
+                    if (politics.devolutions) {
+                        information = `${information}. ${politics.devolutions}`
                     }
                 }
-                if (categories.includes('envios')) {
-                    const shipping = await Politics.findOne().select('shipping -_id').lean()
-                    if (shipping.length) {
-                        information = `${information}. ${shipping}`
+                if (categories.includes('envíos')) {
+                    const politics = await Politics.findOne().select('shipping -_id').lean()
+                    if (politics.shipping) {
+                        information = `${information}. ${politics.shipping}`
                     }
                 }
-                if (categories.includes('horarios') || categories.includes('ubicacion')) {
+                if (categories.includes('horarios') || categories.includes('ubicación')) {
                     const storeData = await StoreData.findOne().select('address departament region city schedule -_id').lean()
-                    if (storeData.length) {
-                        information = `${information}. ${shipping}`
+                    if (storeData) {
+                        information = `${information}. ${JSON.stringify(storeData)}`
                     }
                 }
                 let structure
@@ -280,7 +292,7 @@ export const getMessage = async (req, res) => {
                 } else if (categories.includes('agradecimientos') || categories.includes('despidos')) {
                     if (ultimateMessage.length) {
                         structure = [
-                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                             {"role": "user", "content": ultimateMessage[0].message},
                             {"role": "assistant", "content": ultimateMessage[0].response},
                             {"role": "user", "content": message}
@@ -288,7 +300,7 @@ export const getMessage = async (req, res) => {
                         agent = false
                     } else {
                         structure = [
-                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                             {"role": "user", "content": message}
                         ]
                         agent = false
@@ -316,7 +328,7 @@ export const getMessage = async (req, res) => {
                     return res.sendStatus(200)
                 } else if (ultimateMessage.length) {
                     structure = [
-                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                         {"role": "user", "content": ultimateMessage[0].message},
                         {"role": "assistant", "content": ultimateMessage[0].response},
                         {"role": "user", "content": message}
@@ -324,7 +336,7 @@ export const getMessage = async (req, res) => {
                     agent = false
                 } else {
                     structure = [
-                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                         {"role": "user", "content": message}
                     ]
                     agent = false
@@ -356,10 +368,16 @@ export const getMessage = async (req, res) => {
                 return res.sendStatus(200)
             }
         } else if (req.body?.entry && req.body.entry[0]?.messaging && req.body.entry[0].messaging[0]?.message?.text && req.body.entry[0].id === '17841457418025747') {
+            let ultimateMessages
             const message = req.body.entry[0].messaging[0].message.text
             const sender = req.body.entry[0].messaging[0].sender.id
             const messages = await InstagramMessage.find({messengerId: sender}).select('-instagramId -_id').lean()
             const ultimateMessage = messages.reverse()
+            if (ultimateMessage && ultimateMessage.length) {
+                ultimateMessages = `${ultimateMessage[0].response}. ${message}`
+            } else {
+                ultimateMessages = message
+            }
             if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].agent && sender !== '17841457418025747') {
                 const newMessage = new InstagramMessage({instagramId: sender, message: message, agent: true, view: false})
                 await newMessage.save()
@@ -375,8 +393,8 @@ export const getMessage = async (req, res) => {
                     model: "gpt-3.5-turbo",
                     temperature: 0,
                     messages: [
-                        {"role": "system", "content": 'Con las siguientes categorias: saludo, productos, envios, horarios, ubicacion, seguridad, garantia, devoluciones, agradecimientos y despidos. Cuales encajan mejor con la siguiente pregunta'},
-                        {"role": "user", "content": message}
+                        {"role": "system", "content": 'Con las siguientes categorias: saludo, productos, envíos, horarios, ubicación, seguridad, garantía, devoluciones, agradecimientos y despidos. Cuales encajan mejor con la siguiente pregunta'},
+                        {"role": "user", "content": ultimateMessages}
                     ]
                 })
                 const categories = responseCategorie.data.choices[0].message.content.toLowerCase()
@@ -408,22 +426,22 @@ export const getMessage = async (req, res) => {
                         information = `${information}. ${filter}`
                     }
                 }
-                if (categories.includes('garantia') || categories.includes('devoluciones')) {
-                    const devolution = await Politics.findOne().select('devolution -_id').lean()
-                    if (devolution.length) {
-                        information = `${information}. ${devolution}`
+                if (categories.includes('garantía') || categories.includes('devoluciones')) {
+                    const politics = await Politics.findOne().select('devolutions -_id').lean()
+                    if (politics.devolutions) {
+                        information = `${information}. ${politics.devolutions}`
                     }
                 }
-                if (categories.includes('envios')) {
-                    const shipping = await Politics.findOne().select('shipping -_id').lean()
-                    if (shipping.length) {
-                        information = `${information}. ${shipping}`
+                if (categories.includes('envíos')) {
+                    const politics = await Politics.findOne().select('shipping -_id').lean()
+                    if (politics.shipping) {
+                        information = `${information}. ${politics.shipping}`
                     }
                 }
-                if (categories.includes('horarios') || categories.includes('ubicacion')) {
+                if (categories.includes('horarios') || categories.includes('ubicación')) {
                     const storeData = await StoreData.findOne().select('address departament region city schedule -_id').lean()
-                    if (storeData.length) {
-                        information = `${information}. ${shipping}`
+                    if (storeData) {
+                        information = `${information}. ${JSON.stringify(storeData)}`
                     }
                 }
                 let structure
@@ -454,7 +472,7 @@ export const getMessage = async (req, res) => {
                 } else if (categories.includes('agradecimientos') || categories.includes('despidos')) {
                     if (ultimateMessage.length > 1) {
                         structure = [
-                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                             {"role": "user", "content": ultimateMessage[0].message},
                             {"role": "assistant", "content": ultimateMessage[0].response},
                             {"role": "user", "content": message}
@@ -462,7 +480,7 @@ export const getMessage = async (req, res) => {
                         agent = false
                     } else {
                         structure = [
-                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                             {"role": "user", "content": message}
                         ]
                         agent = false
@@ -492,7 +510,7 @@ export const getMessage = async (req, res) => {
                     }
                 } else if (ultimateMessage.length) {
                     structure = [
-                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                         {"role": "user", "content": ultimateMessage[0].message},
                         {"role": "assistant", "content": ultimateMessage[0].response},
                         {"role": "user", "content": message}
@@ -500,7 +518,7 @@ export const getMessage = async (req, res) => {
                     agent = false
                 } else {
                     structure = [
-                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide y tu respuesta no debe superar los 100 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                         {"role": "user", "content": message}
                     ]
                     agent = false
