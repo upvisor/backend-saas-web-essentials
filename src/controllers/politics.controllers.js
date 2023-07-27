@@ -16,9 +16,9 @@ export const createPolitics = async (req, res) => {
 
 export const getPolitics = async (req, res) => {
     try {
-        const newPolitics = new Politics(req.body)
-        await newPolitics.save()
-        return res.send(newPolitics)
+        const politics = await Politics.findOne().lean()
+        if (!politics) return res.sendStatus(204)
+        return res.send(politics)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
