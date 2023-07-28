@@ -35,24 +35,37 @@ export const sendEmail = async ({ address, name, affair, title, paragraph, butto
                 <main style="display: flex;">
                     <div style="margin: auto; width: 100%; padding: 12px; max-width: 600px;">
                         <div style="display: flex;">
-                            <a style="margin: auto;" target="_blank" href="https://tienda-1.vercel.app/"><img style="width: 300px;" src="https://res.cloudinary.com/blasspod/image/upload/v1664841659/blaspod/ouxxwsmqodpemvffqs7b.png" /></a>
+                            <a style="margin: auto;" target="_blank" href="https://tienda-1.vercel.app/"><img style="width: 300px;" src="${storeData.logo.url}" /></a>
                         </div>
                         <h1 style="font-weight: 500; text-align: center; margin-bottom: 0px;">${title}</h1>
                         <p style="text-align: center; font-size: 16px;">${paragraph.replace('${name}', name)}</p>
                         <div style="display: flex;">
                             <a href="${url}" target="_blank" style="padding: 8px 21px; border: none; text-decoration: none; color: white; font-size: 16px; margin: auto; width: fit-content; margin-bottom: 18px; cursor: pointer; background-color: #3478F5;">${buttonText}</a>
                         </div>
-                        <div style="border-top: 1px solid #CACACA; padding: 12px; display: flex;">
-                            <div style="margin-right: 10px">
-                                <a target="_blank" href="https://tienda-1.vercel.app/" style="display: block;">${storeData.name}</a>
-                                <a target="_blank" href="https://tienda-1.vercel.app/" style="display: block;">${storeData.email}</a>
-                                <a target="_blank" href="https://tienda-1.vercel.app/" style="display: block;">${storeData.phone}</a>
-                            </div>
-                            <div style="margin-left: auto;">
-                                <div style="display: flex;">
-                                    <a style="margin-left: auto;">${storeData.address}</a>
+                        <div style="border-top: 1px solid #CACACA; padding: 12px;">
+                            <div style="width: 100%; display: flex; margin-bottom: 10px;">
+                                <div style="width: auto; display: flex; margin: auto;">
+                                    <a style="padding-right: 30px;" href="/"><img style="width: 20px; height: 20px;" src="https://cdn.icon-icons.com/icons2/836/PNG/512/Instagram_icon-icons.com_66804.png" /></a>
+                                    <a style="padding-right: 30px;" href="/"><img style="width: 20px; height: 20px;" src="https://cdn.icon-icons.com/icons2/2429/PNG/512/facebook_logo_icon_147291.png" /></a>
+                                    <a style="padding-right: 30px;" href="/"><img style="width: 20px; height: 20px;" src="https://cdn.icon-icons.com/icons2/2972/PNG/512/tiktok_logo_icon_186896.png" /></a>
+                                    <a href="/"><img style="width: 20px; height: 20px;" src="https://cdn.icon-icons.com/icons2/729/PNG/512/whatsapp_icon-icons.com_62756.png" /></a>
                                 </div>
-                                <a style="display: block;">${storeData.city}, ${storeData.region}</a>
+                            </div>
+                            <div style="width: 100%; display: flex; margin-bottom: 4px;">
+                                <div style="width: auto; display: flex; margin: auto;">
+                                    <span style="font-size: 14px;">${storeData.email}</span>
+                                </div>
+                            </div>
+                            <div style="width: 100%; display: flex; margin-bottom: 10px;">
+                                <div style="width: auto; display: flex; margin: auto;">
+                                    <span style="font-size: 14px;">${storeData.phone}</span>
+                                </div>
+                            </div>
+                            <div style="width: 100%; display: flex;">
+                                <div style="width: auto; display: flex; margin: auto;">
+                                    <span style="font-size: 14px; margin-right: 5px;">Dejar de recibir correos de esta tienda</span>
+                                    <a style="font-size: 14px;" href="/">Cancelar suscripción</a>
+                                </div>
                             </div>
                         </div>
                     </div>
