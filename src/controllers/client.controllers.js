@@ -143,13 +143,14 @@ export const deleteClient = async (req, res) => {
 export const createAccount = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body
+    const emailLower = email.toLowerCase()
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-    if (!regex.test(email)) return res.send({ message: 'El email no es valido' })
+    if (!regex.test(emailLower)) return res.send({ message: 'El email no es valido' })
     if (password.length < 6) return res.send({ message: 'La contraseña tiene que tener minimo 6 caracteres' })
-    const user = await Account.findOne({ email: email })
+    const user = await Account.findOne({ email: emailLower })
     if (user) return res.send({ message: 'El email ya esta registrado' })
     const hashedPassword = await bcrypt.hash(password, 12)
-    const newAccount = new Account({ firstName, lastName, email, password: hashedPassword })
+    const newAccount = new Account({ firstName, lastName, email: emailLower, password: hashedPassword })
     const accountSave = await newAccount.save()
     return res.send({ firstName: accountSave.firstName, lastName: accountSave.lastName, email: accountSave.email, _id: accountSave._id })
   } catch (error) {
