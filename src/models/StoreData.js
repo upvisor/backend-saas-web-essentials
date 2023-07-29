@@ -18,7 +18,11 @@ const StoreDataSchema = mongoose.Schema({
     sunday: { state: { type: Boolean, required: true }, open: { type: String }, close: { type: String } },
   },
   logo: { public_id: { type: String }, url: { type: String } },
-  logoWhite: { public_id: { type: String }, url: { type: String } }
+  logoWhite: { public_id: { type: String }, url: { type: String } },
+  instagram: { type: String },
+  facebook: { type: String },
+  tiktok: { type: String },
+  whatsapp: { type: String }
 }, {
   timestamps: true
 })

@@ -47,10 +47,10 @@ export const sendEmailBuy = async ({ sell, storeData }) => {
                         <div style="border-top: 1px solid #CACACA; padding: 12px;">
                             <div style="width: 100%; display: flex; margin-bottom: 10px;">
                                 <div style="width: auto; display: flex; margin: auto;">
-                                    <a style="padding-right: 30px;" href="/"><img style="width: 20px; height: 20px;" src="https://cdn.icon-icons.com/icons2/836/PNG/512/Instagram_icon-icons.com_66804.png" /></a>
-                                    <a style="padding-right: 30px;" href="/"><img style="width: 20px; height: 20px;" src="https://cdn.icon-icons.com/icons2/2429/PNG/512/facebook_logo_icon_147291.png" /></a>
-                                    <a style="padding-right: 30px;" href="/"><img style="width: 20px; height: 20px;" src="https://cdn.icon-icons.com/icons2/2972/PNG/512/tiktok_logo_icon_186896.png" /></a>
-                                    <a href="/"><img style="width: 20px; height: 20px;" src="https://cdn.icon-icons.com/icons2/729/PNG/512/whatsapp_icon-icons.com_62756.png" /></a>
+                                    <a style="padding-right: 30px;" href="${storeData.instagram}" target="_blank"><img style="width: 25px; height: 25px;" src="https://cdn.icon-icons.com/icons2/836/PNG/512/Instagram_icon-icons.com_66804.png" /></a>
+                                    <a style="padding-right: 30px;" href="${storeData.facebook}" target="_blank"><img style="width: 25px; height: 25px;" src="https://cdn.icon-icons.com/icons2/2429/PNG/512/facebook_logo_icon_147291.png" /></a>
+                                    <a style="padding-right: 30px;" href="${storeData.tiktok}" target="_blank"><img style="width: 25px; height: 25px;" src="https://cdn.icon-icons.com/icons2/2972/PNG/512/tiktok_logo_icon_186896.png" /></a>
+                                    <a href="${storeData.whatsapp}" target="_blank"><img style="width: 25px; height: 25px;" src="https://cdn.icon-icons.com/icons2/729/PNG/512/whatsapp_icon-icons.com_62756.png" /></a>
                                 </div>
                             </div>
                             <div style="width: 100%; display: flex; margin-bottom: 4px;">
@@ -66,7 +66,7 @@ export const sendEmailBuy = async ({ sell, storeData }) => {
                             <div style="width: 100%; display: flex;">
                                 <div style="width: auto; display: flex; margin: auto;">
                                     <span style="font-size: 14px; margin-right: 5px;">Dejar de recibir correos de esta tienda</span>
-                                    <a style="font-size: 14px;" href="/">Cancelar suscripción</a>
+                                    <a style="font-size: 14px;" href="/" target="_blank">Cancelar suscripción</a>
                                 </div>
                             </div>
                         </div>
