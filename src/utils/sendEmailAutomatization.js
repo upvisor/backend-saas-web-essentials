@@ -20,22 +20,12 @@ export const sendEmailAutomatization = async ({ address, name, affair, title, pa
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-                <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-                <style>
-                    body {
-                        font-family: 'Poppins', Arial, sans-serif;
-                    }
-                    h1, h2, h3, h4, h5, h6 {
-                        font-family: 'Montserrat', Arial, sans-serif;
-                    }
-                </style>
             </head>
             <body>
                 <main style="display: flex;">
                     <div style="margin: auto; width: 100%; padding: 12px; max-width: 600px;">
                         <div style="display: flex;">
-                            <a style="margin: auto;" target="_blank" href="https://tienda-1.vercel.app/"><img style="width: 300px;" src="https://res.cloudinary.com/blasspod/image/upload/v1664841659/blaspod/ouxxwsmqodpemvffqs7b.png" /></a>
+                            <a style="margin: auto;" target="_blank" href="https://tienda-1.vercel.app/"><img style="width: 300px;" src="${storeData.logo.url}" /></a>
                         </div>
                         <h1 style="font-weight: 500; text-align: center; margin-bottom: 0px;">${title}</h1>
                         <p style="text-align: center; font-size: 16px;">${paragraph.replace('${name}', name)}</p>
