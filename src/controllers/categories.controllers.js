@@ -4,7 +4,7 @@ import {uploadImage, deleteImage} from '../libs/cloudinary.js'
 export const getCategories = async (req, res) => {
   try {
     const categories = await Category.find().lean()
-    res.send(categories)
+    return res.send(categories)
   } catch (error) {
     return res.status(500).json({message: error.message})
   }
@@ -14,7 +14,7 @@ export const createCategory = async (req, res) => {
   try {
     const newCategory = new Category(req.body)
     await newCategory.save()
-    res.send(newCategory)
+    return res.send(newCategory)
   } catch (error) {
     return res.status(500).json({message: error.message})
   }
@@ -26,7 +26,19 @@ export const getCategoryBySlug = async (req, res) => {
     if ( !category ) {
       return null
     }
-    res.send(category)
+    return res.send(category)
+  } catch (error) {
+    return res.status(500).json({message: error.message})
+  }
+}
+
+export const getCategoryByCategory = async (req, res) => {
+  try {
+    const category = await Category.findOne({category: req.params.id}).lean()
+    if ( !category ) {
+      return null
+    }
+    return res.send(category)
   } catch (error) {
     return res.status(500).json({message: error.message})
   }
