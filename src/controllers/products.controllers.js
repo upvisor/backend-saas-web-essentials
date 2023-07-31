@@ -74,6 +74,45 @@ export const getProductBySlug = async (req, res) => {
     return res.send(product)
 }
 
+export const updateStockProduct = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id).select('stock variations')
+        const stock = product.stock - req.body.stock
+        if (stock < 0) {
+            return res.sendStatus(403)
+        }
+        if (req.body.variation) {
+            if (req.body.subVariation) {
+                product.variations.variations.map(async (variation) => {
+                    if (variation.variation === req.body.variation && variation.subVariation === req.body.subVariation) {
+                        variation.stock = variation.stock - req.body.stock
+                        if (variation.stock < 0) {
+                            return res.sendStatus(403)
+                        }
+                    }
+                })
+                const updatedProduct = await Product.findByIdAndUpdate(product._id, { stock: stock, variations: product.variations }, { new: true })
+                return res.send(updatedProduct)
+            } else {
+                product.variations.variations.map(variation => {
+                    if (variation.variation === req.body.variation) {
+                        variation.stock = variation.stock - req.body.stock
+                        if (variation.stock < 0) {
+                            return res.sendStatus(403)
+                        }
+                    }
+                })
+                const updatedProduct = await Product.findByIdAndUpdate(product._id, { stock: stock, variations: product.variations }, { new: true })
+                return res.send(updatedProduct)
+            }
+        }
+        const updatedProduct = await Product.findByIdAndUpdate(product._id, { stock: stock }, { new: true })
+        return res.send(updatedProduct)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
+
 export const getProductByCategory = async (req, res) => {
     try {
         const products = await Product.find({ category: req.params.id }).lean()
