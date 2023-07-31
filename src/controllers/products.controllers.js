@@ -6,7 +6,7 @@ export const getProducts = async (req, res) => {
     try {
         const products = await Product.find()
         .lean()
-        res.send(products)
+        return res.send(products)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
@@ -44,13 +44,6 @@ export const deleteProduct = async (req, res) => {
         if (!productRemoved) return res.sendStatus(404)
         if (productRemoved.images.length) {
             productRemoved.images.map(async (image) => await deleteImage(image.public_id))
-        }
-        if (productRemoved.variations.length) {
-            productRemoved.variations.map(async (variation) => {
-                if (variation.image.url) {
-                    await deleteImage(variation.image.public_id)
-                }
-            })
         }
         return res.sendStatus(204)
     } catch (error) {
@@ -90,7 +83,7 @@ export const getProductBySlug = async (req, res) => {
 export const getProductByCategory = async (req, res) => {
     try {
         const products = await Product.find({ category: req.params.id }).lean()
-        res.send(products)
+        return res.send(products)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
