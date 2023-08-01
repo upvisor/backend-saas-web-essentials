@@ -48,7 +48,7 @@ export const createSell = async (req, res) => {
                 }
             )
         const cuponUpper = coupon?.toUpperCase()
-        const sells = Sell.countDocuments()
+        const sells = await Sell.countDocuments()
         const buyOrder = `BLASPOD-${sells}`
         const newSell = new Sell({email, region, city, firstName: firstName[0].toUpperCase() + firstName.substring(1), lastName: lastName[0].toUpperCase() + lastName.substring(1), address, departament, phone: phoneFormat, coupon: cuponUpper, cart, shipping, state, pay, total, shippingMethod, shippingState, buyOrder, subscription})
         await newSell.save()

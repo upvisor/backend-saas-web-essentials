@@ -84,7 +84,7 @@ export const updateStockProduct = async (req, res) => {
         if (req.body.variation) {
             if (req.body.subVariation) {
                 product.variations.variations.map(async (variation) => {
-                    if (variation.variation === req.body.variation && variation.subVariation === req.body.subVariation) {
+                    if (variation.variation === req.body.variation.variation && variation.subVariation === req.body.subVariation) {
                         variation.stock = variation.stock - req.body.stock
                         if (variation.stock < 0) {
                             return res.sendStatus(403)
@@ -95,7 +95,7 @@ export const updateStockProduct = async (req, res) => {
                 return res.send(updatedProduct)
             } else {
                 product.variations.variations.map(variation => {
-                    if (variation.variation === req.body.variation) {
+                    if (variation.variation === req.body.variation.variation) {
                         variation.stock = variation.stock - req.body.stock
                         if (variation.stock < 0) {
                             return res.sendStatus(403)
