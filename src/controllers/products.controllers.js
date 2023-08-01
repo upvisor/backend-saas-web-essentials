@@ -82,29 +82,29 @@ export const updateStockProduct = async (req, res) => {
             return res.sendStatus(403)
         }
         if (req.body.variation) {
-            if (req.body.subVariation) {
-                product.variations.variations.map(async (variation) => {
+            product.variations.variations.map(async (variation) => {
+                if (variation.subVariation) {
                     if (variation.variation === req.body.variation.variation && variation.subVariation === req.body.subVariation) {
                         variation.stock = variation.stock - req.body.stock
                         if (variation.stock < 0) {
                             return res.sendStatus(403)
                         }
+                        const updatedProduct = await Product.findByIdAndUpdate(product._id, { stock: stock, variations: product.variations }, { new: true })
+                        return res.send(updatedProduct)
                     }
-                })
-                const updatedProduct = await Product.findByIdAndUpdate(product._id, { stock: stock, variations: product.variations }, { new: true })
-                return res.send(updatedProduct)
-            } else {
-                product.variations.variations.map(variation => {
+                } else {
                     if (variation.variation === req.body.variation.variation) {
                         variation.stock = variation.stock - req.body.stock
                         if (variation.stock < 0) {
                             return res.sendStatus(403)
                         }
+                        const updatedProduct = await Product.findByIdAndUpdate(product._id, { stock: stock, variations: product.variations }, { new: true })
+                        return res.send(updatedProduct)
                     }
-                })
-                const updatedProduct = await Product.findByIdAndUpdate(product._id, { stock: stock, variations: product.variations }, { new: true })
-                return res.send(updatedProduct)
-            }
+                }
+            })
+            const updatedProduct = await Product.findByIdAndUpdate(product._id, { stock: stock, variations: product.variations }, { new: true })
+            return res.send(updatedProduct)
         }
         const updatedProduct = await Product.findByIdAndUpdate(product._id, { stock: stock }, { new: true })
         return res.send(updatedProduct)
