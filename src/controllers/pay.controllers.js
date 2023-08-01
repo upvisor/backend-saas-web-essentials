@@ -9,8 +9,8 @@ import Sell from '../models/Sell.js'
 export const create = asyncHandler(async function (req, res) {
   const { amount, returnUrl } = req.body
   const sells = await Sell.countDocuments()
-  const buyOrder = `BLASPOD-${sells + 1000}`
-  const sessionId = `S-${sells + 1000}`
+  const buyOrder = `BLASPOD-${sells + 1001}`
+  const sessionId = `S-${1000 + Number(sells)}`
   const createResponse = await (new WebpayPlus.Transaction(new Options(597055555532, '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C', Environment.Integration))).create(
     buyOrder,
     sessionId,
