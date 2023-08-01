@@ -235,6 +235,15 @@ export const updateSell = async (req, res) => {
     }
 }
 
+export const updatedSell = async (req, res) => {
+    try {
+        const updatedSell = await Sell.findByIdAndUpdate(req.params.id, req.body, { new: true })
+        return res.send(updatedSell)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
+
 export const getSellByEmail = async (req, res) => {
     try {
         const sells = await Sell.find({email: req.params.id})
