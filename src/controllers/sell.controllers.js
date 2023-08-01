@@ -61,7 +61,7 @@ export const createSell = async (req, res) => {
 export const getSells = async (req, res) => {
     try {
         const sells = await Sell.find()
-        res.send(sells)
+        return res.send(sells)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
@@ -71,7 +71,7 @@ export const getSell = async (req, res) => {
     try {
         const sell = await Sell.findById(req.params.id)
         if (!sell) return res.sendStatus(404)
-        res.json(sell)
+        return res.json(sell)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
