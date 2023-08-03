@@ -39,6 +39,7 @@ import paymentGatewayRoutes from './routes/paymentGateway.routes.js'
 import designRoutes from './routes/design.routes.js'
 import subscriptionRoutes from './routes/subscription.routes.js'
 import shopLoginRoutes from './routes/shopLogin.routes.js'
+import postRoutes from './routes/post.routes.js'
 
 connectDB()
 
@@ -91,6 +92,7 @@ app.use(paymentGatewayRoutes)
 app.use(designRoutes)
 app.use(subscriptionRoutes)
 app.use(shopLoginRoutes)
+app.use(postRoutes)
 
 io.on('connection', async (socket) => {
     socket.on('message', async (message) => {
