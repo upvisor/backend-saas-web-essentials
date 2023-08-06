@@ -13,7 +13,7 @@ const productSchema = new mongoose.Schema({
   productsOffer: [{ productsSale: [], price: { type: Number, required: true } }],
   slug: { type: String, required: true, unique: true },
   tags: [{ type: String }],
-  category: { category: { type: String, required: true }, url: { type: String, required: true } },
+  category: { category: { type: String, required: true }, slug: { type: String, required: true } },
   reviews: [{ calification: { type: Number, required: true }, name: { type: String, required: true }, email: { type: String }, title: { type: String }, review: { type: String, required: true }, createdAt: { type: Date } }],
   state: { type: Boolean, required: true },
   titleSeo: { type: String },
