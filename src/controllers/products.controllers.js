@@ -116,7 +116,7 @@ export const updateStockProduct = async (req, res) => {
 
 export const getProductByCategory = async (req, res) => {
     try {
-        const products = await Product.find({ category: req.params.id }).lean()
+        const products = await Product.find({ 'category.category': req.params.id }).lean()
         return res.send(products)
     } catch (error) {
         return res.status(500).json({message: error.message})
