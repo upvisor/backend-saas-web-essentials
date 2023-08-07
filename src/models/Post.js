@@ -7,6 +7,8 @@ const PostSchema = new mongoose.Schema({
     image: { public_id: '', url: '' },
     titleSeo: { type: String },
     descriptionSeo: { type: String }
+}, {
+    timestamps: true
 })
 
 const Post = mongoose.models.Post || mongoose.model('Post', PostSchema)
