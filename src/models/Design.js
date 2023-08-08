@@ -20,6 +20,10 @@ const DesignSchema = new mongoose.Schema({
             title: { type: String },
             sectionProducts: { type: String },
             category: { type: String }
+        },
+        seo: {
+            metaTitle: { type: String },
+            metaDescription: { type: String }
         }
     },
     product: {
@@ -35,7 +39,9 @@ const DesignSchema = new mongoose.Schema({
     shop: {
         title: { type: String },
         description: { type: String },
-        banner: { public_id: { type: String }, url: { type: String } }
+        banner: { public_id: { type: String }, url: { type: String } },
+        metaTitle: { type: String },
+        metDescription: { type: String }
     },
     subscription: {
         title: { type: String },
