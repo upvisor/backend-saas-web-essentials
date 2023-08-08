@@ -5,6 +5,7 @@ const PostSchema = new mongoose.Schema({
     content: [{ type: { type: String }, html: { type: String }, content: { type: String }, image: { public_id: { type: String }, url: { type: String } } }],
     state: { type: Boolean, required: true },
     image: { public_id: '', url: '' },
+    description: { type: String, required: true },
     titleSeo: { type: String },
     descriptionSeo: { type: String }
 }, {
