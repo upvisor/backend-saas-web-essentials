@@ -32,9 +32,6 @@ export const createDesign = async (req, res) => {
 export const getDesign = async (req, res) => {
     try {
         const design = await Design.findOne().lean()
-        if (!design) {
-            return null
-        }
         return res.send(design)
     } catch (error) {
         return res.status(500).json({message: error.message})
