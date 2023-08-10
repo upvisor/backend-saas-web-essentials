@@ -39,6 +39,9 @@ export const deleteProduct = async (req, res) => {
         if (productRemoved.images.length) {
             productRemoved.images.map(async (image) => await deleteImage(image.public_id))
         }
+        if (productRemoved.variations.variations.length) {
+            productRemoved.variations.variations.map(async (variation) => await deleteImage(variation.image.public_id))
+        }
         return res.sendStatus(204)
     } catch (error) {
         return res.status(500).json({message: error.message})
