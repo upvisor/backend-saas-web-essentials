@@ -6,16 +6,16 @@ export const createDesign = async (req, res) => {
         const design = await Design.findOne().lean()
         if (design) {
             const deleteDesign = await Design.findByIdAndDelete(design._id)
-            if (deleteDesign.home.banner.length) {
+            if (deleteDesign.home.banner.length && deleteDesign.home.banner[0].image.url !== '') {
                 deleteDesign.home.banner.map(async (banner) => {
                     req.body.home.banner.map(async (ban) => {
                         if (ban.image.url !== banner.image.url) {
-                            await deleteImage(banner.public_id)
+                            await deleteImage(banner.image.public_id)
                         }
                     })
                 })
             }
-            if (deleteDesign.shop.banner.url) {
+            if (deleteDesign.shop.banner.url !== '') {
                 if (deleteDesign.shop.banner.url !== req.body.shop.banner.url) {
                     await deleteImage(deleteDesign.shop.banner.public_id)
                 }
