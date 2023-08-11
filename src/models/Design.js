@@ -55,6 +55,10 @@ const DesignSchema = new mongoose.Schema({
         title: { type: String },
         sectionProducts: { type: String },
         category: { type: String }
+    },
+    blog: {
+        metaTitle: { type: String },
+        metaDescription: { type: String }
     }
 }, {
     timestamps: true
