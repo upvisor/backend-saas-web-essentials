@@ -59,6 +59,11 @@ const DesignSchema = new mongoose.Schema({
     blog: {
         metaTitle: { type: String },
         metaDescription: { type: String }
+    },
+    popup: {
+        title: { type: String },
+        description: { type: String },
+        tag: { type: String }
     }
 }, {
     timestamps: true
