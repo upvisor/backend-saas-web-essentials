@@ -25,7 +25,7 @@ export const sendEmailCampaign = async ({ address, name, affair, title, paragrap
                 <main style="display: flex;">
                     <div style="margin: auto; width: 100%; padding: 12px; max-width: 600px;">
                         <div style="display: flex;">
-                            <a style="margin: auto;" target="_blank" href="https://tienda-1.vercel.app/">${storeData?.logo.url ? `<img style="width: 300px;" src="${storeData.logo.url}" />` : '<p style="font-size: 36px;">TIENDA</p>'}</a>
+                            <a style="margin: auto;" target="_blank" href="https://tienda-1.vercel.app/">${storeData?.logo?.url && storeData?.logo?.url !== '' ? `<img style="width: 300px;" src="${storeData.logo.url}" />` : '<p style="font-size: 36px;">TIENDA</p>'}</a>
                         </div>
                         <h1 style="font-weight: 500; text-align: center; margin-bottom: 0px;">${title}</h1>
                         <p style="text-align: center; font-size: 16px;">${paragraph.replace('${name}', name)}</p>
@@ -63,5 +63,5 @@ export const sendEmailCampaign = async ({ address, name, affair, title, paragrap
             </body>
         </html>
         `
-    })
+    }).catch((err) => console.log(err))
 }
