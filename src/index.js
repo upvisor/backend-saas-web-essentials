@@ -40,6 +40,7 @@ import designRoutes from './routes/design.routes.js'
 import subscriptionRoutes from './routes/subscription.routes.js'
 import shopLoginRoutes from './routes/shopLogin.routes.js'
 import postRoutes from './routes/post.routes.js'
+import mercadoPagoRoutes from './routes/mercadoPago.routes.js'
 
 connectDB()
 
@@ -93,6 +94,7 @@ app.use(designRoutes)
 app.use(subscriptionRoutes)
 app.use(shopLoginRoutes)
 app.use(postRoutes)
+app.use(mercadoPagoRoutes)
 
 io.on('connection', async (socket) => {
     socket.on('message', async (message) => {
