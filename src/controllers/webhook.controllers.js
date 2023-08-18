@@ -9,7 +9,7 @@ import Politics from '../models/Politics.js'
 import StoreData from '../models/StoreData.js'
 
 export const createWebhook = (req, res) => {
-    if (req.query['hub.verify_token'] === 'maaide_token') {
+    if (req.query['hub.verify_token'] === `${process.env.NAME_STORE}_token`) {
         res.send(req.query['hub.challenge'])
     } else {
         res.send('No tienes permisos')
