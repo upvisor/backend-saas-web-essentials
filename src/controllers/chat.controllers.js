@@ -22,7 +22,7 @@ export const responseMessage = async (req, res) => {
             return res.send(newMessage)
         } else {
             const configuration = new Configuration({
-                organization: "org-s20w0nZ3MxE2TSG8LAAzz4TO",
+                organization: process.env.OPENAI_ORGANIZATION,
                 apiKey: process.env.OPENAI_API_KEY,
             })
             const openai = new OpenAIApi(configuration)
