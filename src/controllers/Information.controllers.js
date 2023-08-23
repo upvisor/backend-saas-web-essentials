@@ -20,9 +20,9 @@ export const createInformation = async (req, res) => {
             .setFbc(fbc)
         let value
         if ( cart.length ) {
-            value = cart.reduce((prev, current) => prev + (current.precio * current.cantidadProductos), 0)
+            value = cart.reduce((prev, current) => prev + (current.price * current.quantity), 0)
         } else {
-            value = cart.precio * cart.cantidadProductos
+            value = cart.price * cart.quantity
         }
         const customData = (new CustomData())
             .setCurrency('clp')
