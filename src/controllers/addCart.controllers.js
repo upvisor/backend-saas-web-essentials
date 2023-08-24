@@ -1,9 +1,9 @@
 import AddCart from '../models/AddCart.js'
-import bizSdk from 'facebook-nodejs-business-sdk'
+import bizSdk, { Content } from 'facebook-nodejs-business-sdk'
 
 export const createAddCart = async (req, res) => {
     try {
-        const {name, price, quantity, category, fbp, fbc, url} = req.body
+        const {product, fbp, fbc} = req.body
         const CustomData = bizSdk.CustomData
         const EventRequest = bizSdk.EventRequest
         const UserData = bizSdk.UserData
@@ -17,18 +17,24 @@ export const createAddCart = async (req, res) => {
             .setClientUserAgent(req.headers['user-agent'])
             .setFbp(fbp)
             .setFbc(fbc)
+        const content = (new Content())
+            .setId(product._id)
+            .setCategory(product.category.category)
+            .setQuantity(Number(product.quantity))
+            .setItemPrice(product.price)
         const customData = (new CustomData())
-            .setContentName(name)
+            .setContentName(product.name)
+            .setContentType(product.category.category)
             .setCurrency('clp')
-            .setValue(price)
-            .setContentCategory(category)
-            .setNumItems(Number(quantity))
+            .setValue(product.price * Number(product.quantity))
+            .setContentIds([product._id])
+            .setContents([content])
         const serverEvent = (new ServerEvent())
             .setEventName('AddToCart')
             .setEventTime(current_timestamp)
             .setUserData(userData)
             .setCustomData(customData)
-            .setEventSourceUrl(`${process.env.WEB_URL}/productos/${url}`)
+            .setEventSourceUrl(`${process.env.WEB_URL}/tienda/${product.category.slug}/${product.slug}`)
             .setActionSource('website')
         const eventsData = [serverEvent]
         const eventRequest = (new EventRequest(access_token, pixel_id))
