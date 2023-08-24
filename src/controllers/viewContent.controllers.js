@@ -3,7 +3,7 @@ import bizSdk from 'facebook-nodejs-business-sdk'
 
 export const createViewContent = async (req, res) => {
     try {
-        const {name, price, category, url, fbp, fbc} = req.body
+        const {product, fbp, fbc} = req.body
         const CustomData = bizSdk.CustomData
         const EventRequest = bizSdk.EventRequest
         const UserData = bizSdk.UserData
@@ -18,15 +18,18 @@ export const createViewContent = async (req, res) => {
             .setFbp(fbp)
             .setFbc(fbc)
         const customData = (new CustomData())
-            .setContentName(name)
+            .setContentName(product.name)
+            .setContentCategory(product.category.category)
             .setCurrency('clp')
-            .setValue(price)
+            .setValue(product.price)
+            .setContentIds([product.sku && product.sku !== '' ? product.sku : product._id])
+            .setContents([product])
         const serverEvent = (new ServerEvent())
             .setEventName('ViewContent')
             .setEventTime(current_timestamp)
             .setUserData(userData)
             .setCustomData(customData)
-            .setEventSourceUrl(`${process.env.WEB_URL}/${url}`)
+            .setEventSourceUrl(`${process.env.WEB_URL}/tienda/${product.category.slug}/${product.slug}`)
             .setActionSource('website')
         const eventsData = [serverEvent]
         const eventRequest = (new EventRequest(access_token, pixel_id))
