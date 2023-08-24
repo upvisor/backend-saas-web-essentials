@@ -42,7 +42,7 @@ export const createViewContent = async (req, res) => {
                     console.error('Error: ', err)
                 }
             )
-        const nuevaVisualizacion = new ViewContent({name, price, category})
+        const nuevaVisualizacion = new ViewContent({name: product.name, price: product.price, category: product.category.category})
         await nuevaVisualizacion.save()
         return res.json(nuevaVisualizacion)
     } catch (error) {
