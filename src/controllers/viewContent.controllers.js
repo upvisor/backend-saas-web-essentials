@@ -1,5 +1,5 @@
 import ViewContent from '../models/ViewContent.js'
-import bizSdk from 'facebook-nodejs-business-sdk'
+import bizSdk, { Content } from 'facebook-nodejs-business-sdk'
 
 export const createViewContent = async (req, res) => {
     try {
@@ -12,6 +12,8 @@ export const createViewContent = async (req, res) => {
         const pixel_id = process.env.APIFACEBOOK_PIXELID
         const api = bizSdk.FacebookAdsApi.init(access_token)
         let current_timestamp = new Date()
+        console.log([product.sku && product.sku !== '' ? product.sku : product._id])
+        console.log([product])
         const userData = (new UserData())
             .setClientIpAddress(req.connection.remoteAddress)
             .setClientUserAgent(req.headers['user-agent'])
@@ -22,8 +24,7 @@ export const createViewContent = async (req, res) => {
             .setContentCategory(product.category.category)
             .setCurrency('clp')
             .setValue(product.price)
-            .setContentIds([product.sku && product.sku !== '' ? product.sku : product._id])
-            .setContents([product])
+            .setContentIds([product._id])
         const serverEvent = (new ServerEvent())
             .setEventName('ViewContent')
             .setEventTime(current_timestamp)
