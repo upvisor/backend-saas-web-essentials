@@ -1,5 +1,5 @@
 import Information from '../models/Information.js'
-import bizSdk from 'facebook-nodejs-business-sdk'
+import bizSdk, { Content } from 'facebook-nodejs-business-sdk'
 
 export const createInformation = async (req, res) => {
     try {
@@ -24,9 +24,23 @@ export const createInformation = async (req, res) => {
         } else {
             value = cart.price * cart.quantity
         }
+        let contents = []
+        let ids = []
+        cart.map(product => {
+          const content = (new Content())
+            .setId(product._id)
+            .setQuantity(product.quantity)
+            .setCategory(product.category)
+            .setItemPrice(product.price)
+            .setTitle(product.name)
+          contents = contents.concat(content)
+          ids = ids.concat(product._id)
+        })
         const customData = (new CustomData())
             .setCurrency('clp')
             .setValue(value)
+            .setContents(contents)
+            .setContentIds(ids)
         const serverEvent = (new ServerEvent())
             .setEventName('AddPaymentInfo')
             .setEventTime(current_timestamp)

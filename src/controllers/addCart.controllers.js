@@ -22,6 +22,7 @@ export const createAddCart = async (req, res) => {
             .setCategory(product.category.category)
             .setQuantity(Number(product.quantity))
             .setItemPrice(product.price)
+            .setTitle(product.name)
         const customData = (new CustomData())
             .setContentName(product.name)
             .setContentType(product.category.category)
