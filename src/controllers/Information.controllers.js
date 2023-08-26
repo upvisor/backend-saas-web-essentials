@@ -13,6 +13,8 @@ export const createInformation = async (req, res) => {
         const api = bizSdk.FacebookAdsApi.init(access_token)
         let current_timestamp = new Date()
         const url = `${process.env.WEB_URL}/finalizar-compra/`
+        const nuevoFinalizar = new Information({cart})
+        const newInformation = await nuevoFinalizar.save()
         const userData = (new UserData())
             .setClientIpAddress(req.connection.remoteAddress)
             .setClientUserAgent(req.headers['user-agent'])
@@ -42,6 +44,7 @@ export const createInformation = async (req, res) => {
             .setContents(contents)
             .setContentIds(ids)
         const serverEvent = (new ServerEvent())
+            .setEventId(newInformation._id)
             .setEventName('AddPaymentInfo')
             .setEventTime(current_timestamp)
             .setUserData(userData)
@@ -59,9 +62,7 @@ export const createInformation = async (req, res) => {
                     console.error('Error: ', err)
                 }
             )
-        const nuevoFinalizar = new Information({cart})
-        await nuevoFinalizar.save()
-        return res.json(nuevoFinalizar)
+        return res.json(newInformation)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }

@@ -12,8 +12,8 @@ export const createViewContent = async (req, res) => {
         const pixel_id = process.env.APIFACEBOOK_PIXELID
         const api = bizSdk.FacebookAdsApi.init(access_token)
         let current_timestamp = new Date()
-        console.log([product.sku && product.sku !== '' ? product.sku : product._id])
-        console.log([product])
+        const nuevaVisualizacion = new ViewContent({name: product.name, price: product.price, category: product.category.category})
+        const newViewContent = await nuevaVisualizacion.save()
         const userData = (new UserData())
             .setClientIpAddress(req.connection.remoteAddress)
             .setClientUserAgent(req.headers['user-agent'])
@@ -32,6 +32,7 @@ export const createViewContent = async (req, res) => {
             .setContentIds([product._id])
             .setContents([content])
         const serverEvent = (new ServerEvent())
+            .setEventId(newViewContent._id)
             .setEventName('ViewContent')
             .setEventTime(current_timestamp)
             .setUserData(userData)
@@ -49,9 +50,7 @@ export const createViewContent = async (req, res) => {
                     console.error('Error: ', err)
                 }
             )
-        const nuevaVisualizacion = new ViewContent({name: product.name, price: product.price, category: product.category.category})
-        await nuevaVisualizacion.save()
-        return res.json(nuevaVisualizacion)
+        return res.json(newViewContent)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }

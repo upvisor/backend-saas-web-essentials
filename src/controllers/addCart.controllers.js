@@ -12,6 +12,8 @@ export const createAddCart = async (req, res) => {
         const pixel_id = process.env.APIFACEBOOK_PIXELID
         const api = bizSdk.FacebookAdsApi.init(access_token)
         let current_timestamp = new Date()
+        const nuevoAñadir = new AddCart({quantity, name, price, category})
+        const newAddToCart = await nuevoAñadir.save()
         const userData = (new UserData())
             .setClientIpAddress(req.connection.remoteAddress)
             .setClientUserAgent(req.headers['user-agent'])
@@ -31,6 +33,7 @@ export const createAddCart = async (req, res) => {
             .setContentIds([product._id])
             .setContents([content])
         const serverEvent = (new ServerEvent())
+            .setEventId(newAddToCart._id)
             .setEventName('AddToCart')
             .setEventTime(current_timestamp)
             .setUserData(userData)
@@ -48,9 +51,7 @@ export const createAddCart = async (req, res) => {
                     console.error('Error: ', err)
                 }
             )
-        const nuevoAñadir = new AddCart({quantity, name, price, category})
-        await nuevoAñadir.save()
-        return res.json(nuevoAñadir)
+        return res.json(newAddToCart)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
