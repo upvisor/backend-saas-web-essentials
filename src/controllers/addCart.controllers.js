@@ -12,7 +12,7 @@ export const createAddCart = async (req, res) => {
         const pixel_id = process.env.APIFACEBOOK_PIXELID
         const api = bizSdk.FacebookAdsApi.init(access_token)
         let current_timestamp = new Date()
-        const nuevoAñadir = new AddCart({quantity, name, price, category})
+        const nuevoAñadir = new AddCart({quantity: product.quantity, name: product.name, price: product.price, category: product.category.category})
         const newAddToCart = await nuevoAñadir.save()
         const userData = (new UserData())
             .setClientIpAddress(req.connection.remoteAddress)

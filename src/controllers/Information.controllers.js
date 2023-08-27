@@ -13,7 +13,7 @@ export const createInformation = async (req, res) => {
         const api = bizSdk.FacebookAdsApi.init(access_token)
         let current_timestamp = new Date()
         const url = `${process.env.WEB_URL}/finalizar-compra/`
-        const nuevoFinalizar = new Information({cart})
+        const nuevoFinalizar = new Information(cart)
         const newInformation = await nuevoFinalizar.save()
         const userData = (new UserData())
             .setClientIpAddress(req.connection.remoteAddress)
