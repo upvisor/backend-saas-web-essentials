@@ -32,7 +32,7 @@ export const createViewContent = async (req, res) => {
             .setContentIds([product._id])
             .setContents([content])
         const serverEvent = (new ServerEvent())
-            .setEventId(newViewContent._id)
+            .setEventId(newViewContent._id.toString())
             .setEventName('ViewContent')
             .setEventTime(current_timestamp)
             .setUserData(userData)

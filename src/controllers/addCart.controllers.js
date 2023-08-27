@@ -33,7 +33,7 @@ export const createAddCart = async (req, res) => {
             .setContentIds([product._id])
             .setContents([content])
         const serverEvent = (new ServerEvent())
-            .setEventId(newAddToCart._id)
+            .setEventId(newAddToCart._id.toString())
             .setEventName('AddToCart')
             .setEventTime(current_timestamp)
             .setUserData(userData)
