@@ -22,7 +22,7 @@ export const createClient = async (req, res) => {
       let emails = []
       automatizationsClient.map(async (automatization) => {
           let previousDate = new Date()
-          previousDate.setMinutes(previousDate.getMinutes() + 1)
+          previousDate.setMinutes(previousDate.getMinutes() + 2)
           for (const email of automatization.automatization) {
               const currentDate = new Date(previousDate)
               if (email.time === 'Días') {
@@ -55,7 +55,7 @@ export const createClient = async (req, res) => {
       let emails = []
       automatizationsClient.map(async (automatization) => {
           let previousDate = new Date()
-          previousDate.setMinutes(previousDate.getMinutes() + 1)
+          previousDate.setMinutes(previousDate.getMinutes() + 2)
           for (const email of automatization.automatization) {
               const currentDate = new Date(previousDate)
               if (email.time === 'Días') {
