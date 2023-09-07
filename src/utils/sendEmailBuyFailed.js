@@ -12,7 +12,7 @@ export const sendEmailBuyFailed = async ({ sell, storeData }) => {
         }
     })
     await transporter.sendMail({
-        from: 'contacto@maaide.com',
+        from: storeData?.email,
         to: sell.email,
         subject: '¡Ups! Tu compra no ha podido ser realizada con exito',
         html: `
@@ -26,7 +26,7 @@ export const sendEmailBuyFailed = async ({ sell, storeData }) => {
                 <main style="display: flex;">
                     <div style="margin: auto; width: 100%; padding: 12px; max-width: 600px;">
                         <div style="display: flex;">
-                            <a style="margin: auto;" target="_blank" href="https://tienda-1.vercel.app/">${storeData?.logo.url ? `<img style="width: 300px;" src="${storeData.logo.url}" />` : '<p style="font-size: 36px;">TIENDA</p>'}</a>
+                            <a style="margin: auto;" target="_blank" href="https://tienda-1.vercel.app/">${storeData?.logo.url ? `<img style="width: 200px;" src="${storeData.logo.url}" />` : '<p style="font-size: 36px;">TIENDA</p>'}</a>
                         </div>
                         <h1 style="font-weight: 500; text-align: center; margin-bottom: 0px;">Tu compra no ha sido realizada</h1>
                         <p style="text-align: center; font-size: 16px;">Hola ${sell.firstName}, tu compra no ha podido ser realizada con exito, puedes hacer click en el boton de abajo para volver a intentarlo.</p>

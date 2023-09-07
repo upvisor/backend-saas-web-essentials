@@ -10,7 +10,7 @@ export const createAutomatization = async (req, res) => {
         const { address, name, automatization } = req.body
         const emails = []
         let previousDate = new Date()
-        previousDate.setMinutes(previousDate.getMinutes() + 1)
+        previousDate.setMinutes(previousDate.getMinutes() + 2)
         for (const email of automatization) {
             const currentDate = new Date(previousDate)
             if (email.time === 'Días') {
