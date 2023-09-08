@@ -118,7 +118,7 @@ export const getMessage = async (req, res) => {
                 } else if (categories.includes('agradecimientos') || categories.includes('despidos')) {
                     if (ultimateMessage.length) {
                         structure = [
-                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, responde la pregunta con un maximo de 200 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                             {"role": "user", "content": ultimateMessage[0].message},
                             {"role": "assistant", "content": ultimateMessage[0].response},
                             {"role": "user", "content": message}
@@ -126,7 +126,7 @@ export const getMessage = async (req, res) => {
                         agent = false
                     } else {
                         structure = [
-                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, responde la pregunta con un maximo de 200 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                             {"role": "user", "content": message}
                         ]
                         agent = false
@@ -152,7 +152,7 @@ export const getMessage = async (req, res) => {
                     return res.sendStatus(200)
                 } else if (ultimateMessage.length) {
                     structure = [
-                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, responde la pregunta con un maximo de 200 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                         {"role": "user", "content": ultimateMessage[0].message},
                         {"role": "assistant", "content": ultimateMessage[0].response},
                         {"role": "user", "content": message}
@@ -160,7 +160,7 @@ export const getMessage = async (req, res) => {
                     agent = false
                 } else {
                     structure = [
-                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, responde la pregunta con un maximo de 200 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                         {"role": "user", "content": message}
                     ]
                     agent = false
@@ -292,7 +292,7 @@ export const getMessage = async (req, res) => {
                 } else if (categories.includes('agradecimientos') || categories.includes('despidos')) {
                     if (ultimateMessage.length) {
                         structure = [
-                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, responde la pregunta con un maximo de 200 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                             {"role": "user", "content": ultimateMessage[0].message},
                             {"role": "assistant", "content": ultimateMessage[0].response},
                             {"role": "user", "content": message}
@@ -300,7 +300,7 @@ export const getMessage = async (req, res) => {
                         agent = false
                     } else {
                         structure = [
-                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, responde la pregunta con un maximo de 200 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                             {"role": "user", "content": message}
                         ]
                         agent = false
@@ -328,7 +328,7 @@ export const getMessage = async (req, res) => {
                     return res.sendStatus(200)
                 } else if (ultimateMessage.length) {
                     structure = [
-                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, responde la pregunta con un maximo de 200 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                         {"role": "user", "content": ultimateMessage[0].message},
                         {"role": "assistant", "content": ultimateMessage[0].response},
                         {"role": "user", "content": message}
@@ -336,7 +336,7 @@ export const getMessage = async (req, res) => {
                     agent = false
                 } else {
                     structure = [
-                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, responde la pregunta con un maximo de 200 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                         {"role": "user", "content": message}
                     ]
                     agent = false
@@ -472,7 +472,7 @@ export const getMessage = async (req, res) => {
                 } else if (categories.includes('agradecimientos') || categories.includes('despidos')) {
                     if (ultimateMessage.length > 1) {
                         structure = [
-                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, responde la pregunta con un maximo de 200 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                             {"role": "user", "content": ultimateMessage[0].message},
                             {"role": "assistant", "content": ultimateMessage[0].response},
                             {"role": "user", "content": message}
@@ -480,7 +480,7 @@ export const getMessage = async (req, res) => {
                         agent = false
                     } else {
                         structure = [
-                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                            {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, responde la pregunta con un maximo de 200 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                             {"role": "user", "content": message}
                         ]
                         agent = false
@@ -510,7 +510,7 @@ export const getMessage = async (req, res) => {
                     }
                 } else if (ultimateMessage.length) {
                     structure = [
-                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, responde la pregunta con un maximo de 200 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                         {"role": "user", "content": ultimateMessage[0].message},
                         {"role": "assistant", "content": ultimateMessage[0].response},
                         {"role": "user", "content": message}
@@ -518,7 +518,7 @@ export const getMessage = async (req, res) => {
                     agent = false
                 } else {
                     structure = [
-                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
+                        {"role": "system", "content": `Eres un asistente llamado Maaibot de la tienda Maaide, responde la pregunta con un maximo de 200 caracteres, la unica informacion que usaras para responder la pregunta es la siguiente: ${information}`},
                         {"role": "user", "content": message}
                     ]
                     agent = false
