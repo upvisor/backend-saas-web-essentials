@@ -27,6 +27,8 @@ const DesignSchema = new mongoose.Schema({
         }
     },
     product: {
+        titleInfo: { type: String },
+        textInfo: { type: String },
         title: { type: String },
         sectionProducts: { type: String },
         category: { type: String }
