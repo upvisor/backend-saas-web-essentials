@@ -4,6 +4,7 @@ const AccountSchema = new mongoose.Schema({
     firstName: { type: String },
     lastName: { type: String },
     email: { type: String, required: true, unique: true },
+    phone: { type: Number },
     password: { type: String, required: true, select: false },
     cart: { type: Array }
 }, {
