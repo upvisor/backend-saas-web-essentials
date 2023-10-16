@@ -23,3 +23,13 @@ export const getPolitics = async (req, res) => {
         return res.status(500).json({message: error.message})
     }
 }
+
+export const getPolitic = async (req, res) => {
+    try {
+        const politic = await Politics.findOne().select(`${req.params.id}`).lean()
+        if (!politic) return res.sendStatus(204)
+        return res.send(politic)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
