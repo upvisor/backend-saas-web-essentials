@@ -52,7 +52,13 @@ const io = new SocketServer(server, {
     }
 })
 
-app.use(cors())
+const corsOptions = {
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true
+}
+
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use(fileUpload({
     useTempFiles: true,
