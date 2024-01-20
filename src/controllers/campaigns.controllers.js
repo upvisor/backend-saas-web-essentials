@@ -61,7 +61,7 @@ export const getCampaign = async (req, res) => {
 export const deleteCampaign = async (req, res) => {
     try {
         const campaignDelete = await Email.findByIdAndDelete(req.params.id)
-        return res.semd(campaignDelete)
+        return res.send(campaignDelete)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
