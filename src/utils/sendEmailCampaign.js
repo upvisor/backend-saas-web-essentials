@@ -30,7 +30,7 @@ export const sendEmailCampaign = async ({ address, name, affair, title, paragrap
                         <h1 style="font-weight: 500; text-align: center; margin-bottom: 0px;">${title}</h1>
                         <p style="text-align: center; font-size: 16px;">${paragraph.replace('${name}', name)}</p>
                         <div style="display: flex;">
-                        ${url !== '' && buttonText !== '' ? `<a href="${url}" target="_blank" style="padding: 8px 21px; border: none; text-decoration: none; color: white; font-size: 16px; margin: auto; width: fit-content; margin-bottom: 18px; cursor: pointer; background-color: #3478F5;">${buttonText}</a>` : ''}
+                        ${url !== '' && buttonText !== '' ? `<a href="${process.env.WEB_URL}${url}" target="_blank" style="padding: 8px 21px; border: none; text-decoration: none; color: white; font-size: 16px; margin: auto; width: fit-content; margin-bottom: 18px; cursor: pointer; background-color: #3478F5;">${buttonText}</a>` : ''}
                         </div>
                         <div style="border-top: 1px solid #CACACA; padding: 12px;">
                             <div style="width: 100%; display: flex; margin-bottom: 10px;">
