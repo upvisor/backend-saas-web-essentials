@@ -9,6 +9,6 @@ router.get('/automatizations', getAutomatizations)
 
 router.get('/automatization/:id', getAutomatization)
 
-router.delete('/automatzation/:id', deleteAutomatization)
+router.delete('/automatization/:id', deleteAutomatization)
 
 export default router
