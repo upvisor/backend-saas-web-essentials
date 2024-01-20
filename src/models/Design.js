@@ -14,6 +14,7 @@ const DesignSchema = new mongoose.Schema({
         }],
         category: {
             titleCategory: { type: Boolean },
+            title: { type: String },
             descriptionCategory: { type: Boolean }
         },
         products: {
