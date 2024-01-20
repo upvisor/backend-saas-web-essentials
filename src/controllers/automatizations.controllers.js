@@ -68,3 +68,12 @@ export const getAutomatization = async (req, res) => {
         return res.status(500).json({message: error.message})
     }
 }
+
+export const deleteAutomatization = async (req, res) => {
+    try {
+        const automatizationDelete = await Automatization.findByIdAndDelete(req.params.id)
+        return res.send(automatizationDelete)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
