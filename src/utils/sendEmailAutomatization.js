@@ -10,7 +10,7 @@ export const sendEmailAutomatization = async ({ address, name, affair, title, pa
             pass: process.env.EMAIL_PASSWORD,
         }
     })
-    await transporter.sendMail({
+    const prueba = await transporter.sendMail({
         from: storeData?.email,
         to: address,
         subject: affair,

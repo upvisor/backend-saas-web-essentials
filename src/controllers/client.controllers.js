@@ -40,9 +40,8 @@ export const createClient = async (req, res) => {
               const storeData = await StoreData.find().lean()
               const dateFormat = new Date(email.date)
               const format = formatDateToCron(dateFormat)
-              console.log(format)
               cron.schedule(format, () => {
-                  sendEmailAutomatization({ address: client.email, name: client.firstName !== undefined ? client.firstName : '', affair: email.affair, title: email.title, paragraph: email.paragraph, buttonText: email.buttonText, url: email.url, storeData: storeData === null ? { name: '', email: '', phone: '', address: '', city: '', region: '' } : storeData }).catch(console.error)
+                  sendEmailAutomatization({ address: client.email, name: client.firstName !== undefined ? client.firstName : '', affair: email.affair, title: email.title, paragraph: email.paragraph, buttonText: email.buttonText, url: email.url, storeData: storeData === null ? { name: '', email: '', phone: '', address: '', city: '', region: '' } : storeData })
               })
           })
       })
@@ -74,7 +73,8 @@ export const createClient = async (req, res) => {
               const dateFormat = new Date(email.date)
               const format = formatDateToCron(dateFormat)
               cron.schedule(format, () => {
-                  sendEmailAutomatization({ address: req.body.email, name: req.body.firstName !== undefined ? req.body.firstName : '', affair: email.affair, title: email.title, paragraph: email.paragraph, buttonText: email.buttonText, url: email.url, storeData: storeData === null ? { name: '', email: '', phone: '', address: '', city: '', region: '' } : storeData }).catch(console.error)
+                  console.log('email')
+                  sendEmailAutomatization({ address: req.body.email, name: req.body.firstName !== undefined ? req.body.firstName : '', affair: email.affair, title: email.title, paragraph: email.paragraph, buttonText: email.buttonText, url: email.url, storeData: storeData === null ? { name: '', email: '', phone: '', address: '', city: '', region: '' } : storeData })
               })
           })
       })
