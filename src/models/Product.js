@@ -19,7 +19,8 @@ const productSchema = new mongoose.Schema({
   titleSeo: { type: String },
   descriptionSeo: { type: String },
   nameVariations: { type: String },
-  quantityOffers: [{ quantity: { type: Number, required: true }, descount: { type: Number, required: true } }]
+  quantityOffers: [{ quantity: { type: Number, required: true }, descount: { type: Number, required: true } }],
+  informations: [{ title: { type: String }, description: { type: String }, image: { public_id: { type: String }, url: { type: String } }, align: { type: String, required: true } }]
 },{
   timestamps: true
 })
