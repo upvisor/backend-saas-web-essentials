@@ -106,7 +106,7 @@ io.on('connection', async (socket) => {
     socket.on('message', async (message) => {
         const messages = await ChatMessage.find({senderId: message.senderId}).select('-senderId -_id').lean()
         const ultimateMessage = messages.reverse()
-        if (ultimateMessage[0]?.agent || message.message.toLowerCase() === 'agente') {
+        if (ultimateMessage[0]?.agent || message.message?.toLowerCase() === 'agente') {
             socket.broadcast.emit('message', message)
         }
     })

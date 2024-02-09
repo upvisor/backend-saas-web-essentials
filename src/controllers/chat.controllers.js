@@ -3,6 +3,8 @@ import Product from '../models/Product.js'
 import ChatMessage from '../models/Chat.js'
 import Politics from '../models/Politics.js'
 import StoreData from '../models/StoreData.js'
+import Client from '../models/Client.js'
+import Sell from "../models/Sell.js"
 
 export const responseMessage = async (req, res) => {
     try {
@@ -20,7 +22,89 @@ export const responseMessage = async (req, res) => {
             const newMessage = new ChatMessage({senderId: senderId, message: message, agent: true, adminView: false, userView: true})
             await newMessage.save()
             return res.send(newMessage)
+        } else if (ultimateMessage && ultimateMessage.length && ultimateMessage[0].shop) {
+            if (ultimateMessage[0].shop === 1) {
+                if (req.body.saveData && req.body.saveData === 'true') {
+                    const newMessage = new ChatMessage({senderId: senderId, message: message, response: 'Tus datos quedaron guardados por tu compra anterior, elige si usar esos datos "datos anteriores" o ingresar tus datos nuevamente "datos nuevos"', agent: false, adminView: false, userView: true, shop: 1.5})
+                    await newMessage.save()
+                    return res.send(newMessage)
+                } else {
+                    const newMessage = new ChatMessage({senderId: senderId, message: message, response: 'Ahora escribe tu correo', agent: false, adminView: false, userView: true, shop: 2})
+                    await newMessage.save()
+                    return res.send(newMessage)
+                }
+            } else if (ultimateMessage[0].shop === 1.5) {
+                if (message.toLowerCase() === 'datos anteriores')  {
+                    const newMessage = new ChatMessage({senderId: senderId, message: message, response: 'Elige el metodo de envío', agent: false, adminView: false, userView: true, shop: 9})
+                    await newMessage.save()
+                    return res.send(newMessage)
+                } else {
+                    const newMessage = new ChatMessage({senderId: senderId, message: message, response: 'Ahora escribe tu correo', agent: false, adminView: false, userView: true, shop: 2})
+                    await newMessage.save()
+                    return res.send(newMessage)
+                }
+            } else if (ultimateMessage[0].shop === 2) {
+                const client = await Client.findOne({ email: message })
+                if (!client) {
+                    const newClient = new Client({ email: message })
+                    await newClient.save()
+                }
+                const newMessage = new ChatMessage({senderId: senderId, message: message, response: 'Ahora tu nombre y apellido', agent: false, adminView: false, userView: true, shop: 3})
+                await newMessage.save()
+                return res.send(newMessage)
+            } else if (ultimateMessage[0].shop === 3) {
+                const name = message.split(' ')
+                await Client.findOneAndUpdate({ email: req.body.email }, { firstName: name[0], lastName: name[1] })
+                const newMessage = new ChatMessage({senderId: senderId, message: message, response: 'Ahora tu celular', agent: false, adminView: false, userView: true, shop: 4})
+                await newMessage.save()
+                return res.send(newMessage)
+            } else if (ultimateMessage[0].shop === 4) {
+                await Client.findOneAndUpdate({ email: req.body.email }, { phone: message })
+                const newMessage = new ChatMessage({senderId: senderId, message: message, response: 'Ahora escribe tu dirección', agent: false, adminView: false, userView: true, shop: 5})
+                await newMessage.save()
+                return res.send(newMessage)
+            } else if (ultimateMessage[0].shop === 5) {
+                await Client.findOneAndUpdate({ email: req.body.email }, { address: message })
+                const newMessage = new ChatMessage({senderId: senderId, message: message, response: 'Detalles de la dirección (Si no aplica escribir "no")', agent: false, adminView: false, userView: true, shop: 6})
+                await newMessage.save()
+                return res.send(newMessage)
+            } else if (ultimateMessage[0].shop === 6) {
+                await Client.findOneAndUpdate({ email: req.body.email }, { departament: message })
+                const newMessage = new ChatMessage({senderId: senderId, message: message, response: 'Ahora selecciona tu región', agent: false, adminView: false, userView: true, shop: 7})
+                await newMessage.save()
+                return res.send(newMessage)
+            } else if (ultimateMessage[0].shop === 7) {
+                await Client.findOneAndUpdate({ email: req.body.email }, { region: message })
+                const newMessage = new ChatMessage({senderId: senderId, message: message, response: 'Ahora tu ciudad', agent: false, adminView: false, userView: true, shop: 8})
+                await newMessage.save()
+                return res.send(newMessage)
+            } else if (ultimateMessage[0].shop === 8) {
+                await Client.findOneAndUpdate({ email: req.body.email }, { city: message })
+                const newMessage = new ChatMessage({senderId: senderId, message: message, response: 'Elige el metodo de envío', agent: false, adminView: false, userView: true, shop: 9})
+                await newMessage.save()
+                return res.send(newMessage)
+            } else if (ultimateMessage[0].shop === 9) {
+                const newMessage = new ChatMessage({senderId: senderId, message: message, response: 'Elige el metodo de pago', agent: false, adminView: false, userView: true, shop: 10})
+                await newMessage.save()
+                return res.send(newMessage)
+            } else if (ultimateMessage[0].shop === 10) {
+                await Sell.findOneAndUpdate({ email: req.body.email }, { pay: message }, { sort: { createdAt: -1 }, new: true })
+                const newMessage = new ChatMessage({senderId: senderId, message: message, response: '¡Perfecto! Con este boton iniciaras el pago del pedido', agent: false, adminView: false, userView: true, shop: 11})
+                await newMessage.save()
+                return res.send(newMessage)
+            }
         } else {
+            let agent
+            if (message && message?.toLowerCase() === 'agente') {
+                agent = true
+                const newMessage = new ChatMessage({senderId: senderId, message: message, response: '¡Perfecto! En este momento te estamos transfiriendo con un operador, espera unos minutos', agent: agent, adminView: false, userView: true})
+                await newMessage.save()
+                return res.send(newMessage)
+            } else if (message && message?.toLowerCase() === 'compra') {
+                const newMessage = new ChatMessage({senderId: senderId, message: message, response: '¡Perfecto! Elige los productos que quieres comprar, cuando estes listo escribe "listo" en el chat', agent: false, adminView: false, userView: true, shop: 1})
+                await newMessage.save()
+                return res.send(newMessage)
+            }
             const configuration = new Configuration({
                 organization: process.env.OPENAI_ORGANIZATION,
                 apiKey: process.env.OPENAI_API_KEY,
@@ -30,18 +114,22 @@ export const responseMessage = async (req, res) => {
                 model: "gpt-3.5-turbo",
                 temperature: 0,
                 messages: [
-                    {"role": "system", "content": 'Con las siguientes categorias: saludo, productos, envíos, horarios, ubicación, seguridad, garantía, devoluciones, agradecimientos y despidos. Cuales encajan mejor con la siguiente pregunta'},
+                    {"role": "system", "content": 'Con las siguientes categorias: compra, saludo, productos, envíos, horarios, ubicación, seguridad, garantía, devoluciones, agradecimientos y despidos. Cuales encajan mejor con la siguiente pregunta'},
                     {"role": "user", "content": ultimateMessages}
                 ]
             })
             const categories = responseCategorie.data.choices[0].message.content.toLowerCase()
-            if (categories.includes('saludo') && !categories.includes('productos')) {
+            let information = ''
+            let structure
+            if (categories.includes('compra')) {
+                const newMessage = new ChatMessage({senderId: senderId, message: message, response: 'Si quieres realizar una compra escribre "compra" en el chat', agent: false, adminView: false, userView: true})
+                await newMessage.save()
+                return res.send(newMessage)
+            } else if (categories.includes('saludo') && !categories.includes('productos')) {
                 const newMessage = new ChatMessage({senderId: senderId, message: message, response: '¡Hola! En que te puedo ayudar?', agent: false, adminView: false, userView: true})
                 await newMessage.save()
                 return res.send(newMessage)
-            }
-            let information = ''
-            if (categories.includes('productos')) {
+            } else if (categories.includes('productos')) {
                 const products = await Product.find().select('name stock price beforePrice variations.variation variations.stock category tags -_id').lean()
                 const productsString = JSON.stringify(products)
                 const regex = new RegExp('"', 'g')
@@ -49,32 +137,21 @@ export const responseMessage = async (req, res) => {
                 if (products.length) {
                     information = `${information}. ${filter}`
                 }
-            }
-            if (categories.includes('garantía') || categories.includes('devoluciones')) {
+            } else if (categories.includes('garantía') || categories.includes('devoluciones')) {
                 const politics = await Politics.findOne().select('devolutions -_id').lean()
                 if (politics.devolutions) {
                     information = `${information}. ${politics.devolutions}`
                 }
-            }
-            if (categories.includes('envíos')) {
+            } else if (categories.includes('envíos')) {
                 const politics = await Politics.findOne().select('shipping -_id').lean()
                 if (politics.shipping) {
                     information = `${information}. ${politics.shipping}`
                 }
-            }
-            if (categories.includes('horarios') || categories.includes('ubicación')) {
+            } else if (categories.includes('horarios') || categories.includes('ubicación')) {
                 const storeData = await StoreData.findOne().select('address departament region city schedule -_id').lean()
                 if (storeData) {
                     information = `${information}. ${JSON.stringify(storeData)}`
                 }
-            }
-            let structure
-            let agent
-            if (message.toLowerCase() === 'agente') {
-                agent = true
-                const newMessage = new ChatMessage({senderId: senderId, message: message, response: '¡Perfecto! En este momento te estamos transfiriendo con un operador, espera unos minutos', agent: agent, adminView: false, userView: true})
-                await newMessage.save()
-                return res.send(newMessage)
             } else if (categories.includes('agradecimientos') || categories.includes('despidos')) {
                 if (ultimateMessage.length > 1) {
                     structure = [

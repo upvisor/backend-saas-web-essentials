@@ -11,7 +11,7 @@ export const createOrder = async (req, res) => {
       back_urls: {
         success: `${process.env.WEB_URL}/procesando-pago`,
         pending: `${process.env.WEB_URL}/procesando-pago`,
-        failure: `${process.env.WEB_URL}/pago-fallido`,
+        failure: `${process.env.WEB_URL}/procesando-pago`,
       },
     })
 

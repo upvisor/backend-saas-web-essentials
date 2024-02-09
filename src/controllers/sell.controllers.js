@@ -6,6 +6,7 @@ export const createSell = async (req, res) => {
     try {
         const {email, region, city, firstName, lastName, address, departament, phone, coupon, cart, shipping, state, pay, total, fbp, fbc, shippingMethod, shippingState, subscription} = req.body
         const phoneFormat = `56${phone}`
+        console.log(phoneFormat)
         const CustomData = bizSdk.CustomData
         const EventRequest = bizSdk.EventRequest
         const UserData = bizSdk.UserData
@@ -50,7 +51,7 @@ export const createSell = async (req, res) => {
         const cuponUpper = coupon?.toUpperCase()
         const sells = await Sell.countDocuments()
         const buyOrder = `BLASPOD-${1001 + Number(sells)}`
-        const newSell = new Sell({email, region, city, firstName: firstName[0].toUpperCase() + firstName.substring(1), lastName: lastName[0].toUpperCase() + lastName.substring(1), address, departament, phone: phoneFormat, coupon: cuponUpper, cart, shipping, state, pay, total, shippingMethod, shippingState, buyOrder, subscription})
+        const newSell = new Sell({email, region, city, firstName: firstName[0].toUpperCase() + firstName.substring(1), lastName: lastName[0].toUpperCase() + lastName.substring(1), address, departament, phone: phone, coupon: cuponUpper, cart, shipping, state, pay, total, shippingMethod, shippingState, buyOrder, subscription})
         await newSell.save()
         return res.json(newSell)
     } catch (error) {
@@ -71,6 +72,15 @@ export const getSell = async (req, res) => {
     try {
         const sell = await Sell.findById(req.params.id)
         if (!sell) return res.sendStatus(404)
+        return res.json(sell)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
+
+export const getSellEmail = async (req, res) => {
+    try {
+        const sell = await Sell.findOne({ email: req.params.email }).sort({ createdAt: -1 }).limit(1)
         return res.json(sell)
     } catch (error) {
         return res.status(500).json({message: error.message})
