@@ -4,67 +4,7 @@ const DesignSchema = new mongoose.Schema({
     header: {
         topStrip: { type: String }
     },
-    home: {
-        banner: [{
-            image: { public_id: { type: String }, url: { type: String } },
-            title: { type: String },
-            text: { type: String },
-            textButton: { type: String },
-            linkButton: { type: String }
-        }],
-        category: {
-            titleCategory: { type: Boolean },
-            title: { type: String },
-            descriptionCategory: { type: Boolean }
-        },
-        products: {
-            title: { type: String },
-            sectionProducts: { type: String },
-            category: { type: String }
-        },
-        seo: {
-            metaTitle: { type: String },
-            metaDescription: { type: String }
-        }
-    },
-    product: {
-        titleInfo: { type: String },
-        textInfo: { type: String }
-    },
-    contact: {
-        title: { type: String },
-        text: { type: String },
-        titleForm: { type: String }
-    },
-    shop: {
-        title: { type: String },
-        description: { type: String },
-        banner: { public_id: { type: String }, url: { type: String } },
-        metaTitle: { type: String },
-        metDescription: { type: String }
-    },
-    subscription: {
-        title: { type: String },
-        affair: { type: String },
-        titleEmail: { type: String },
-        textEmail: { type: String },
-        textButton: { type: String },
-        linikButton: { type: String }
-    },
-    cart: {
-        title: { type: String },
-        sectionProducts: { type: String },
-        category: { type: String }
-    },
-    blog: {
-        metaTitle: { type: String },
-        metaDescription: { type: String }
-    },
-    popup: {
-        title: { type: String },
-        description: { type: String },
-        tag: { type: String }
-    }
+    pages: [{ page: { type: String }, slug: { type: String }, header: { type: Boolean }, metaTitle: { type: String }, metaDescription: { type: String }, design: [{ content: { type: String }, info: { banner: [{ title: { type: String }, description: { type: String }, button: { type: String }, buttonLink: { type: String }, image: { public_id: { type: String }, url: { type: String } } }], title: { type: String }, subTitle: { type: String }, description: { type: String }, image: { public_id: { type: String }, url: { type: String } }, titleForm: { type: String }, button: { type: String }, buttonLink: { type: String }, subTitle2: { type: String }, description2: { type: String }, button2: { type: String }, buttonLink2: { type: String }, subTitle3: { type: String }, description3: { type: String }, button3: { type: String }, buttonLink3: { type: String }, descriptionView: { type: Boolean }, products: [{ type: String }] } }] }]
 }, {
     timestamps: true
 })

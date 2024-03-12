@@ -1,25 +1,10 @@
 import Design from '../models/Design.js'
-import {uploadImage, deleteImage} from '../libs/cloudinary.js'
 
 export const createDesign = async (req, res) => {
     try {
-        const design = await Design.findOne().lean()
+        const design = await Design.findOne()
         if (design) {
-            const deleteDesign = await Design.findByIdAndDelete(design._id)
-            if (deleteDesign.home.banner.length && deleteDesign.home.banner[0].image.url !== '') {
-                deleteDesign.home.banner.map(async (banner) => {
-                    req.body.home.banner.map(async (ban) => {
-                        if (ban.image.url !== banner.image.url) {
-                            await deleteImage(banner.image.public_id)
-                        }
-                    })
-                })
-            }
-            if (deleteDesign.shop.banner.url !== '') {
-                if (deleteDesign.shop.banner.url !== req.body.shop.banner.url) {
-                    await deleteImage(deleteDesign.shop.banner.public_id)
-                }
-            }
+            await Design.findByIdAndDelete(design._id)
         }
         const newDesign = new Design(req.body)
         await newDesign.save()
@@ -36,6 +21,15 @@ export const getDesign = async (req, res) => {
             return res.send([])
         }
         return res.send(design)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
+
+export const updateDesign = async (req, res) => {
+    try {
+        const updateDesign = await Design.findOneAndUpdate(req.body, { new: true })
+        return res.send(updateDesign)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
