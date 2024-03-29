@@ -1,4 +1,5 @@
 import Sell from '../models/Sell.js'
+import Product from '../models/Product.js'
 import bizSdk from 'facebook-nodejs-business-sdk'
 import nodemailer from 'nodemailer'
 
@@ -6,7 +7,6 @@ export const createSell = async (req, res) => {
     try {
         const {email, region, city, firstName, lastName, address, departament, phone, coupon, cart, shipping, state, pay, total, fbp, fbc, shippingMethod, shippingState, subscription} = req.body
         const phoneFormat = `56${phone}`
-        console.log(phoneFormat)
         const CustomData = bizSdk.CustomData
         const EventRequest = bizSdk.EventRequest
         const UserData = bizSdk.UserData
@@ -52,8 +52,35 @@ export const createSell = async (req, res) => {
         const sells = await Sell.countDocuments()
         const buyOrder = `BLASPOD-${1001 + Number(sells)}`
         const newSell = new Sell({email, region, city, firstName: firstName[0].toUpperCase() + firstName.substring(1), lastName: lastName[0].toUpperCase() + lastName.substring(1), address, departament, phone: phone, coupon: cuponUpper, cart, shipping, state, pay, total, shippingMethod, shippingState, buyOrder, subscription})
-        await newSell.save()
-        return res.json(newSell)
+        const sellSave = await newSell.save()
+        res.json(sellSave)
+        setTimeout(async () => {
+            const sell = await Sell.findById(sellSave._id)
+            if (sell.state === 'Pedido realizado') {
+                sell.cart.map(async product => {
+                    const prod = await Product.findById(product._id)
+                    if (product.variation?.variation) {
+                        if (product.variation.subVariation) {
+                            if (product.variation.subVariation2) {
+                                const variationIndex = prod.variations.variations.findIndex((variation) => variation.variation === product.variation.variation && variation.subVariation === product.variation.subVariation && variation.subVariation2 === product.variation.subVariation2)
+                                prod.variations.variations[variationIndex].stock = prod.variations.variations[variationIndex].stock + product.quantity
+                                await Product.findByIdAndUpdate(product._id, { stock: prod.stock + product.quantity, variations: prod.variations })
+                            } else {
+                                const variationIndex = prod.variations.variations.findIndex((variation) => variation.variation === product.variation?.variation && variation.subVariation === product.variation.subVariation)
+                                prod.variations.variations[variationIndex].stock = prod.variations.variations[variationIndex].stock + product.quantity
+                                await Product.findByIdAndUpdate(product._id, { stock: prod.stock + product.quantity, variations: prod.variations })
+                            }
+                        } else {
+                            const variationIndex = prod.variations.variations.findIndex((variation) => variation.variation === product.variation.variation)
+                            prod.variations.variations[variationIndex].stock = prod.variations.variations[variationIndex].stock + product.quantity
+                            await Product.findByIdAndUpdate(product._id, { stock: prod.stock + product.quantity, variations: prod.variations })
+                        }
+                    } else {
+                        await Product.findByIdAndUpdate(product._id, { stock: prod.stock + product.quantity, variations: prod.variations })
+                    }
+                })
+            }
+        }, 60 * 1000)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }

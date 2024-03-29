@@ -5,12 +5,13 @@ import Sell from '../models/Sell.js'
 
 export const getStadistics = async (req, res) => {
   try {
-    const sell = await Sell.find().select('total -_id').lean()
-    const totalSell = sell.reduce((prev, curr) => prev + curr.total, 0)
+    const sell = await Sell.find().select('total state -_id').lean()
+    const sellFilter = sell.filter(sel => sel.state !== 'Pedido realizado').filter(sel => sel.state !== 'Cancelado')
+    const totalSell = sellFilter.reduce((prev, curr) => prev + curr.total, 0)
     const viewContents = await ViewContent.countDocuments()
     const addCarts = await AddCart.countDocuments()
     const informations = await Information.countDocuments()
-    const sells = await Sell.countDocuments()
+    const sells = sellFilter.length
     return res.send({ totalSell: totalSell, viewContents: viewContents, addCarts: addCarts, informations: informations, sells: sells })
   } catch (error) {
     return res.status(500).json({message: error.message})
