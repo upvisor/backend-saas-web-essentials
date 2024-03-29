@@ -80,7 +80,7 @@ export const createSell = async (req, res) => {
                     }
                 })
             }
-        }, 60 * 1000)
+        }, 10 * 60 * 1000)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
