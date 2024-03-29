@@ -88,7 +88,7 @@ export const createSell = async (req, res) => {
 
 export const getSells = async (req, res) => {
     try {
-        const sells = await Sell.find()
+        const sells = await Sell.find().sort({ createdAt: -1 })
         return res.send(sells)
     } catch (error) {
         return res.status(500).json({message: error.message})
@@ -283,7 +283,7 @@ export const updatedSell = async (req, res) => {
 
 export const getSellByEmail = async (req, res) => {
     try {
-        const sells = await Sell.find({email: req.params.id})
+        const sells = await Sell.find({email: req.params.id}).sort({ createdAt: -1 })
 
         if (!sells) {
             return undefined
