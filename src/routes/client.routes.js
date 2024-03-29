@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import { createClient, getClients, updateClient, getClient, getClientByEmail, deleteClient, createAccount, getAccountData, editAccountData } from '../controllers/client.controllers.js'
+import { createClient, getClients, updateClient, updateClientEmail, getClient, getClientByEmail, deleteClient, createAccount, getAccountData, editAccountData } from '../controllers/client.controllers.js'
 
 const router = Router()
 
@@ -8,6 +8,8 @@ router.post('/clients', createClient)
 router.get('/clients', getClients)
 
 router.put('/clients/:id', updateClient)
+
+router.put('/client/:id', updateClientEmail)
 
 router.get('/clients/:id', getClient)
 

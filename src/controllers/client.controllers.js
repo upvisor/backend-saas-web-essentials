@@ -108,6 +108,15 @@ export const updateClient = async (req, res) => {
   }
 }
 
+export const updateClientEmail = async (req, res) => {
+  try {
+    const updateClient = await Client.findOneAndUpdate({ email: req.params.id }, req.body, { new: true })
+    return res.send(updateClient)
+  } catch (error) {
+    return res.status(500).json({message: error.message})
+  }
+}
+
 export const getClient = async (req, res) => {
   try {
     const client = await Client.findById(req.params.id)
