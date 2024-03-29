@@ -55,7 +55,7 @@ export const createSell = async (req, res) => {
         const sellSave = await newSell.save()
         res.json(sellSave)
         setTimeout(async () => {
-            const sell = await Sell.findById(sellSave._id)
+            const sell = await Sell.findByIdAndUpdate(sellSave._id, { state: 'Pago no realizado' })
             if (sell.state === 'Pedido realizado') {
                 sell.cart.map(async product => {
                     const prod = await Product.findById(product._id)
