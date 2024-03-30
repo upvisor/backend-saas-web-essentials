@@ -28,6 +28,7 @@ export const sendEmail = async (req, res) => {
                             padding: 0;
                             font-family: Arial, sans-serif;
                             background-color: #f4f4f4;
+                            color: #2D2D2D;
                         }
                         .container {
                             width: 100%;
