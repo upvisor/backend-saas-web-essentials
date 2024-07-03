@@ -48,7 +48,7 @@ export const sendEmail = async ({ address, name, affair, title, paragraph, butto
                             </div>
                             <div style="width: 100%; display: flex; margin-bottom: 10px;">
                                 <div style="width: auto; display: flex; margin: auto;">
-                                    <span style="font-size: 14px;">${storeData?.phone ? storeData.phone : ''}</span>
+                                    <span style="font-size: 14px;">${storeData?.phone ? `+56${storeData.phone}` : ''}</span>
                                 </div>
                             </div>
                             <div style="width: 100%; display: flex;">
