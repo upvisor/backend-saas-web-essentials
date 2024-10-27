@@ -1,9 +1,22 @@
 import mongoose from 'mongoose'
 
+const AutomatizationsSchema = new mongoose.Schema({ 
+    affair: { type: String, required: true }, 
+    title: { type: String, required: true }, 
+    paragraph: { type: String, required: true }, 
+    buttonText: { type: String }, 
+    url: { type: String }, 
+    date: { type: Date }, 
+    number: { type: Number }, 
+    time: { type: String }, 
+    condition: [{ type: String }] 
+})
+
 const AutomatizationSchema = new mongoose.Schema({
-    address: { type: String, required: true },
+    startType: { type: String, required: true },
+    startValue: { type: String, required: true },
     name: { type: String, required: true },
-    automatization: [{ affair: { type: String, required: true }, title: { type: String, required: true }, paragraph: { type: String, required: true }, buttonText: { type: String }, url: { type: String }, date: { type: Date }, number: { type: Number }, time: { type: String } }]
+    automatization: [AutomatizationsSchema]
 }, {
     timestamps: true
 })

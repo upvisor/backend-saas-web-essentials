@@ -1,37 +1,51 @@
 import Email from '../models/Email.js'
-import cron from 'node-cron'
-import { sendEmailCampaign } from '../utils/sendEmailCampaign.js'
-import { formatDateToCron } from '../utils/cronFormat.js'
 import Client from '../models/Client.js'
+import { sendEmail } from '../utils/sendEmail.js'
+import { formatDateToCron } from '../utils/cronFormat.js'
+import cron from 'node-cron'
 import StoreData from '../models/StoreData.js'
+import ClientData from '../models/ClientData.js'
+import Task from '../models/Task.js'
 
 export const createCampaign = async (req, res) => {
     try {
-        const { address, affair, summary, title, paragraph, buttonText, url, date } = req.body
-        const newCampaign = new Email({ address, affair, summary, title, paragraph, buttonText, url, date: date === undefined ? new Date() : date })
+        const { address, affair, title, paragraph, buttonText, url, date } = req.body
+        const newCampaign = new Email({ address, affair, title, paragraph, buttonText, url, date: date === undefined ? new Date() : date })
         await newCampaign.save()
-        let subscribers = []
-        if (address === 'Todos los suscriptores') {
-            subscribers = await Client.find().lean()
-        } else {
-            subscribers = await Client.find({ tags: address }).lean()
-        }
-        if (date === undefined) {
-            const storeData = await StoreData.findOne().lean()
-            subscribers.map(subscriber => {
-                sendEmailCampaign({ address: subscriber.email, name: subscriber.firstName !== undefined ? subscriber.firstName : '', affair, title, paragraph, buttonText, url, storeData: storeData === null ? { name: '', email: '', phone: '', address: '', city: '', region: '' } : storeData }).catch(console.error)
+        res.json(newCampaign)
+        if (date !== undefined) {
+            let subscribers = []
+            if (address === 'Todos los suscriptores') {
+                subscribers = await Client.find().lean()
+            } else {
+                subscribers = await Client.find({ tags: address }).lean()
+            }
+            const dateCron = formatDateToCron(new Date(date))
+            const newTask = new Task({ dateCron: dateCron, tag: address, emailData: { affair: affair, title: title, paragraph: paragraph, buttonText: buttonText, url: url } })
+            await newTask.save()
+            cron.schedule(dateCron, async () => {
+                if (address === 'Todos los suscriptores') {
+                    subscribers = await Client.find().lean()
+                } else {
+                    subscribers = await Client.find({ tags: address }).lean()
+                }
+                const storeData = await StoreData.find()
+                const clientData = await ClientData.find()
+                subscribers = subscribers.filter(subscriber => !subscriber.tags.includes('desuscrito'))
+                sendEmail({ subscribers: subscribers, emailData: { affair: affair, title: title, paragraph: paragraph, buttonText: buttonText, url: url }, clientData: clientData, storeData: storeData[0] })
             })
         } else {
-            const storeData = await StoreData.findOne().lean()
-            const dateFormat = new Date(date)
-            const format = formatDateToCron(dateFormat)
-            cron.schedule(format, () => {
-                subscribers.map(subscriber => {
-                    sendEmailCampaign({ address: subscriber.email, name: subscriber.firstName !== undefined ? subscriber.firstName : '', affair, title, paragraph, buttonText, url, storeData: storeData === null ? { name: '', email: '', phone: '', address: '', city: '', region: '' } : storeData }).catch(console.error)
-                })
-            })
+            let subscribers = []
+            if (address === 'Todos los suscriptores') {
+                subscribers = await Client.find().lean()
+            } else {
+                subscribers = await Client.find({ tags: address }).lean()
+            }
+            const storeData = await StoreData.find()
+            const clientData = await ClientData.find()
+            subscribers = subscribers.filter(subscriber => !subscriber.tags.includes('desuscrito'))
+            sendEmail({ subscribers: subscribers, emailData: { affair: affair, title: title, paragraph: paragraph, buttonText: buttonText, url: url }, clientData: clientData, storeData: storeData[0] })
         }
-        return res.send(newCampaign)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
@@ -62,6 +76,15 @@ export const deleteCampaign = async (req, res) => {
     try {
         const campaignDelete = await Email.findByIdAndDelete(req.params.id)
         return res.send(campaignDelete)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
+
+export const editCampaign = async (req, res) => {
+    try {
+        const campaignEdit = await Email.findByIdAndUpdate(req.params.id, req.body, { new: true })
+        return res.json(campaignEdit)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }

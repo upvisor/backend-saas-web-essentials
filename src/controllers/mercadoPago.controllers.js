@@ -1,36 +1,23 @@
-import mercadopage from "mercadopago"
+import { MercadoPagoConfig, Payment } from 'mercadopago';
+import Paym from '../models/Payment.js'
 
-export const createOrder = async (req, res) => {
-  mercadopage.configure({
-    access_token: process.env.MERCADOPAGO_ACCESS_TOKEN,
-  })
-
-  try {
-    const result = await mercadopage.preferences.create({
-      items: req.body,
-      back_urls: {
-        success: `${process.env.WEB_URL}/procesando-pago`,
-        pending: `${process.env.WEB_URL}/procesando-pago`,
-        failure: `${process.env.WEB_URL}/procesando-pago`,
-      },
-    })
-
-    // res.json({ message: "Payment creted" })
-    res.json(result.body)
-  } catch (error) {
-    return res.status(500).json({ message: "Something goes wrong" })
-  }
+export const createPay = async (req, res) => {
+    try {
+        const paymentData = await Paym.findOne()
+        const client = new MercadoPagoConfig({ accessToken: paymentData.mercadoPago.accessToken, options: { timeout: 5000 } });
+        const payment = new Payment(client);
+        payment.create({ body: req.body })
+            .then(async (response) => {
+                return res.json(response)
+            })
+            .catch(async (error) => {
+                console.log(error)
+                return res.status(500).json({message: error.message})
+            })
+    
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+    
 }
 
-export const receiveWebhook = async (req, res) => {
-  try {
-    return res.json({
-      Payment: req.query.payment_id,
-      Status: req.query.status,
-      MerchantOrder: req.query.merchant_order_id
-    })
-  } catch (error) {
-    console.log(error)
-    return res.status(500).json({ message: "Something goes wrong" })
-  }
-}

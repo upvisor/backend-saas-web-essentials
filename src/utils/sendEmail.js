@@ -1,67 +1,123 @@
-import nodemailer from 'nodemailer'
+import brevo from '@getbrevo/brevo'
+import { updateClientEmailStatus } from '../utils/updateEmail.js'
 
-export const sendEmail = async ({ address, name, affair, title, paragraph, buttonText, url, storeData }) => {
-    let transporter = nodemailer.createTransport({
-        host: "smtp.hostinger.com",
-        post: 465,
-        secure: true,
-        auth: {
-            user: process.env.EMAIL,
-            pass: process.env.EMAIL_PASSWORD,
-        }
+export const sendEmail = async ({ subscribers, emailData, clientData, storeData }) => {
+
+    let apiInstance = new brevo.TransactionalEmailsApi()
+
+    let apiKey = apiInstance.authentications['apiKey']
+    apiKey.apiKey = process.env.BREVO_API
+
+    const id = `email-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+
+    const createDataMap = (subscriber, clientData) => {
+        const dataMap = { ...subscriber }
+        clientData.forEach(item => {
+            if (!dataMap[item.data]) {
+                dataMap[item.data] = item.name
+            }
+        })
+        return dataMap
+    };
+    
+    const replacePlaceholders = (text, data) => {
+        return Object.keys(data).reduce((result, key) => {
+            const placeholder = new RegExp(`{${key}}`, 'g')
+            return result.replace(placeholder, data[key])
+        }, text)
+    };
+
+    subscribers.map(async (subscriber) => {
+        const dataMap = createDataMap(subscriber._doc || subscriber, clientData)
+        let sendSmtpEmail = new brevo.SendSmtpEmail()
+        sendSmtpEmail = {
+            sender: { email: 'contacto@carmenorellana.cl', name: 'Carmen Orellana' },
+            subject: replacePlaceholders(emailData.affair, dataMap),
+            to: [{
+                email: subscriber.email,
+                name: subscriber.firstName
+            }],
+            htmlContent: `
+                <div lang="und" style="width:100%;padding:0;Margin:0;background-color:#ffffff;font-family:roboto,'helvetica neue',helvetica,arial,sans-serif;">
+                    <table style="width: 100%; border-collapse: collapse; border-spacing: 0px; padding: 0; margin: 0; height: 100%; background-repeat: repeat; background-position: center top; background-color: #ffffff;">
+                        <tbody><tr><td>
+                            <table style="border-collapse: collapse; border-spacing: 0px; table-layout: fixed !important; width: 100%;">
+                                <tbody><tr><td align="center">
+                                    <table style="border-collapse: collapse; border-spacing: 0px; background-color: transparent; width: 100%; max-width: 650px;">
+                                        <tbody><tr><td>
+                                            <table style="border-collapse: collapse; border-spacing: 0px; width: 100%;">
+                                                <tbody>
+                                                    ${storeData.logo && storeData.logo !== ''
+                                                        ? `
+                                                            <tr>
+                                                                <td align="center" style="padding: 20px;">
+                                                                    <a href="${process.env.WEB_URL}" target="_blank"><img src="${storeData.logo}" alt="Logo" style="width: 150px;" /><a/>
+                                                                </td>
+                                                            </tr>
+                                                            <td align="center" style="Margin:0;font-size:0">
+                                                                <table border="0" width="100%" height="100%" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px">
+                                                                    <tbody><tr><td style="padding:0;Margin:0;border-bottom:1px solid #cccccc;background:unset;height:1px;width:100%;margin:0px">
+                                                                    </td></tr></tbody>
+                                                                </table>
+                                                            </td>
+                                                        `
+                                                        : ''
+                                                    }
+                                                    <tr>
+                                                        <td align="center" style="padding: 20px;">
+                                                            ${emailData.title && emailData.title !== ''
+                                                                ? `
+                                                                    <h1 style="margin: 0; color: #333333; font-weight: 500;">${replacePlaceholders(emailData.title, dataMap)}</h1>
+                                                                    <br>
+                                                                `
+                                                                : ''
+                                                            }
+                                                            <p style="margin: 0;${emailData.buttonText && emailData.buttonText !== '' && emailData.url && emailData.url !== '' ? 'padding-bottom: 10px;' : ''} line-height: 25px; color: #333333; font-size: 16px;">${replacePlaceholders(emailData.paragraph, dataMap)}</p>
+                                                            ${emailData.buttonText && emailData.buttonText !== '' && emailData.url && emailData.url !== ''
+                                                                ? `
+                                                                    <br>
+                                                                    <a href="${replacePlaceholders(emailData.url, dataMap)}" style="padding: 10px 30px; background-color: #c447ff; border: none; color: #ffffff; border-radius: 12px; font-size: 15px; text-decoration: none;">${emailData.buttonText}</a>
+                                                                `
+                                                                : ''
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                    <td align="center" style="margin:0;font-size:0;${emailData.buttonText && emailData.buttonText !== '' && emailData.url && emailData.url !== '' ? 'padding-top: 10px;' : ''}">
+                                                        <table border="0" width="100%" height="100%" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px">
+                                                            <tbody><tr><td style="padding:0;Margin:0;border-bottom:1px solid #cccccc;background:unset;height:1px;width:100%;margin:0px;">
+                                                            </td></td></tbody>
+                                                        </table>
+                                                    </td>
+                                                    <tr>
+                                                        <td align="center" style="padding-bottom: 20px; padding-top: 10px;">
+                                                            <p style="margin: 0; padding-bottom: 10px; font-size: 12px; color: #444444;padding-bottom: 10px;">Enviado a: ${subscriber.email}</p>
+                                                            <a href="${process.env.API_URL}/desubcribe/${subscriber.email}" style="margin: 0; padding-bottom: 10px; font-size: 12px; color: #444444;">Desuscribirte</a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td></tr></tbody>
+                                    </table>
+                                </td></tr></tbody>
+                            </table>
+                        </td></tr></tbody>
+                    </table>
+                </div>
+            `,
+            headers: {
+                'X-Unique-Id': id
+            }
+        };
+        await updateClientEmailStatus(subscriber.email, {
+            id: id,
+            subject: emailData.affair,
+            opened: false,
+            clicked: false
+        });
+        apiInstance.sendTransacEmail(sendSmtpEmail).then(function (data) {
+            console.log('API called successfully. Returned data: ' + JSON.stringify(data));
+        }, function (error) {
+            console.error(error);
+        });
     })
-    await transporter.sendMail({
-        from: storeData?.email,
-        to: address,
-        subject: affair,
-        html: `
-        <!DOCTYPE html>
-        <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            </head>
-            <body>
-                <main style="display: flex;">
-                    <div style="margin: auto; width: 100%; padding: 12px; max-width: 600px;">
-                        <div style="display: flex;">
-                            <a style="margin: auto;" target="_blank" href="https://tienda-1.vercel.app/">${storeData?.logo.url ? `<img style="width: 200px;" src="${storeData.logo.url}" />` : '<p style="font-size: 36px;">TIENDA</p>'}</a>
-                        </div>
-                        <h1 style="font-weight: 500; text-align: center; margin-bottom: 0px;">${title}</h1>
-                        <p style="text-align: center; font-size: 16px;">${paragraph.replace('${name}', name)}</p>
-                        <div style="display: flex;">
-                            ${url !== '' && buttonText !== '' ? `<a href="${url}" target="_blank" style="padding: 8px 21px; border: none; text-decoration: none; color: white; font-size: 16px; margin: auto; width: fit-content; margin-bottom: 18px; cursor: pointer; background-color: #3478F5;">${buttonText}</a>` : ''}
-                        </div>
-                        <div style="border-top: 1px solid #CACACA; padding: 12px;">
-                            <div style="width: 100%; display: flex; margin-bottom: 10px;">
-                                <div style="width: auto; display: flex; margin: auto;">
-                                    ${storeData?.instagram ? `<a style="padding-right: 30px;" href="${storeData.instagram}" target="_blank"><img style="width: 25px; height: 25px;" src="https://cdn.icon-icons.com/icons2/836/PNG/512/Instagram_icon-icons.com_66804.png" /></a>` : ''}
-                                    ${storeData?.facebook ? `<a style="padding-right: 30px;" href="${storeData.facebook}" target="_blank"><img style="width: 25px; height: 25px;" src="https://cdn.icon-icons.com/icons2/2429/PNG/512/facebook_logo_icon_147291.png" /></a>` : ''}
-                                    ${storeData?.tiktok ? `<a style="padding-right: 30px;" href="${storeData.tiktok}" target="_blank"><img style="width: 25px; height: 25px;" src="https://cdn.icon-icons.com/icons2/2972/PNG/512/tiktok_logo_icon_186896.png" /></a>` : ''}
-                                    ${storeData?.whatsapp ? `<a href="${storeData.whatsapp}" target="_blank"><img style="width: 25px; height: 25px;" src="https://cdn.icon-icons.com/icons2/729/PNG/512/whatsapp_icon-icons.com_62756.png" /></a>` :''}
-                                </div>
-                            </div>
-                            <div style="width: 100%; display: flex; margin-bottom: 4px;">
-                                <div style="width: auto; display: flex; margin: auto;">
-                                    <span style="font-size: 14px;">${storeData?.email ? storeData.email : ''}</span>
-                                </div>
-                            </div>
-                            <div style="width: 100%; display: flex; margin-bottom: 10px;">
-                                <div style="width: auto; display: flex; margin: auto;">
-                                    <span style="font-size: 14px;">${storeData?.phone ? `+56${storeData.phone}` : ''}</span>
-                                </div>
-                            </div>
-                            <div style="width: 100%; display: flex;">
-                                <div style="width: auto; display: flex; margin: auto;">
-                                    <span style="font-size: 14px; margin-right: 5px;">Dejar de recibir correos de esta tienda</span>
-                                    <a style="font-size: 14px;" href="/" target="_blank">Cancelar suscripción</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </body>
-        </html>
-        `
-    }).catch((err) => console.log(err))
 }

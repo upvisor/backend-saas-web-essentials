@@ -4,44 +4,39 @@ import fileUpload from 'express-fileupload'
 import {connectDB} from './db.js'
 import http from 'http'
 import {Server as SocketServer} from 'socket.io'
-import ChatMessage from './models/Chat.js'
+import { loadTasks } from './utils/tasks.js'
 
-import productsRoutes from './routes/products.routes.js'
-import addCartRoutes from './routes/addCart.routes.js'
-import sellsRoutes from './routes/sells.routes.js'
 import contactRoutes from './routes/contact.routes.js'
-import informationRoutes from './routes/information.routes.js'
-import viewContentRoutes from './routes/viewContent.routes.js'
-import stadisticsRoutes from './routes/stadistics.routes.js'
-import categoriesRoutes from './routes/categories.routes.js'
-import aiDescriptionProductRoutes from './routes/aiDescriptionProduct.routes.js'
-import aiProductSeo from './routes/aiProductSeo.routes.js'
-import aiDescriptionCategoryRoutes from './routes/aiDescriptionCategory.routes.js'
-import aiDescriptionCategorySeoRoutes from './routes/aiDescriptionCategorySeo.routes.js'
-import aiTitleCategorySeoRoutes from './routes/aiTitleCategorySeo.routes.js'
-import promotionalCodeRoutes from './routes/promotionalCode.routes.js'
 import clientTagRoutes from './routes/clientTag.routes.js'
-import whatsappRoutes from './routes/whatsapp.routes.js'
 import clientsRoutes from './routes/client.routes.js'
 import storeDataRoutes from './routes/storeData.routes.js'
 import chatRoutes from './routes/chat.routes.js'
-import payRoutes from './routes/pay.routes.js'
-import tagsRoutes from './routes/tags.routes.js'
-import webhookRoutes from './routes/webhook.routes.js'
-import messengerRoutes from './routes/messenger.routes.js'
-import instagramRoutes from './routes/instagram.routes.js'
 import notificationsRoutes from './routes/notifications.routes.js'
-import campaignRoutes from './routes/campaign.controllers.js'
+import campaignRoutes from './routes/campaign.routes.js'
 import automatizationsRoutes from './routes/automatizations.routes.js'
-import domainRoutes from './routes/domain.routes.js'
 import politicsRoutes from './routes/politics.routes.js'
-import paymentGatewayRoutes from './routes/paymentGateway.routes.js'
 import designRoutes from './routes/design.routes.js'
 import subscriptionRoutes from './routes/subscription.routes.js'
 import shopLoginRoutes from './routes/shopLogin.routes.js'
 import postRoutes from './routes/post.routes.js'
-import mercadoPagoRoutes from './routes/mercadoPago.routes.js'
 import emailRoutes from './routes/email.routes.js'
+import sessionRoutes from './routes/session.routes.js'
+import funnelsRoutes from './routes/funnels.routes.js'
+import formsRoutes from './routes/form.routes.js'
+import callsRoutes from './routes/calls.routes.js'
+import meetingsRoutes from './routes/meetings.routes.js'
+import clientDataRoutes from './routes/clientData.router.js'
+import mercadopagoRoutes from './routes/mercadoPago.routes.js'
+import servicesRoutes from './routes/services.routes.js'
+import bunnyRoutes from './routes/bunny.routes.js'
+import zoomRoutes from './routes/zoom.routes.js'
+import paysRoutes from './routes/pays.routes.js'
+import stadisticsRoutes from './routes/stadistics.routes.js'
+import checkoutRoutes from './routes/checkouts.routes.js'
+import pagesRoutes from './routes/pages.routes.js'
+import leadsRoutes from './routes/leads.routes.js'
+import paymentsRoutes from './routes/payments.controllers.js'
+import desubscribesRoutes from './routes/desubscribes.routes.js'
 
 connectDB()
 
@@ -67,62 +62,46 @@ app.use(fileUpload({
 }))
 app.use(express.urlencoded({extended: false}))
 
-app.use(productsRoutes)
-app.use(addCartRoutes)
-app.use(sellsRoutes)
+await loadTasks()
+
 app.use(contactRoutes)
-app.use(informationRoutes)
-app.use(viewContentRoutes)
-app.use(stadisticsRoutes)
-app.use(categoriesRoutes)
-app.use(aiDescriptionProductRoutes)
-app.use(aiProductSeo)
-app.use(aiDescriptionCategoryRoutes)
-app.use(aiDescriptionCategorySeoRoutes)
-app.use(aiTitleCategorySeoRoutes)
-app.use(promotionalCodeRoutes)
-app.use(whatsappRoutes)
 app.use(clientsRoutes)
 app.use(clientTagRoutes)
 app.use(storeDataRoutes)
 app.use(chatRoutes)
-app.use(payRoutes)
-app.use(tagsRoutes)
-app.use(webhookRoutes)
-app.use(messengerRoutes)
-app.use(instagramRoutes)
 app.use(notificationsRoutes)
 app.use(campaignRoutes)
 app.use(automatizationsRoutes)
-app.use(domainRoutes)
 app.use(politicsRoutes)
-app.use(paymentGatewayRoutes)
 app.use(designRoutes)
 app.use(subscriptionRoutes)
 app.use(shopLoginRoutes)
 app.use(postRoutes)
-app.use(mercadoPagoRoutes)
 app.use(emailRoutes)
+app.use(sessionRoutes)
+app.use(funnelsRoutes)
+app.use(formsRoutes)
+app.use(callsRoutes)
+app.use(meetingsRoutes)
+app.use(clientDataRoutes)
+app.use(mercadopagoRoutes)
+app.use(servicesRoutes)
+app.use(bunnyRoutes)
+app.use(zoomRoutes)
+app.use(paysRoutes)
+app.use(stadisticsRoutes)
+app.use(checkoutRoutes)
+app.use(pagesRoutes)
+app.use(leadsRoutes)
+app.use(paymentsRoutes)
+app.use(desubscribesRoutes)
 
 io.on('connection', async (socket) => {
     socket.on('message', async (message) => {
-        const messages = await ChatMessage.find({senderId: message.senderId}).select('-senderId -_id').lean()
-        const ultimateMessage = messages.reverse()
-        if (ultimateMessage[0]?.agent || message.message?.toLowerCase() === 'agente') {
-            socket.broadcast.emit('message', message)
-        }
+        socket.broadcast.emit('message', message)
     })
     socket.on('messageAdmin', (message) => {
         socket.broadcast.emit('messageAdmin', message)
-    })
-    socket.on('whatsapp', (message) => {
-        socket.broadcast.emit('whatsapp', message)
-    })
-    socket.on('messenger', (message) => {
-        socket.broadcast.emit('messenger', message)
-    })
-    socket.on('instagram', (message) => {
-        socket.broadcast.emit('instagram', message)
     })
     socket.on('newNotification', (message) => {
         socket.broadcast.emit('newNotification', message)

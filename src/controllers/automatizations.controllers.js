@@ -1,16 +1,17 @@
 import Automatization from '../models/Automatization.js'
 import Client from '../models/Client.js'
-import StoreData from '../models/StoreData.js'
-import { sendEmailAutomatization } from '../utils/sendEmailAutomatization.js'
+import { sendEmail } from '../utils/sendEmail.js'
 import { formatDateToCron } from '../utils/cronFormat.js'
 import cron from 'node-cron'
+import ClientData from '../models/ClientData.js'
+import StoreData from '../models/StoreData.js'
+import Task from '../models/Task.js'
 
 export const createAutomatization = async (req, res) => {
     try {
-        const { address, name, automatization } = req.body
+        const { startType, startValue, name, automatization } = req.body
         const emails = []
         let previousDate = new Date()
-        previousDate.setMinutes(previousDate.getMinutes() + 2)
         for (const email of automatization) {
             const currentDate = new Date(previousDate)
             if (email.time === 'Días') {
@@ -24,25 +25,87 @@ export const createAutomatization = async (req, res) => {
             emails.push(email)
             previousDate = currentDate
         }
-        const newAutomatization = new Automatization({ address, name, automatization: emails })
+        const newAutomatization = new Automatization({ startType, startValue, name, automatization: emails })
         await newAutomatization.save()
-        let subscribers = []
-        if (address === 'Todos los suscriptores') {
-            subscribers = await Client.find().lean()
-        } else {
-            subscribers = await Client.find({ tags: address }).lean()
-        }
+        res.json(newAutomatization)
         emails.map(async (email) => {
-            const storeData = await StoreData.findOne().lean()
-            const dateFormat = new Date(email.date)
-            const format = formatDateToCron(dateFormat)
-            cron.schedule(format, () => {
-                subscribers.map(subscriber => {
-                    sendEmailAutomatization({ address: subscriber.email, name: subscriber.firstName !== undefined ? subscriber.firstName : '', affair: email.affair, title: email.title, paragraph: email.paragraph, buttonText: email.buttonText, url: email.url, storeData: storeData === null ? { name: '', email: '', phone: '', address: '', city: '', region: '' } : storeData}).catch(console.error)
+            if (Number(email.number) === 0) {
+                let subscribers = []
+                if (startType === 'Formulario completado') {
+                    subscribers = await Client.find({ 'forms.form': startValue }).lean()
+                } else if (startType === 'Llamada agendada') {
+                    subscribers = await Client.find({ 'meetings.meeting': startValue }).lean()
+                } else if (startType === 'Ingreso a un servicio') {
+                    subscribers = await Client.find({
+                        services: {
+                            $elemMatch: {
+                                service: startValue,
+                                step: { $exists: true, $ne: '' }
+                            }
+                        }
+                    }).lean();
+                } else if (startType === 'Añadido a una etapa de un embudo') {
+                    subscribers = await Client.find({ 'funnels.step': startValue }).lean()
+                } else if (startType === 'Añadido a una etapa de un servicio') {
+                    subscribers = await Client.find({ 'services.step': startValue }).lean()
+                } else if (startType === 'Tag añadido') {
+                    subscribers = await Client.find({ tags: startValue }).lean()
+                }
+                const filteredSubscribers = subscribers.filter(subscriber => {
+                    if (email.condition.length === 0) {
+                        return !subscriber.tags.includes('desuscrito')
+                    }
+                    return email.condition.every(condition => 
+                        !subscriber.tags.includes(condition) || !subscriber.tags.includes('desuscrito')
+                    );
+                });
+                const clientData = await ClientData.find()
+                const storeData = await StoreData.find()
+                sendEmail({ subscribers: filteredSubscribers, emailData: email, clientData: clientData, storeData: storeData[0] })
+            } else {
+                let subscribers = []
+                if (startType === 'Formulario completado') {
+                    subscribers = await Client.find({ 'forms.form': startValue }).lean()
+                } else if (startType === 'Llamada agendada') {
+                    subscribers = await Client.find({ 'meetings.meeting': startValue }).lean()
+                } else if (startType === 'Ingreso a un servicio') {
+                    subscribers = await Client.find({
+                        services: {
+                            $elemMatch: {
+                                service: startValue,
+                                step: { $exists: true, $ne: '' }
+                            }
+                        }
+                    }).lean();
+                } else if (startType === 'Añadido a una etapa de un embudo') {
+                    subscribers = await Client.find({ 'funnels.step': startValue }).lean()
+                } else if (startType === 'Añadido a una etapa de un servicio') {
+                    subscribers = await Client.find({ 'services.step': startValue }).lean()
+                } else if (startType === 'Tag añadido') {
+                    subscribers = await Client.find({ tags: startValue }).lean()
+                }
+                const dateCron = formatDateToCron(new Date(email.date))
+                const newTask = new Task({ dateCron: dateCron, subscribers: subscribers.map(subscriber => subscriber.email), startType: startType, startValue: startValue, emailData: email, condition: email.condition })
+                await newTask.save()
+                cron.schedule(dateCron, async () => {
+                    const emails = subscribers.map(subscriber => subscriber.email);
+                    const updatedSubscribers = await Client.find({ email: { $in: emails } }).lean()
+                    const filteredSubscribers = updatedSubscribers.filter(subscriber => {
+                        const tagsCondition = (email.condition.length === 0 && !subscriber.tags.includes('desuscrito')) || (subscriber.condition.some(tag => !subscriber.tags.includes(tag) || !subscriber.tags.includes('desuscrito')))
+                        let funnelOrServiceCondition = true
+                        if (startType === 'Añadido a una etapa de un embudo') {
+                            funnelOrServiceCondition = subscriber.funnels.some(funnel => funnel.step === startValue)
+                        } else if (startType === 'Añadido a una etapa de un servicio') {
+                            funnelOrServiceCondition = subscriber.services.some(service => service.step === startValue)
+                        }
+                        return tagsCondition && funnelOrServiceCondition
+                    });
+                    const clientData = await ClientData.find()
+                    const storeData = await StoreData.find()
+                    sendEmail({ subscribers: filteredSubscribers, emailData: email, clientData: clientData, storeData: storeData[0] })
                 })
-            })
+            }
         })
-        return res.send(newAutomatization)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
@@ -73,6 +136,15 @@ export const deleteAutomatization = async (req, res) => {
     try {
         const automatizationDelete = await Automatization.findByIdAndDelete(req.params.id)
         return res.send(automatizationDelete)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
+
+export const editAutomatizacion = async (req, res) => {
+    try {
+        const automatizationEdit = await Automatization.findByIdAndUpdate(req.params.id, req.body, { new: true })
+        return res.json(automatizationEdit)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }

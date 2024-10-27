@@ -1,15 +1,56 @@
 import mongoose from 'mongoose'
 
-const ClientSchema = mongoose.Schema({
+const funnelSchema = new mongoose.Schema({
+  funnel: { type: String },
+  step: { type: String }
+}, {
+  timestamps: true
+})
+
+const serviceSchema = new mongoose.Schema({
+  service: { type: String },
+  step: { type: String },
+  plan: { type: String },
+  price: { type: Number },
+  payStatus: { type: String }
+}, {
+  timestamps: true
+})
+
+const formSchema = new mongoose.Schema({
+  form: { type: String }
+}, {
+  timestamps: true
+})
+
+const meetingSchema = new mongoose.Schema({
+  meeting: { type: String }
+}, {
+  timestamps: true
+})
+
+const emailSchema = new mongoose.Schema({
+  id: { type: String },
+  subject: { type: String },
+  opened: { type: Boolean },
+  clicked: { type: Boolean }
+}, {
+  timestamps: true
+})
+
+const ClientSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   firstName: { type: String },
   lastName: { type: String },
   phone: { type: Number },
-  address: { type: String },
-  departament: { type: String },
-  region: { type: String },
-  city: { type: String },
-  tags: [{ type: String }]
+  tags: [{ type: String }],
+  funnels: [funnelSchema],
+  services: [serviceSchema],
+  forms: [formSchema],
+  meetings: [meetingSchema],
+  tags: [{ type: String }],
+  emails: [emailSchema],
+  data: [{ name: { type: String }, value: { type: String } }]
 }, {
   timestamps: true
 })

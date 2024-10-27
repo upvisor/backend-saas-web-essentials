@@ -17,8 +17,8 @@ export const createPolitics = async (req, res) => {
 export const getPolitics = async (req, res) => {
     try {
         const politics = await Politics.findOne().lean()
-        if (!politics) return res.sendStatus(204)
-        return res.send(politics)
+        if (!politics) return res.json({})
+        return res.json(politics)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }

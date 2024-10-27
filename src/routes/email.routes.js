@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { sendEmail } from '../controllers/email.controllers.js'
+import { sendEmailClient } from '../controllers/email.controllers.js'
 
 const router = Router()
 
-router.post('/email/:id', sendEmail)
+router.post('/email/:id', sendEmailClient)
 
 export default router

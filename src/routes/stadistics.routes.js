@@ -1,5 +1,5 @@
-import {Router} from 'express'
-import {getStadistics, getStadisticsFiltered} from '../controllers/stadistics.controllers.js'
+import { Router } from 'express'
+import { getStadistics, getStadisticsFiltered } from '../controllers/stadistics.controllers.js'
 
 const router = Router()
 

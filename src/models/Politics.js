@@ -2,9 +2,7 @@ import mongoose from 'mongoose'
 
 const PoliticsSchema = new mongoose.Schema({
     terms: { type: String },
-    shipping: { type: String },
-    privacy: { type: String },
-    devolutions: { type: String }
+    privacy: { type: String }
 }, {
     timestamps: true
 })

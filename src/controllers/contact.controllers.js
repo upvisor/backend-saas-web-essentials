@@ -19,10 +19,10 @@ export const createMessage = async (req, res) => {
             .setFbp(fbp)
             .setFbc(fbc)
         const serverEvent = (new ServerEvent())
-            .setEventName('Lead')
+            .setEventName('Contact')
             .setEventTime(current_timestamp)
             .setUserData(userData)
-            .setEventSourceUrl(`${process.env.WEB_URL}/contacto`)
+            .setEventSourceUrl(`${process.env.WEB_URL}${req.body.page}`)
             .setActionSource('website')
         const eventsData = [serverEvent]
         const eventRequest = (new EventRequest(access_token, pixel_id))
