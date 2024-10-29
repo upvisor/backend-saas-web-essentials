@@ -7,6 +7,8 @@ import ClientData from '../models/ClientData.js'
 import moment from 'moment-timezone'
 import StoreData from '../models/StoreData.js'
 import bizSdk from 'facebook-nodejs-business-sdk'
+import Zoom from '../models/Zoom.js'
+import { isTokenExpired } from '../utils/zoom.js'
 
 export const editCalendar = async (req, res) => {
     try {
@@ -38,15 +40,38 @@ export const getCalendar = async (req, res) => {
 
 export const CreateMeeting = async (req, res) => {
     try {
+        const zoom = await Zoom.findOne();
+        let token
+        if (!zoom || isTokenExpired(zoom.createdAt, zoom.expires_in)) {
+            const response = await axios.post('https://zoom.us/oauth/token', null, {
+                headers: {
+                    'Authorization': `Basic ${Buffer.from(`${process.env.ZOOM_CLIENT_ID}:${process.env.ZOOM_CLIENT_SECRET}`).toString('base64')}`,
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                params: {
+                    "grant_type": "account_credentials",
+                    "account_id": process.env.ZOOM_ACCOUNT_ID
+                }
+            })
+            token = response.data.access_token
+            if (zoom) {
+                await Zoom.findByIdAndUpdate(zoom._id, response.data, { new: true })
+            } else {
+                const newToken = new Zoom(response.data)
+                await newToken.save()
+            }
+        } else {
+            token = zoom.access_token
+        }
         const meetingData = {
             topic: req.body.call,
             type: 2,
             start_time: moment.tz(req.body.date, 'America/Santiago').format(),
             duration: req.body.duration
         }
-        const response = await axios.post(`https://api.zoom.us/v2/users/me/meetings`, meetingData, {
+        const meetingResponse = await axios.post(`https://api.zoom.us/v2/users/me/meetings`, meetingData, {
             headers: {
-                'Authorization': `Bearer ${process.env.ZOOM_TOKEN}`,
+                'Authorization': `Bearer ${token}`,
             },
         }).catch(error => console.log(error))
         const Content = bizSdk.Content
@@ -95,7 +120,7 @@ export const CreateMeeting = async (req, res) => {
                 console.error('Error: ', err)
             }
         )
-        const newMeeting = new Meeting({ ...req.body, url: response.data.start_url})
+        const newMeeting = new Meeting({ ...req.body, url: meetingResponse.data.start_url})
         const newMeetingSave = await newMeeting.save()
         const client = await Client.findOne({ email: req.body.email })
         if (client) {
@@ -107,7 +132,7 @@ export const CreateMeeting = async (req, res) => {
         res.json(newMeetingSave)
         const clientData = await ClientData.find()
         const storeData = await StoreData.find()
-        await sendEmail({ subscribers: [{ name: req.body.firstName, email: req.body.email }], emailData: { affair: `¡Hola ${req.body.firstName}! Tu llamada ha sido agendada con exito`, title: 'Hemos agendado tu llamada exitosamente', paragraph: `¡Hola ${req.body.firstName}! Te queriamos informar que tu llamada con fecha ${new Date(req.body.date).getDate()}/${new Date(req.body.date).getMonth() + 1}/${new Date(req.body.date).getFullYear()} a las ${new Date(req.body.date).getHours()}:${new Date(req.body.date).getMinutes() >= 9 ? new Date(req.body.date).getMinutes() : `0${new Date(req.body.date).getMinutes()}`} ha sido agendada con exito, aqui te dejamos el acceso a la llamada en el siguiente boton.`, buttonText: 'Ingresar a la llamada', url: response.data.start_url }, clientData: clientData, storeData: storeData[0] })
+        await sendEmail({ subscribers: [{ name: req.body.firstName, email: req.body.email }], emailData: { affair: `¡Hola ${req.body.firstName}! Tu llamada ha sido agendada con exito`, title: 'Hemos agendado tu llamada exitosamente', paragraph: `¡Hola ${req.body.firstName}! Te queriamos informar que tu llamada con fecha ${new Date(req.body.date).getDate()}/${new Date(req.body.date).getMonth() + 1}/${new Date(req.body.date).getFullYear()} a las ${new Date(req.body.date).getHours()}:${new Date(req.body.date).getMinutes() >= 9 ? new Date(req.body.date).getMinutes() : `0${new Date(req.body.date).getMinutes()}`} ha sido agendada con exito, aqui te dejamos el acceso a la llamada en el siguiente boton.`, buttonText: 'Ingresar a la llamada', url: meetingResponse.data.start_url }, clientData: clientData, storeData: storeData[0] })
     } catch (error) {
         console.log(error)
         return res.status(500).json({message: error.message})

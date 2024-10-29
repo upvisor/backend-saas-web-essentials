@@ -1,19 +1,26 @@
 import axios from 'axios'
+import Zoom from '../models/Zoom.js'
 
 export const createToken = async (req, res) => {
     try {
-        const code = req.query.code
         const response = await axios.post('https://zoom.us/oauth/token', null, {
-            params: {
-                grant_type: 'authorization_code',
-                code: code,
-                redirect_uri: `${process.env.API_URL}/zoom-token`
-            },
             headers: {
-                'Authorization': `Basic ${Buffer.from(`${process.env.ZOOM_API_KEY}:${process.env.ZOOM_API_SECRET}`).toString('base64')}`
+                'Authorization': `Basic ${Buffer.from(`${process.env.ZOOM_CLIENT_ID}:${process.env.ZOOM_CLIENT_SECRET}`).toString('base64')}`,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            params: {
+                "grant_type": "account_credentials",
+                "account_id": process.env.ZOOM_ACCOUNT_ID
             }
         })
-        return res.json(response.data.access_token)
+        const zoom = await Zoom.findOne()
+        if (zoom.length > 0) {
+            await Zoom.findByIdAndUpdate(zoom._id, response.data, { new: true })
+        } else {
+            const newToken = new Zoom(response.data)
+            await newToken.save()
+        }
+        return res.json(response.data)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
