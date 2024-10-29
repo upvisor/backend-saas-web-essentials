@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { createPay } from '../controllers/mercadopago.controllers.js'
+import { createPay } from '../controllers/mercadoPago.controllers.js'
 
 const router = Router()
 
