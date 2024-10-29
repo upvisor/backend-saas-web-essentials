@@ -49,10 +49,7 @@ const io = new SocketServer(server, {
 })
 
 const corsOptions = {
-    origin: [
-        'https://www.carmenorellana.cl',
-        'https://admin.carmenorellana.cl'
-    ],
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true
 }
