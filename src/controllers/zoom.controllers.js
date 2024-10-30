@@ -14,7 +14,7 @@ export const createToken = async (req, res) => {
             }
         })
         const zoom = await Zoom.findOne()
-        if (zoom.length > 0) {
+        if (zoom) {
             await Zoom.findByIdAndUpdate(zoom._id, response.data, { new: true })
         } else {
             const newToken = new Zoom(response.data)

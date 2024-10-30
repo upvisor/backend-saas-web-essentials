@@ -44,8 +44,11 @@ const app = express()
 const server = http.createServer(app)
 const io = new SocketServer(server, {
     cors: {
-        origin: '*'
-    }
+        origin: '*',
+        methods: ['GET', 'POST']
+    },
+    pingInterval: 10000,
+    pingTimeout: 5000
 })
 
 const corsOptions = {
