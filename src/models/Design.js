@@ -18,7 +18,7 @@ const DesignSchema = new mongoose.Schema({
         topStrip: { type: String }
     },
     pages: [pageSchema],
-    popup: { active: { type: Boolean }, wait: { type: Number }, title: { type: String }, description: { type: String }, content: { type: String } }
+    popup: { active: { type: Boolean }, wait: { type: Number }, title: { type: String }, description: { type: String }, content: { type: String }, buttonText: { type: String }, buttonLink: { type: String } }
 }, {
     timestamps: true
 })
