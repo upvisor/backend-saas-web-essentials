@@ -1,4 +1,4 @@
-import { updateClientEmailStatusById } from '../utils/updateEmail'
+import { updateClientEmailStatusById } from '../utils/updateEmail.js'
 
 export const getStatus = async (req, res) => {
     const event = req.body.event;
