@@ -96,7 +96,7 @@ export const createClient = async (req, res) => {
             ) {
               const clientData = await ClientData.find();
               const storeData = await StoreData.find();
-              sendEmail({ subscribers: [client], emailData: email, clientData: clientData, storeData: storeData[0] });
+              sendEmail({ subscribers: [client], emailData: email, clientData: clientData, storeData: storeData[0], automatizationId: automatization._id });
             }
           } else {
             const dateCron = formatDateToCron(new Date(email.date));
@@ -104,6 +104,7 @@ export const createClient = async (req, res) => {
               dateCron: dateCron,
               subscriber: client.email,
               emailData: email,
+              automatizationId: automatization._id,
               condition: email.condition,
               startType: automatization.startType,
               startValue: automatization.startValue
@@ -124,7 +125,7 @@ export const createClient = async (req, res) => {
                 if (tagsCondition && funnelOrServiceCondition) {
                   const clientData = await ClientData.find();
                   const storeData = await StoreData.find();
-                  sendEmail({ subscribers: [clientUpdate], emailData: email, clientData: clientData, storeData: storeData[0] });
+                  sendEmail({ subscribers: [clientUpdate], emailData: email, clientData: clientData, storeData: storeData[0], automatizationId: automatization._id });
                 }
               }
             });
@@ -183,7 +184,7 @@ export const createClient = async (req, res) => {
             ) {
               const clientData = await ClientData.find();
               const storeData = await StoreData.find();
-              sendEmail({ subscribers: [newClientSave], emailData: email, storeData: storeData[0], clientData: clientData });
+              sendEmail({ subscribers: [newClientSave], emailData: email, storeData: storeData[0], clientData: clientData, automatizationId: automatization._id });
             }
           } else {
             const dateCron = formatDateToCron(new Date(email.date));
@@ -191,6 +192,7 @@ export const createClient = async (req, res) => {
               dateCron: dateCron,
               subscriber: newClient.email,
               emailData: email,
+              automatizationId: automatization._id,
               condition: email.condition,
               startType: automatization.startType,
               startValue: automatization.startValue
@@ -211,7 +213,7 @@ export const createClient = async (req, res) => {
                 if (tagsCondition && funnelOrServiceCondition) {
                   const clientData = await ClientData.find();
                   const storeData = await StoreData.find();
-                  sendEmail({ subscribers: [clientUpdate], emailData: email, clientData: clientData, storeData: storeData[0] });
+                  sendEmail({ subscribers: [clientUpdate], emailData: email, clientData: clientData, storeData: storeData[0], automatizationId: automatization._id });
                 }
               }
             });

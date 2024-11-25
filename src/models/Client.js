@@ -31,6 +31,7 @@ const meetingSchema = new mongoose.Schema({
 
 const emailSchema = new mongoose.Schema({
   id: { type: String },
+  automatizationId: { type: String },
   subject: { type: String },
   opened: { type: Boolean },
   clicked: { type: Boolean }

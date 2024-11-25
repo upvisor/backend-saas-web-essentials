@@ -22,7 +22,7 @@ export const loadTasks = async () => {
                     if (tagsCondition && funnelOrServiceCondition) {
                         const clientData = await ClientData.find();
                         const storeData = await StoreData.find();
-                        sendEmail({ subscribers: [client], emailData: task.emailData, clientData: clientData, storeData: storeData[0] });
+                        sendEmail({ subscribers: [client], emailData: task.emailData, clientData: clientData, storeData: storeData[0], automatizationId: task.automatizationId });
                     }
                 }
             } else {
@@ -41,7 +41,7 @@ export const loadTasks = async () => {
                 if (filteredSubscribers.length > 0) {
                     const clientData = await ClientData.find()
                     const storeData = await StoreData.find()
-                    sendEmail({ subscribers: filteredSubscribers, emailData: task.emailData, clientData: clientData, storeData: storeData[0] })
+                    sendEmail({ subscribers: filteredSubscribers, emailData: task.emailData, clientData: clientData, storeData: storeData[0], automatizationId: task.automatizationId })
                 }
             }
         })

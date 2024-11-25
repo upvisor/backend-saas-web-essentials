@@ -1,7 +1,7 @@
 import brevo from '@getbrevo/brevo'
 import { updateClientEmailStatus } from '../utils/updateEmail.js'
 
-export const sendEmail = async ({ subscribers, emailData, clientData, storeData }) => {
+export const sendEmail = async ({ subscribers, emailData, clientData, storeData, automatizationId }) => {
 
     let apiInstance = new brevo.TransactionalEmailsApi()
 
@@ -108,6 +108,7 @@ export const sendEmail = async ({ subscribers, emailData, clientData, storeData 
         };
         await updateClientEmailStatus(subscriber.email, {
             id: id,
+            automatizationId: automatizationId,
             subject: emailData.affair,
             opened: false,
             clicked: false

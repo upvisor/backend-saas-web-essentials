@@ -26,7 +26,7 @@ export const createAutomatization = async (req, res) => {
             previousDate = currentDate
         }
         const newAutomatization = new Automatization({ startType, startValue, name, automatization: emails })
-        await newAutomatization.save()
+        const newAutomatizationSave = await newAutomatization.save()
         res.json(newAutomatization)
         emails.map(async (email) => {
             if (Number(email.number) === 0) {
@@ -61,7 +61,7 @@ export const createAutomatization = async (req, res) => {
                 });
                 const clientData = await ClientData.find()
                 const storeData = await StoreData.find()
-                sendEmail({ subscribers: filteredSubscribers, emailData: email, clientData: clientData, storeData: storeData[0] })
+                sendEmail({ subscribers: filteredSubscribers, emailData: email, clientData: clientData, storeData: storeData[0], automatizationId: newAutomatizationSave._id })
             } else {
                 let subscribers = []
                 if (startType === 'Formulario completado') {
@@ -102,7 +102,7 @@ export const createAutomatization = async (req, res) => {
                     });
                     const clientData = await ClientData.find()
                     const storeData = await StoreData.find()
-                    sendEmail({ subscribers: filteredSubscribers, emailData: email, clientData: clientData, storeData: storeData[0] })
+                    sendEmail({ subscribers: filteredSubscribers, emailData: email, clientData: clientData, storeData: storeData[0], automatizationId: newAutomatizationSave._id })
                 })
             }
         })
