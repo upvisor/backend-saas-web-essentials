@@ -104,9 +104,7 @@ export const sendEmail = async ({ subscribers, emailData, clientData, storeData 
                     </table>
                 </div>
             `,
-            headers: {
-                'X-Unique-Id': id
-            }
+            tags: [id]
         };
         await updateClientEmailStatus(subscriber.email, {
             id: id,
