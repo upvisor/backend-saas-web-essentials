@@ -12,7 +12,7 @@ export const updateClientEmailStatusById = async (email, emailId, updateData) =>
     let emailUpdate = client.emails.find(email => email.id === emailId)
     if (updateData === 'unique_opened') {
         emailUpdate.opened = true
-    } else if (updateData === 'clicked') {
+    } else if (updateData === 'click') {
         emailUpdate.clicked = true
     }
     await client.save()
