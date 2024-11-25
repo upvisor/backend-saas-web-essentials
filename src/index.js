@@ -37,6 +37,7 @@ import pagesRoutes from './routes/pages.routes.js'
 import leadsRoutes from './routes/leads.routes.js'
 import paymentsRoutes from './routes/payments.controllers.js'
 import desubscribesRoutes from './routes/desubscribes.routes.js'
+import brevoWebhookRoutes from './routes/brevoWebhook.routes.js'
 
 connectDB()
 
@@ -98,6 +99,7 @@ app.use(pagesRoutes)
 app.use(leadsRoutes)
 app.use(paymentsRoutes)
 app.use(desubscribesRoutes)
+app.use(brevoWebhookRoutes)
 
 io.on('connection', async (socket) => {
     socket.on('message', async (message) => {
