@@ -53,7 +53,16 @@ const io = new SocketServer(server, {
 })
 
 const corsOptions = {
-    origin: '*',
+    origin: (origin, callback) => {
+        const allowedOrigins = [process.env.WEB_URL, process.env.ADMIN_URL];
+        
+        // Permitir solicitudes sin origen (por ejemplo, Postman o backends internos)
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true
 }

@@ -21,7 +21,7 @@ export const createCampaign = async (req, res) => {
                 subscribers = await Client.find({ tags: address }).lean()
             }
             const dateCron = formatDateToCron(new Date(date))
-            const newTask = new Task({ dateCron: dateCron, tag: address, emailData: { affair: affair, title: title, paragraph: paragraph, buttonText: buttonText, url: url } })
+            const newTask = new Task({ dateCron: dateCron, tag: address, emailData: { affair: affair, title: title, paragraph: paragraph, buttonText: buttonText, url: url }, automatizationId: newCampaign._id })
             await newTask.save()
             cron.schedule(dateCron, async () => {
                 if (address === 'Todos los suscriptores') {
@@ -32,7 +32,7 @@ export const createCampaign = async (req, res) => {
                 const storeData = await StoreData.find()
                 const clientData = await ClientData.find()
                 subscribers = subscribers.filter(subscriber => !subscriber.tags.includes('desuscrito'))
-                sendEmail({ subscribers: subscribers, emailData: { affair: affair, title: title, paragraph: paragraph, buttonText: buttonText, url: url }, clientData: clientData, storeData: storeData[0] })
+                sendEmail({ subscribers: subscribers, emailData: { affair: affair, title: title, paragraph: paragraph, buttonText: buttonText, url: url }, clientData: clientData, storeData: storeData[0], automatizationId: newCampaign._id })
             })
         } else {
             let subscribers = []
@@ -44,7 +44,7 @@ export const createCampaign = async (req, res) => {
             const storeData = await StoreData.find()
             const clientData = await ClientData.find()
             subscribers = subscribers.filter(subscriber => !subscriber.tags.includes('desuscrito'))
-            sendEmail({ subscribers: subscribers, emailData: { affair: affair, title: title, paragraph: paragraph, buttonText: buttonText, url: url }, clientData: clientData, storeData: storeData[0] })
+            sendEmail({ subscribers: subscribers, emailData: { affair: affair, title: title, paragraph: paragraph, buttonText: buttonText, url: url }, clientData: clientData, storeData: storeData[0], automatizationId: newCampaign._id })
         }
     } catch (error) {
         return res.status(500).json({message: error.message})
