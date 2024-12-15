@@ -9,7 +9,11 @@ const StoreDataSchema = mongoose.Schema({
   instagram: { type: String },
   facebook: { type: String },
   tiktok: { type: String },
-  whatsapp: { type: String }
+  whatsapp: { type: String },
+  address: { type: String },
+  departament: { type: String },
+  region: { type: String },
+  city: { type: String }
 }, {
   timestamps: true
 })

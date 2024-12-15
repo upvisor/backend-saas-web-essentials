@@ -10,42 +10,44 @@ export const createLead = async (req, res) => {
         const ServerEvent = bizSdk.ServerEvent
         const access_token = process.env.APIFACEBOOK_TOKEN
         const pixel_id = process.env.APIFACEBOOK_PIXELID
-        const api = bizSdk.FacebookAdsApi.init(access_token)
-        let current_timestamp = Math.floor(new Date() / 1000)
-        const userData = (new UserData())
-            .setFirstName(req.body.firstName)
-            .setLastName(req.body.lastName)
-            .setEmail(req.body.email)
-            .setPhone(req.body.phone && req.body.phone !== '' ? `56${req.body.phone}` : undefined)
-            .setClientIpAddress(req.connection.remoteAddress)
-            .setClientUserAgent(req.headers['user-agent'])
-            .setFbp(req.body.fbp)
-            .setFbc(req.body.fbc)
-        const content = (new Content())
-            .setId(req.body.service)
-            .setQuantity(1)
-        const customData = (new CustomData())
-            .setContentName(req.body.service)
-            .setContents([content])
-        const serverEvent = (new ServerEvent())
-            .setEventId(req.body.eventId)
-            .setEventName('Lead')
-            .setEventTime(current_timestamp)
-            .setUserData(userData)
-            .setCustomData(customData)
-            .setEventSourceUrl(`${process.env.WEB_URL}${req.body.page}`)
-            .setActionSource('website')
-        const eventsData = [serverEvent];
-        const eventRequest = (new EventRequest(access_token, pixel_id))
-            .setEvents(eventsData)
-        eventRequest.execute().then(
-            response => {
-                console.log('Response: ', response)
-            },
-            err => {
-                console.error('Error: ', err)
-            }
-        )
+        if (access_token && pixel_id) {
+            const api = bizSdk.FacebookAdsApi.init(access_token)
+            let current_timestamp = Math.floor(new Date() / 1000)
+            const userData = (new UserData())
+                .setFirstName(req.body.firstName)
+                .setLastName(req.body.lastName)
+                .setEmail(req.body.email)
+                .setPhone(req.body.phone && req.body.phone !== '' ? `56${req.body.phone}` : undefined)
+                .setClientIpAddress(req.connection.remoteAddress)
+                .setClientUserAgent(req.headers['user-agent'])
+                .setFbp(req.body.fbp)
+                .setFbc(req.body.fbc)
+            const content = (new Content())
+                .setId(req.body.service)
+                .setQuantity(1)
+            const customData = (new CustomData())
+                .setContentName(req.body.service)
+                .setContents([content])
+            const serverEvent = (new ServerEvent())
+                .setEventId(req.body.eventId)
+                .setEventName('Lead')
+                .setEventTime(current_timestamp)
+                .setUserData(userData)
+                .setCustomData(customData)
+                .setEventSourceUrl(`${process.env.WEB_URL}${req.body.page}`)
+                .setActionSource('website')
+            const eventsData = [serverEvent];
+            const eventRequest = (new EventRequest(access_token, pixel_id))
+                .setEvents(eventsData)
+            eventRequest.execute().then(
+                response => {
+                    console.log('Response: ', response)
+                },
+                err => {
+                    console.error('Error: ', err)
+                }
+            )
+        }
         const newLead = new Lead(req.body)
         const newLeadSave = await newLead.save()
         return res.json(newLeadSave)

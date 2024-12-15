@@ -1,0 +1,15 @@
+import mongoose from 'mongoose'
+
+const StyleSchema = new mongoose.Schema({
+    design: { type: String },
+    form: { type: String },
+    primary: { type: String },
+    secondary: { type: String },
+    button: { type: String }
+}, {
+    timestamps: true
+})
+
+const Style = mongoose.models.Style || mongoose.model('Style', StyleSchema)
+
+export default Style

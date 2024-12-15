@@ -1,8 +1,7 @@
 import Design from '../models/Design.js'
-import Funnel from '../models/Funnel.js'
 import ClientTag from '../models/ClientTag.js'
 import ClientData from '../models/ClientData.js'
-import Service from '../models/Service.js'
+import Style from '../models/Style.js'
 
 export const createDesign = async (req, res) => {
     try {
@@ -70,13 +69,7 @@ export const getPagesAndFunnels = async (req, res) => {
     try {
         const design = await Design.findOne();
         const pages = design.pages.filter(page => page.slug !== '').filter(page => page.slug !== 'contacto');
-        const funnels = await Funnel.find();
-        const services = await Service.find()
-
-        // Aplanar los steps de los funnels y unirlos con pages
-        const allSteps = funnels.map(funnel => funnel.steps.filter(step => step.slug !== '')).flat();
-        const allStepsServices = services.map(service => service.steps.filter(step => step.slug && step.slug !== '')).flat()
-        const result = [...pages, ...allSteps, ...allStepsServices];
+        const result = [...pages];
 
         return res.json(result)
     } catch (error) {
@@ -87,22 +80,8 @@ export const getPagesAndFunnels = async (req, res) => {
 export const getPagesFunnels = async (req, res) => {
     try {
         const design = await Design.find()
-        if (design[0].pages.find(page => page.slug === req.params.id)) {
-            const page = design[0].pages.find(page => page.slug === req.params.id)
-            return res.json(page)
-        } else {
-            const funnels = await Funnel.find()
-            if (funnels.map(funnel => funnel.steps.find(step => req.params.id === step.slug)).length && funnels.map(funnel => funnel.steps.find(step => req.params.id === step.slug))[0] && funnels.map(funnel => funnel.steps.find(step => req.params.id === step.slug))[0].step) {
-                const step = funnels.map(funnel => funnel.steps.find(step => req.params.id === step.slug))
-                return res.json(step[0])
-            } else {
-                const services = await Service.find()
-                if (services.map(service => service.steps.find(step => req.params.id === step.slug))) {
-                    const step = services.map(service => service.steps.find(step => req.params.id === step.slug))
-                    return res.json(step[0])
-                }
-            }
-        }
+        const page = design[0].pages.find(page => page.slug === req.params.id)
+        return res.json(page)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }
@@ -121,7 +100,7 @@ export const createDefaultPages = async (req, res) => {
               header: true,
               metaTitle: 'Inicio',
               design: [
-                { content: 'Carrusel', info: { banner: [{ title: 'Lorem ipsum', description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit.', button: 'Lorem ipsum', buttonLink: '', image: 'https://web-upvisor.b-cdn.net/Imagen%20prueba.jpg' }] } },
+                { content: 'Carrusel', info: { banner: [{ title: 'Lorem ipsum', description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit.', button: 'Lorem ipsum', buttonLink: '', image: 'https://img-saas-upvisor.b-cdn.net/Imagen%20prueba.jpg' }] } },
                 { content: 'Suscripción', info: { title: 'Suscribete a nuestra lista' } }
               ]
             },
@@ -153,7 +132,34 @@ export const createDefaultPages = async (req, res) => {
         await newDataEmail.save()
         const newDataPhone = new ClientData({ name: 'Teléfono', data: 'phone' })
         await newDataPhone.save()
+        const newStyle = new Style({ design: 'Borde', form: 'Cuadradas', primary: '#0071e3', button: '#ffffff' })
+        await newStyle.save()
         return res.json(newDesignSave)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
+
+export const createStyle = async (req, res) => {
+    try {
+        const style = await Style.findOne()
+        if (style) {
+            const updateStyle = await Style.findByIdAndUpdate(style._id, req.body, { new: true })
+            return res.json(updateStyle)
+        } else {
+            const newStyle = new Style(req.body)
+            const newStyleSave = await newStyle.save()
+            return res.json(newStyleSave)
+        }
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
+
+export const getStyle = async (req, res) => {
+    try {
+        const style = await Style.findOne()
+        return res.json(style)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }

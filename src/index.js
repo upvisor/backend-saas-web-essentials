@@ -21,21 +21,12 @@ import shopLoginRoutes from './routes/shopLogin.routes.js'
 import postRoutes from './routes/post.routes.js'
 import emailRoutes from './routes/email.routes.js'
 import sessionRoutes from './routes/session.routes.js'
-import funnelsRoutes from './routes/funnels.routes.js'
 import formsRoutes from './routes/form.routes.js'
-import callsRoutes from './routes/calls.routes.js'
-import meetingsRoutes from './routes/meetings.routes.js'
 import clientDataRoutes from './routes/clientData.router.js'
-import mercadopagoRoutes from './routes/mercadoPago.routes.js'
-import servicesRoutes from './routes/services.routes.js'
 import bunnyRoutes from './routes/bunny.routes.js'
-import zoomRoutes from './routes/zoom.routes.js'
-import paysRoutes from './routes/pays.routes.js'
 import stadisticsRoutes from './routes/stadistics.routes.js'
-import checkoutRoutes from './routes/checkouts.routes.js'
 import pagesRoutes from './routes/pages.routes.js'
 import leadsRoutes from './routes/leads.routes.js'
-import paymentsRoutes from './routes/payments.controllers.js'
 import desubscribesRoutes from './routes/desubscribes.routes.js'
 import brevoWebhookRoutes from './routes/brevoWebhook.routes.js'
 
@@ -83,21 +74,12 @@ app.use(shopLoginRoutes)
 app.use(postRoutes)
 app.use(emailRoutes)
 app.use(sessionRoutes)
-app.use(funnelsRoutes)
 app.use(formsRoutes)
-app.use(callsRoutes)
-app.use(meetingsRoutes)
 app.use(clientDataRoutes)
-app.use(mercadopagoRoutes)
-app.use(servicesRoutes)
 app.use(bunnyRoutes)
-app.use(zoomRoutes)
-app.use(paysRoutes)
 app.use(stadisticsRoutes)
-app.use(checkoutRoutes)
 app.use(pagesRoutes)
 app.use(leadsRoutes)
-app.use(paymentsRoutes)
 app.use(desubscribesRoutes)
 app.use(brevoWebhookRoutes)
 
