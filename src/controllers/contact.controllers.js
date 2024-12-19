@@ -1,15 +1,18 @@
 import Contact from '../models/Contact.js'
 import bizSdk from 'facebook-nodejs-business-sdk'
+import Integrations from '../models/Integrations.js'
 
 export const createMessage = async (req, res) => {
     try {
         const {name, email, message, images, fbp, fbc} = req.body
-        const EventRequest = bizSdk.EventRequest
-        const UserData = bizSdk.UserData
-        const ServerEvent = bizSdk.ServerEvent
-        const access_token = process.env.APIFACEBOOK_TOKEN
-        const pixel_id = process.env.APIFACEBOOK_PIXELID
-        const api = bizSdk.FacebookAdsApi.init(access_token)
+        const integrations = await Integrations.findOne().lean()
+        if (integrations && integrations.apiToken && integrations.apiToken !== '' && integrations.apiPixelId && integrations.apiPixelId !== '') {
+            const EventRequest = bizSdk.EventRequest
+            const UserData = bizSdk.UserData
+            const ServerEvent = bizSdk.ServerEvent
+            const access_token = integrations.apiToken
+            const pixel_id = integrations.apiPixelId
+            const api = bizSdk.FacebookAdsApi.init(access_token)
         let current_timestamp = new Date()
         const userData = (new UserData())
             .setFirstName(name.toLowerCase())
@@ -35,6 +38,7 @@ export const createMessage = async (req, res) => {
                     console.error('Error: ', err)
                 }
             )
+        }
         const nuevoMensaje = new Contact({name, email, message, images})
         await nuevoMensaje.save()
         return res.json(nuevoMensaje)

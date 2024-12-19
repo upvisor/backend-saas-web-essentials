@@ -1,16 +1,18 @@
 import Lead from '../models/Lead.js'
 import bizSdk from 'facebook-nodejs-business-sdk'
+import Integrations from '../models/Integrations.js'
 
 export const createLead = async (req, res) => {
     try {
-        const Content = bizSdk.Content
-        const CustomData = bizSdk.CustomData
-        const EventRequest = bizSdk.EventRequest
-        const UserData = bizSdk.UserData
-        const ServerEvent = bizSdk.ServerEvent
-        const access_token = process.env.APIFACEBOOK_TOKEN
-        const pixel_id = process.env.APIFACEBOOK_PIXELID
-        if (access_token && pixel_id) {
+        const integrations = await Integrations.findOne().lean()
+        if (integrations && integrations.apiToken && integrations.apiToken !== '' && integrations.apiPixelId && integrations.apiPixelId !== '') {
+            const Content = bizSdk.Content
+            const CustomData = bizSdk.CustomData
+            const EventRequest = bizSdk.EventRequest
+            const UserData = bizSdk.UserData
+            const ServerEvent = bizSdk.ServerEvent
+            const access_token = integrations.apiToken
+            const pixel_id = integrations.apiPixelId
             const api = bizSdk.FacebookAdsApi.init(access_token)
             let current_timestamp = Math.floor(new Date() / 1000)
             const userData = (new UserData())

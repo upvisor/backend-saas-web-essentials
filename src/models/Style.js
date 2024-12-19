@@ -5,7 +5,9 @@ const StyleSchema = new mongoose.Schema({
     form: { type: String },
     primary: { type: String },
     secondary: { type: String },
-    button: { type: String }
+    button: { type: String },
+    borderButton: { type: Number },
+    borderBlock: { type: Number }
 }, {
     timestamps: true
 })
