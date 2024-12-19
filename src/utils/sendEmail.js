@@ -3,6 +3,8 @@ import { updateClientEmailStatus } from '../utils/updateEmail.js'
 
 export const sendEmail = async ({ subscribers, emailData, clientData, storeData, automatizationId }) => {
 
+    console.log(storeData)
+
     let apiInstance = new brevo.TransactionalEmailsApi()
 
     let apiKey = apiInstance.authentications['apiKey']
@@ -31,7 +33,7 @@ export const sendEmail = async ({ subscribers, emailData, clientData, storeData,
         const dataMap = createDataMap(subscriber._doc || subscriber, clientData)
         let sendSmtpEmail = new brevo.SendSmtpEmail()
         sendSmtpEmail = {
-            sender: { email: storeData.email, name: storeData.nameContact },
+            sender: { email: 'jorge@contacto.martinez.upvisor.cl', name: 'Jorge Tapia' },
             subject: replacePlaceholders(emailData.affair, dataMap),
             to: [{
                 email: subscriber.email,
