@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 
 const StoreDataSchema = mongoose.Schema({
   name: { type: String, required: true },
+  nameContact: { type: String },
   email: { type: String, required: true },
   phone: { type: Number },
   logo: { type: String },

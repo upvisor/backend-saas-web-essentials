@@ -31,7 +31,7 @@ export const sendEmail = async ({ subscribers, emailData, clientData, storeData,
         const dataMap = createDataMap(subscriber._doc || subscriber, clientData)
         let sendSmtpEmail = new brevo.SendSmtpEmail()
         sendSmtpEmail = {
-            sender: { email: 'contacto@carmenorellana.cl', name: 'Carmen Orellana' },
+            sender: { email: storeData.email, name: storeData.nameContact },
             subject: replacePlaceholders(emailData.affair, dataMap),
             to: [{
                 email: subscriber.email,
